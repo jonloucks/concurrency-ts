@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@jonloucks/concurrency-ts": ["index.ts"],
+      "@jonloucks/concurrency-ts/*": ["*"],
+      "@jonloucks/concurrency-ts/auxiliary/*": ["auxiliary/*"],
+      "@jonloucks/concurrency-ts/api/*": ["api/*"],
+      "@jonloucks/concurrency-ts/test/*": ["test/*"],
+      "@jonloucks/concurrency-ts/impl/*": ["impl/*"],
+      "@jonloucks/concurrency-ts/never-publish/*": ["never-publish/*"],
+    },
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
