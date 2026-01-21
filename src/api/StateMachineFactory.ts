@@ -1,4 +1,4 @@
-import { Contract, createContract, hasFunctions, RequiredType} from "@jonloucks/contracts-ts";
+import { Contract, createContract, hasFunctions, RequiredType } from "@jonloucks/contracts-ts";
 
 import { StateMachine, Config } from "@jonloucks/concurrency-ts/api/StateMachine";
 
@@ -39,7 +39,7 @@ export function isStateMachineFactory(instance: unknown): instance is StateMachi
 
 /**
  * Contract for StateMachineFactory
- */ 
+ */
 export const CONTRACT: Contract<StateMachineFactory> = createContract({
   name: "StateMachineFactory",
   test: isStateMachineFactory

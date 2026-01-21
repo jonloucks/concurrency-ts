@@ -8,7 +8,7 @@ describe('OnCompletion Tests', () => {
   it('isOnCompletion should return true for OnCompletion', () => {
     const onCompletion: OnCompletion<string> = mock<OnCompletion<string>>();
     ok(isOnCompletion(onCompletion), 'OnCompletion should return true');
-  }); 
-});  
+  });
+});
 
 assertDuck(isOnCompletion, 'onCompletion');
