@@ -35,7 +35,7 @@ describe('Concurrency exports', () => {
   });
 });
 
-assertDuck(isConcurrency,     
+assertDuck(isConcurrency,
   'createWaitable',
     'createStateMachine',
     'createCompletable',
