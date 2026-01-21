@@ -45,7 +45,7 @@
     "prepare": "npm run build",
     "docs": "typedoc --options typedoc.json",
     "badges": "npx tsx ./src/never-publish/generate-badges.ts",
-    "smoke": " npx tsx ./src/never-publish/smoke-test.ts",
+    "smoke": "npx tsx ./src/never-publish/smoke-test.ts",
     "clean": "rm -rf dist",
     "compile": "tsc",
     "pack-package": "npm run before:publish && cd dist && npm pack && npm run after:publish"
