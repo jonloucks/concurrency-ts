@@ -8,7 +8,7 @@ describe('IsCompleted Tests', () => {
   it('isIsCompleted should return true for IsCompleted', () => {
     const completable: IsCompleted = mock<IsCompleted>();
     ok(isIsCompleted(completable), 'IsCompleted should return true');
-  }); 
-});  
+  });
+});
 
 assertDuck(isIsCompleted, 'isCompleted');
