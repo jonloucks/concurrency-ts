@@ -1,73 +1,15 @@
-import { OptionalType, Supplier } from "@jonloucks/concurrency-ts/api/Types";
-import { isWaitableSupplier, WaitableSupplier } from "./WaitableSupplier";
-import { isWaitableNotify, WaitableNotify } from "./WaitableNotify";
+import { OptionalType } from "@jonloucks/concurrency-ts/api/Types";
+import { isWaitableSupplier, WaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
+import { isWaitableNotify, WaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
+import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
+import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { hasFunctions } from "@jonloucks/contracts-ts";
-
-/**
-* Opt-in interface a state type can implement to assist in determining the valid transitions
-*/
-export interface Rule<T> {
-
-  /**
-   * Determine if 'this' state can transition to the target
-   *
-   * @param event the event name
-   * @param goal  the goal state
-   * @return true if the transition is valid
-   */
-  canTransition(event: string, goal: T): boolean;
-
-  // review isEndState, or isFinalState needed?
-}
-
-/**
- * Defines how a transition between states will be done
- *
- * @param <R> return type of the transition
- */
-export interface Transition<S, R> {
-
-  /**
-   * @return the name of the event
-   */
-  getEvent(): string;
-
-  /**
-   * @return the success state of this transition
-   */
-  getSuccessState(): S;
-
-  /**
-   * @return the optional state if an exception is thrown
-   */
-  getErrorState(): OptionalType<S>;
-
-  /**
-   * @return the optional state if the transition is not allowed
-   */
-  getFailedState(): OptionalType<S>;
-
-  /**
-   * @return the optional return value on success
-   */
-  getSuccessValue(): OptionalType<Supplier<R>>;
-
-  /**
-   * @return the optional return value on exception thrown
-   */
-  getErrorValue(): OptionalType<Supplier<R>>;
-
-  /**
-   * @return the optional return value if transition is not allowed
-   */
-  getFailedValue(): OptionalType<Supplier<R>>;
-}
 
 /**
  * State machine.
  * User defined states with rules to restrict state transitions.
  *
- * @param <T> the user define state type
+ * @param <T> the user defined state type
  */
 export interface StateMachine<T> extends WaitableSupplier<T>, WaitableNotify<T> {
 

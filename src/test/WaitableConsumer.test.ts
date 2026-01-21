@@ -8,11 +8,11 @@ describe('WaitableConsumer Tests', () => {
   it('isWaitableConsumer should return true for WaitableConsumer', () => {
     const waitableConsumer: WaitableConsumer<number> = mock<WaitableConsumer<number>>();
     ok(isWaitableConsumer(waitableConsumer), 'WaitableConsumer should return true');
-  });     
-}); 
+  });
+});
 
 assertDuck(isWaitableConsumer,
-    'accept',
-    'acceptIf',
-    'acceptWhen'
+  'accept',
+  'acceptIf',
+  'acceptWhen'
 );

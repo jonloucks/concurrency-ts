@@ -39,7 +39,7 @@ export function assertDuck<T>(isDuck: IsDuck<T>, ...propertyNames: (string | sym
         ok(isDuck(obj), `Object with all properties ${combination.join(', ')} should be recognized as duck type`);
       } else {
         // Partial set of properties
-        ok(!isDuck(obj), `Object partial properties ${combination.join(', ')} should NOT be recognized as duck type`);
+        ok(!isDuck(obj), `Object with partial properties ${combination.join(', ')} should NOT be recognized as duck type`);
       }
     });
   });

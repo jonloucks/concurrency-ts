@@ -16,7 +16,7 @@ export interface WaitableSupplier<T> extends Supplier<T> {
    * Gets the current value if it satisfies a condition
    *
    * @param predicate the predicate
-   * @return the current value iif the condition is satisfied
+   * @return the current value if and only if the condition is satisfied
    * @throws IllegalArgumentException if predicate is null or if value is null
    */
   getIf(predicate: PredicateType<T>): OptionalType<T>;
@@ -26,7 +26,7 @@ export interface WaitableSupplier<T> extends Supplier<T> {
    *
    * @param predicate the predicate to test if the value satisfies the stop waiting condition
    * @param timeout the time to wait for the value to satisfy the predicate
-   * @return the current value iif the condition is satisfied
+   * @return the current value if and only if the condition is satisfied
    * @throws IllegalArgumentException if predicate is null, duration is null, or duration is negative
    */
   getWhen(predicate: RequiredType<PredicateType<T>>, timeout?: OptionalType<Duration>): OptionalType<T>;
