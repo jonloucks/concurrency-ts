@@ -29,17 +29,20 @@ export function assertDuck<T>(isDuck: IsDuck<T>, ...propertyNames: (string | sym
 
   const combinations : (string | symbol)[][] = generateCombinations(propertyNames);
   combinations.forEach((combination) => {
-    it(`isDuck should return true for object with properties: ${combination.join(', ')}`, () => {
+    const joinedMixed: string = combination
+      .map(item => typeof item === 'symbol' ? String(item) : item)
+      .join(', ');
+    it(`isDuck should return true for object with properties: ${joinedMixed}`, () => {
       const obj: Record<string | symbol, unknown> = {};
       combination.forEach((prop) => {
         obj[prop] = () : void => {}; // currently assuming a function
       });
       if (combination.length === propertyNames.length) {
         // Full set of properties
-        ok(isDuck(obj), `Object with all properties ${combination.join(', ')} should be recognized as duck type`);
+        ok(isDuck(obj), `Object with all properties ${joinedMixed} should be recognized as duck type`);
       } else {
         // Partial set of properties
-        ok(!isDuck(obj), `Object with partial properties ${combination.join(', ')} should NOT be recognized as duck type`);
+        ok(!isDuck(obj), `Object with partial properties ${joinedMixed} should NOT be recognized as duck type`);
       }
     });
   });
