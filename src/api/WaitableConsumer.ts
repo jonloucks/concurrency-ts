@@ -1,4 +1,4 @@
-import { Consumer, Supplier, OptionalType, RequiredType, Predicate, Duration } from "@jonloucks/concurrency-ts/api/Types";
+import { Consumer, Supplier, OptionalType, RequiredType, PredicateType, Duration } from "@jonloucks/concurrency-ts/api/Types";
 import { hasFunctions } from "@jonloucks/contracts-ts";
 
 /**
@@ -23,7 +23,7 @@ export interface WaitableConsumer<T> extends Consumer<T> {
    * @return if accepted the value replaced.
    * @throws IllegalArgumentException if predicate is null or if value is null
    */
-  acceptIf(predicate: RequiredType<Predicate<T>>, value: T): OptionalType<T>;
+  acceptIf(predicate: RequiredType<PredicateType<T>>, value: T): OptionalType<T>;
 
   /**
    * Assign a new value if conditions are satisfied
@@ -33,7 +33,7 @@ export interface WaitableConsumer<T> extends Consumer<T> {
    * @return if accepted the value replaced.
    * @throws IllegalArgumentException if predicate is null or if value is null
    */
-  acceptIf(predicate: RequiredType<Predicate<T>>, valueSupplier: RequiredType<Supplier<T>>): OptionalType<T>;
+  acceptIf(predicate: RequiredType<PredicateType<T>>, valueSupplier: RequiredType<Supplier<T>>): OptionalType<T>;
 
   /**
    * Assign a new value if conditions are satisfied
@@ -44,7 +44,7 @@ export interface WaitableConsumer<T> extends Consumer<T> {
    * @return if accepted the value replaced.
    * @throws IllegalArgumentException if predicate is null, valueSupplier is null, timeout is null or invalid
    */
-  acceptWhen(predicate: RequiredType<Predicate<T>>, valueSupplier: RequiredType<Supplier<T>>, timeout?: OptionalType<Duration>): OptionalType<T>;
+  acceptWhen(predicate: RequiredType<PredicateType<T>>, valueSupplier: RequiredType<Supplier<T>>, timeout?: OptionalType<Duration>): OptionalType<T>;
 }
 
 export function isWaitableConsumer<T>(instance: unknown): instance is WaitableConsumer<T> {

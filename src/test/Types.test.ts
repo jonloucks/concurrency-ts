@@ -3,17 +3,17 @@ import { ok, strictEqual } from "node:assert";
 import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
 import {
-  OptionalType,
-  RequiredType,
-  isPresent,
+  Duration,
   isNotPresent,
   isNumber,
+  isPresent,
   isString,
-  Throwable,
   isThrowable,
-  MIN_TIMEOUT,
   MAX_TIMEOUT,
-  Duration
+  MIN_TIMEOUT,
+  OptionalType,
+  RequiredType,
+  Throwable
 } from "@jonloucks/concurrency-ts/api/Types";
 
 describe("Types", () => {
@@ -32,12 +32,12 @@ describe("Types", () => {
 
 describe('Duration Type Tests', () => { 
   it('Duration type should create correct durations', () => {
-    const duration1: Duration = { milliseconds: 5000 };
-    const duration2: Duration = { milliseconds: 0 };
-    const duration3: Duration = { milliseconds: 123456789 };    
-    strictEqual(duration1.milliseconds, 5000, 'duration1 should be 5000 milliseconds');
-    strictEqual(duration2.milliseconds, 0, 'duration2 should be 0 milliseconds');
-    strictEqual(duration3.milliseconds, 123456789, 'duration3 should be 123456789 milliseconds');
+    const duration1: Duration = { milliSeconds: 5000 };
+    const duration2: Duration = { milliSeconds: 0 };
+    const duration3: Duration = { milliSeconds: 123456789 };    
+    strictEqual(duration1.milliSeconds, 5000, 'duration1 should be 5000 milliseconds');
+    strictEqual(duration2.milliSeconds, 0, 'duration2 should be 0 milliseconds');
+    strictEqual(duration3.milliSeconds, 123456789, 'duration3 should be 123456789 milliseconds');
   });
 });
 
@@ -55,15 +55,15 @@ describe('concurrency-ts/auxiliary/Checks Index exports', () => {
 
 describe('Constants', () => {
   it('should have a positive min timeout', () => {
-    strictEqual(MIN_TIMEOUT.milliseconds >= 0, true);
+    strictEqual(MIN_TIMEOUT.milliSeconds >= 0, true);
   });
 
   it('should have a max timeout greater than min timeout', () => {
-    strictEqual(MAX_TIMEOUT.milliseconds > MIN_TIMEOUT.milliseconds, true);
+    strictEqual(MAX_TIMEOUT.milliSeconds > MIN_TIMEOUT.milliSeconds, true);
   }); 
 
   it ('should have max timeout less than or equal to Number.MAX_SAFE_INTEGER', () => {
-    strictEqual(MAX_TIMEOUT.milliseconds <= Number.MAX_SAFE_INTEGER, true);
+    strictEqual(MAX_TIMEOUT.milliSeconds <= Number.MAX_SAFE_INTEGER, true);
   });
 });
 

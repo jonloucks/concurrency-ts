@@ -1,4 +1,4 @@
-import { Supplier, OptionalType, RequiredType, Predicate, Duration } from "@jonloucks/concurrency-ts/api/Types";
+import { Supplier, OptionalType, RequiredType, PredicateType, Duration } from "@jonloucks/concurrency-ts/api/Types";
 import { hasFunctions } from "@jonloucks/contracts-ts";
 
 /**
@@ -19,7 +19,7 @@ export interface WaitableSupplier<T> extends Supplier<T> {
    * @return the current value iif the condition is satisfied
    * @throws IllegalArgumentException if predicate is null or if value is null
    */
-  getIf(predicate: Predicate<T>): OptionalType<T>;
+  getIf(predicate: PredicateType<T>): OptionalType<T>;
 
   /**
    * Waits until the current value if it satisfies a condition or a timeout is reached
@@ -29,7 +29,7 @@ export interface WaitableSupplier<T> extends Supplier<T> {
    * @return the current value iif the condition is satisfied
    * @throws IllegalArgumentException if predicate is null, duration is null, or duration is negative
    */
-  getWhen(predicate: RequiredType<Predicate<T>>, timeout?: OptionalType<Duration>): OptionalType<T>;
+  getWhen(predicate: RequiredType<PredicateType<T>>, timeout?: OptionalType<Duration>): OptionalType<T>;
 }
 
 export function isWaitableSupplier<T>(instance: unknown): instance is WaitableSupplier<T> {

@@ -1,9 +1,9 @@
 import { hasFunctions, RequiredType, AutoClose } from "@jonloucks/contracts-ts";
 
-import { Predicate, Consumer } from "@jonloucks/concurrency-ts/api/Types";
+import { PredicateType, Consumer } from "@jonloucks/concurrency-ts/api/Types";
 
 export { RequiredType, AutoClose } from "@jonloucks/contracts-ts";
-export { Predicate, Consumer } from "@jonloucks/concurrency-ts/api/Types";
+export { PredicateType, Consumer } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Notify lister when condition is satisfied
@@ -21,7 +21,7 @@ export interface WaitableNotify<T> {
    * @return AutoClose which removes the listener
    * @throws IllegalArgumentException if predicate is null or the listener is null
  */
-  notifyIf(predicate: RequiredType<Predicate<T>>, listener: RequiredType<Consumer<T>>): RequiredType<AutoClose>;
+  notifyIf(predicate: RequiredType<PredicateType<T>>, listener: RequiredType<Consumer<T>>): RequiredType<AutoClose>;
 }
 
 /**

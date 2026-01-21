@@ -18,17 +18,17 @@ export type PredicateType<T> = PredicateFunction<T> | Predicate<T> | boolean;
 
 // review if there is a something better to use here, like Java's Duration
 export interface Duration {
-  get milliseconds(): number;
+  get milliSeconds(): number;
 }
 
 export const MIN_TIMEOUT: Duration = {
-  get milliseconds() {
+  get milliSeconds() : number {
     return 0;
   }
 };
 
 export const MAX_TIMEOUT: Duration = {
-  get milliseconds() {
+  get milliSeconds() : number {
     return Number.MAX_SAFE_INTEGER;
   }
 };
