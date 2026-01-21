@@ -50,7 +50,7 @@ export interface Transition<S, R> {
  * @param instance the instance to check
  * @return true if instance is a Transition
  */
-export function isTransition<S, R>(instance: unknown): instance is Transition<S, R> {
+export function guard<S, R>(instance: unknown): instance is Transition<S, R> {
   return hasFunctions(
     instance,
     'getEvent',

@@ -1,5 +1,5 @@
-import { OptionalType, RequiredType, Throwable } from "@jonloucks/concurrency-ts/api/Types";
 import { IsCompleted } from "@jonloucks/concurrency-ts/api/IsCompleted";
+import { OptionalType, RequiredType, Throwable } from "@jonloucks/concurrency-ts/api/Types";
 import { hasFunctions } from "@jonloucks/contracts-ts";
 
 /**
@@ -68,7 +68,7 @@ export interface Completion<T> extends IsCompleted {
  * @param instance the instance to check
  * @returns true if the instance implements Completion
  */
-export function isCompletion<T>(instance: unknown): instance is Completion<T> {
+export function guard<T>(instance: unknown): instance is Completion<T> {
   return hasFunctions(instance,
     'getState',
     'getThrown',

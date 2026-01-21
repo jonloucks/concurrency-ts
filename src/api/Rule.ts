@@ -21,6 +21,6 @@ export interface Rule<T> {
  * @param instance the instance to check
  * @return true if instance is a Rule
  */
-export function isRule<T>(instance: unknown): instance is Rule<T> {
+export function guard<T>(instance: unknown): instance is Rule<T> {
   return hasFunctions(instance, 'canTransition');
 } 

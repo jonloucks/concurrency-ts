@@ -1,5 +1,5 @@
-import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
+import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { hasFunctions } from "@jonloucks/contracts-ts";
 
 /**
@@ -23,6 +23,6 @@ export interface OnCompletion<T> {
  * @param instance the instance to check
  * @return true if instance is an OnCompletion, false otherwise
  */
-export function isOnCompletion<T>(instance: unknown): instance is OnCompletion<T> {
+export function guard<T>(instance: unknown): instance is OnCompletion<T> {
   return hasFunctions(instance, 'onCompletion');
 };

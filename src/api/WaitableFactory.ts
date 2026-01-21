@@ -18,11 +18,20 @@ export interface WaitableFactory {
   create<T>(initialValue: T): RequiredType<Waitable<T>>;
 }
 
-export function isWaitableFactory(instance: unknown): instance is WaitableFactory {
+/**
+ * Determine if the given instance is a WaitableFactory
+ *
+ * @param instance the instance to check
+ * @return true if the instance is a WaitableFactory
+ */
+export function guard(instance: unknown): instance is WaitableFactory {
   return hasFunctions(instance, 'create');
 }
 
+/**
+ * Contract for WaitableFactory
+ */
 export const CONTRACT: Contract<WaitableFactory> = createContract({
   name: "WaitableFactory",
-  test: isWaitableFactory
+  test: guard
 });

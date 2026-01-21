@@ -18,6 +18,6 @@ export interface IsCompleted {
  * @param instance the instance to check
  * @return true if instance is an IsCompleted, false otherwise
  */
-export function isIsCompleted(instance: unknown): instance is IsCompleted {
+export function guard(instance: unknown): instance is IsCompleted {
   return hasFunctions(instance, 'isCompleted');
 }

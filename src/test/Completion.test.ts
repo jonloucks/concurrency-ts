@@ -1,17 +1,17 @@
-import { ok } from "node:assert";
 import { mock } from "jest-mock-extended";
+import { ok } from "node:assert";
 
-import { Completion, Config, State, isCompletion } from "@jonloucks/concurrency-ts/api/Completion";
+import { Completion, Config, State, guard } from "@jonloucks/concurrency-ts/api/Completion";
 import { assertDuck } from "./helper.test";
 
 describe('isCompletion Tests', () => {
   it('isCompletion should return true for Completion', () => {
     const completion: Completion<number> = mock<Completion<number>>();
-    ok(isCompletion(completion), 'Completion should return true');
+    ok(guard(completion), 'Completion should return true');
   });
 });
 
-assertDuck(isCompletion, 
+assertDuck(guard, 
   'getState', 
   'getThrown', 
   'getValue', 

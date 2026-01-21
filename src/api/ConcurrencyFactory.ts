@@ -1,5 +1,5 @@
-import { Contract, createContract, hasFunctions, Repository, RequiredType } from "@jonloucks/contracts-ts";
 import { Concurrency, Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { Contract, createContract, hasFunctions, Repository, RequiredType } from "@jonloucks/contracts-ts";
 
 /**
  * Responsible for creating new instances of Concurrency
@@ -35,7 +35,7 @@ export interface ConcurrencyFactory {
  * @param instance the instance to check
  * @return true if instance is a ConcurrencyFactory, false otherwise
  */
-export function isConcurrencyFactory(instance: unknown): instance is ConcurrencyFactory {
+export function guard(instance: unknown): instance is ConcurrencyFactory {
   return hasFunctions(instance, 'create', 'install');
 }
 
@@ -44,5 +44,5 @@ export function isConcurrencyFactory(instance: unknown): instance is Concurrency
  */
 export const CONTRACT: Contract<ConcurrencyFactory> = createContract({
   name: "ConcurrencyFactory",
-  test: isConcurrencyFactory
+  test: guard
 });
