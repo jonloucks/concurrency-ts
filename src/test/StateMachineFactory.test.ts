@@ -8,7 +8,7 @@ describe('StateMachineFactory Tests', () => {
   it('isStateMachineFactory should return true for StateMachineFactory', () => {
     const stateMachineFactory: StateMachineFactory = mock<StateMachineFactory>();
     ok(isStateMachineFactory(stateMachineFactory), 'StateMachineFactory should return true');
-  }); 
+  });
 });
 
 assertDuck(isStateMachineFactory, 'create');

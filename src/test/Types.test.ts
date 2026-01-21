@@ -28,13 +28,13 @@ describe("Types", () => {
       expect(isThrowable([])).toBe(true);
     });
   });
-}); 
+});
 
-describe('Duration Type Tests', () => { 
+describe('Duration Type Tests', () => {
   it('Duration type should create correct durations', () => {
     const duration1: Duration = { milliSeconds: 5000 };
     const duration2: Duration = { milliSeconds: 0 };
-    const duration3: Duration = { milliSeconds: 123456789 };    
+    const duration3: Duration = { milliSeconds: 123456789 };
     strictEqual(duration1.milliSeconds, 5000, 'duration1 should be 5000 milliseconds');
     strictEqual(duration2.milliSeconds, 0, 'duration2 should be 0 milliseconds');
     strictEqual(duration3.milliSeconds, 123456789, 'duration3 should be 123456789 milliseconds');
@@ -60,9 +60,9 @@ describe('Constants', () => {
 
   it('should have a max timeout greater than min timeout', () => {
     strictEqual(MAX_TIMEOUT.milliSeconds > MIN_TIMEOUT.milliSeconds, true);
-  }); 
+  });
 
-  it ('should have max timeout less than or equal to Number.MAX_SAFE_INTEGER', () => {
+  it('should have max timeout less than or equal to Number.MAX_SAFE_INTEGER', () => {
     strictEqual(MAX_TIMEOUT.milliSeconds <= Number.MAX_SAFE_INTEGER, true);
   });
 });
