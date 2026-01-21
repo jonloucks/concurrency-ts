@@ -26,7 +26,7 @@ export interface Completable<T> extends AutoOpen, CompletionNotify<T>, OnComplet
   /**
    * @return observe state change
    */
-  notifyState(): WaitableNotify<CompletionState>
+  notifyState(): WaitableNotify<CompletionState>;
 
   /**
    * @return Observe the completed value
