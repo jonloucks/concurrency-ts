@@ -20,4 +20,4 @@ export interface IsCompleted {
  */
 export function isIsCompleted(instance: unknown): instance is IsCompleted {
   return hasFunctions(instance, 'isCompleted');
-} 
+}
