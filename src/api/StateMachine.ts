@@ -92,7 +92,7 @@ export interface StateMachine<T> extends WaitableSupplier<T>, WaitableNotify<T> 
    * Determine if the given state is known
    *
    * @param state the state to check
-   * @return true iif the state is known
+   * @return true if and only if the state is known
    * @throws IllegalArgumentException when state is null
    */
   hasState(state: T): boolean;
