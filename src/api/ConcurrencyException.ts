@@ -48,6 +48,6 @@ export class ConcurrencyException extends Error {
  * @returns true if the instance is a ConcurrencyException
  */
 export function guard(instance: unknown): instance is ConcurrencyException {
-  return isNotPresent(instance) || instance instanceof ConcurrencyException;
+  return instance instanceof ConcurrencyException;
 }
 
