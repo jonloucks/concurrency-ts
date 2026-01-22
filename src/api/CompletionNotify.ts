@@ -1,6 +1,6 @@
-import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { hasFunctions } from "@jonloucks/contracts-ts";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
 /**
  * Responsibility: Dispatch Completion status to subscribers
@@ -22,7 +22,7 @@ export interface CompletionNotify<T> {
  * @param instance the instance to check
  * @returns true if the instance implements CompletionNotify
  */
-export function isCompletionNotify<T>(instance: unknown): instance is CompletionNotify<T> {
+export function guard<T>(instance: unknown): instance is CompletionNotify<T> {
   return hasFunctions(instance,
     'notify'
   );

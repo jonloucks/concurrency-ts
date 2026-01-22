@@ -1,17 +1,17 @@
-import { ok } from "node:assert";
 import { mock } from "jest-mock-extended";
+import { ok } from "node:assert";
 
-import { WaitableFactory, isWaitableFactory, CONTRACT } from "@jonloucks/concurrency-ts/api/WaitableFactory";
+import { CONTRACT, WaitableFactory, guard } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { assertContract, assertDuck } from "./helper.test";
 
 describe('WaitableFactory Tests', () => {
   it('isWaitableFactory should return true for WaitableFactory', () => {
     const factory: WaitableFactory = mock<WaitableFactory>();
-    ok(isWaitableFactory(factory), 'WaitableFactory should return true');
+    ok(guard(factory), 'WaitableFactory should return true');
   });
 });
 
-assertDuck(isWaitableFactory,
+assertDuck(guard,
   'create'
 );
 

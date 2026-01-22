@@ -1,16 +1,25 @@
-import { ok } from "node:assert";
 import { mock } from "jest-mock-extended";
+import { ok } from "node:assert";
 
-import { Concurrency, isConcurrency, Config as ConcurrencyConfig, CONTRACT,
-  Waitable, StateMachine, Completable, Completion, OnCompletion, Supplier, Consumer 
+import {
+    Completable, Completion,
+    Concurrency,
+    Config as ConcurrencyConfig,
+    Consumer,
+    CONTRACT,
+    guard,
+    OnCompletion,
+    StateMachine,
+    Supplier,
+    Waitable
 } from "@jonloucks/concurrency-ts/api/Concurrency";
-import {OptionalType } from "@jonloucks/contracts-ts";
+import { OptionalType } from "@jonloucks/contracts-ts";
 import { assertContract, assertDuck } from "./helper.test";
 
 describe("Concurrency exports", () => {
   it("isConcurrency() should identify Concurrency instances", () => {
     const concurrencyInstance: Concurrency = mock<Concurrency>();
-    ok(isConcurrency(concurrencyInstance), "The instance should be identified as Concurrency");
+    ok(guard(concurrencyInstance), "The instance should be identified as Concurrency");
   });
 });
 
@@ -35,7 +44,7 @@ describe('Concurrency exports', () => {
   });
 });
 
-assertDuck(isConcurrency,
+assertDuck(guard,
   'createWaitable',
     'createStateMachine',
     'createCompletable',

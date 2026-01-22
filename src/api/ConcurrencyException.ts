@@ -1,4 +1,5 @@
 import { messageCheck } from "@jonloucks/contracts-ts/auxiliary/Checks"
+import { isNotPresent } from "./Types";
 
 /**
  * Runtime exception thrown for Concurrency related problems.
@@ -24,13 +25,29 @@ export class ConcurrencyException extends Error {
    * @param message the optional message to use if caught is not an ConcurrencyException
    */
   static rethrow(caught: unknown, message?: string): never {
-    if (caught instanceof ConcurrencyException) {
+    if (isNotPresent(caught)) {
+       this.throwUnknown(message);
+    } else if (guard(caught)) {
       throw caught;
     } else if (caught instanceof Error) {
       throw new ConcurrencyException(message ?? caught.message, caught);
     } else {
-      throw new ConcurrencyException(message ?? "Unknown type of caught value.");
+       this.throwUnknown(message);
     }
   }
+
+  private static throwUnknown( message?: string): never {
+    throw new ConcurrencyException(message ?? "Unknown type of caught value.");
+  }
+}
+
+/**
+ * Determine if an instance is a ConcurrencyException
+ *
+ * @param instance the instance to check
+ * @returns true if the instance is a ConcurrencyException
+ */
+export function guard(instance: unknown): instance is ConcurrencyException {
+  return instance instanceof ConcurrencyException;
 }
 
