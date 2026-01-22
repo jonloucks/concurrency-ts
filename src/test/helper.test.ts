@@ -13,8 +13,8 @@ export function assertContract<T>(contract: Contract<T>, name: string): void {
   describe(`${name} CONTRACT test`, () => {
     it(`${name} CONTRACT should be ratified with a name`, () => {
       ok(isRatifiedContract(contract), `${name} isRatifiedContract should return true`);
-      ok(contract.name == name, `CONTRACT name should be ${name}`);
-      if (contract.guarded == false) {
+      ok(contract.name === name, `CONTRACT name should be ${name}`);
+      if (contract.guarded === false) {
         ok(contract.cast(null) === null, `${name} CONTRACT.cast(null) should return null`);
         ok(contract.cast(undefined) === undefined, `${name} CONTRACT.cast(undefined) should return undefined`);
       }
