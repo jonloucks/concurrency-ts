@@ -1,19 +1,19 @@
-import { AutoOpen, RequiredType, OptionalType, Contract, createContract, hasFunctions } from "@jonloucks/contracts-ts";
 import { Completable, Config as CompletableConfig } from "@jonloucks/concurrency-ts/api/Completable";
 import { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
-import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
-import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
-import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
+import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Consumer, Supplier } from "@jonloucks/concurrency-ts/api/Types";
+import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
+import { AutoOpen, Contract, createContract, hasFunctions, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
+import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
 
 export { Completable, Config as CompletableConfig } from "@jonloucks/concurrency-ts/api/Completable";
 export { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
-export { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
-export { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
-export { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 export { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
+export { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 export { Consumer, Supplier } from "@jonloucks/concurrency-ts/api/Types";
+export { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
+export { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
 
 /**
  * The configuration used to create a new Concurrency instance.
@@ -98,7 +98,7 @@ export interface Concurrency extends AutoOpen {
  * @param instance the instance to test
  * @return true if the instance is a Concurrency
  */
-export function isConcurrency(instance: unknown): instance is Concurrency {
+export function guard(instance: unknown): instance is Concurrency {
   return hasFunctions(instance,
     'createWaitable',
     'createStateMachine',
@@ -115,5 +115,5 @@ export function isConcurrency(instance: unknown): instance is Concurrency {
  */
 export const CONTRACT: Contract<Concurrency> = createContract<Concurrency>({
   name: "Concurrency",
-  test: isConcurrency
+  test: guard
 });

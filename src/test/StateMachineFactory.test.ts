@@ -1,16 +1,16 @@
-import { ok } from "node:assert";
 import { mock } from "jest-mock-extended";
+import { ok } from "node:assert";
 
-import { StateMachineFactory, isStateMachineFactory, CONTRACT } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
+import { CONTRACT, StateMachineFactory, guard } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { assertContract, assertDuck } from "./helper.test";
 
 describe('StateMachineFactory Tests', () => {
   it('isStateMachineFactory should return true for StateMachineFactory', () => {
     const stateMachineFactory: StateMachineFactory = mock<StateMachineFactory>();
-    ok(isStateMachineFactory(stateMachineFactory), 'StateMachineFactory should return true');
+    ok(guard(stateMachineFactory), 'StateMachineFactory should return true');
   });
 });
 
-assertDuck(isStateMachineFactory, 'create');
+assertDuck(guard, 'create');
 
 assertContract(CONTRACT, 'StateMachineFactory');

@@ -49,6 +49,15 @@ describe('ConcurrencyException Tests', () => {
     });
   });
 
+    it('rethrow with number caught without message, has correct name and message', () => {
+    throws(() => {
+      ConcurrencyException.rethrow(13);
+    }, {
+      name: 'ConcurrencyException',
+      message: "Unknown type of caught value."
+    });
+  });
+
   it('rethrow with null caught with message, has correct name and message', () => {
     throws(() => {
       ConcurrencyException.rethrow(null, "Outer Problem.");
