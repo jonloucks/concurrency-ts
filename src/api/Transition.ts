@@ -1,5 +1,4 @@
-import { OptionalType, Supplier } from "@jonloucks/concurrency-ts/api/Types";
-import { hasFunctions } from "@jonloucks/contracts-ts";
+import { OptionalType, RequiredType, Supplier, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Defines how a transition between states will be done
@@ -50,8 +49,8 @@ export interface Transition<S, R> {
  * @param instance the instance to check
  * @return true if instance is a Transition
  */
-export function guard<S, R>(instance: unknown): instance is Transition<S, R> {
-  return hasFunctions(
+export function guard<S, R>(instance: unknown): instance is RequiredType<Transition<S, R>> {
+  return guardFunctions(
     instance,
     'getEvent',
     'getSuccessState',

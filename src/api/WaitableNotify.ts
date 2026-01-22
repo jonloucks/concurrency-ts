@@ -1,9 +1,9 @@
-import { AutoClose, hasFunctions, RequiredType } from "@jonloucks/contracts-ts";
+import { AutoClose, RequiredType } from "@jonloucks/contracts-ts";
 
-import { Consumer, PredicateType } from "@jonloucks/concurrency-ts/api/Types";
+import { Consumer, PredicateType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
-export { Consumer, PredicateType } from "@jonloucks/concurrency-ts/api/Types";
-export { AutoClose, RequiredType } from "@jonloucks/contracts-ts";
+export { Consumer, PredicateType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
+export { AutoClose } from "@jonloucks/contracts-ts";
 
 /**
  * Notify lister when condition is satisfied
@@ -31,6 +31,6 @@ export interface WaitableNotify<T> {
  * @param <T>    the type of value  
  * @returns true if value is WaitableNotify, false otherwise
  */
-export function guard<T>(value: unknown): value is WaitableNotify<T> {
-  return hasFunctions(value, 'notifyIf');
+export function guard<T>(value: unknown): value is RequiredType<WaitableNotify<T>> {
+  return guardFunctions(value, 'notifyIf');
 }

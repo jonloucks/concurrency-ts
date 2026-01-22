@@ -1,9 +1,9 @@
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
-import { OptionalType } from "@jonloucks/concurrency-ts/api/Types";
+import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
-import { hasFunctions } from "@jonloucks/contracts-ts";
+
 
 /**
  * State machine.
@@ -95,8 +95,8 @@ export interface Config<T> {
  * @param instance the instance to check
  * @return true if the instance is a StateMachine
  */
-export function guard<T>(instance: unknown): instance is StateMachine<T> {
-  return hasFunctions(instance,
+export function guard<T>(instance: unknown): instance is RequiredType<StateMachine<T>> {
+  return guardFunctions(instance,
     'isTransitionAllowed',
     'getState',
     'setState',

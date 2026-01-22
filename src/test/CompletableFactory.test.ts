@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Completable, CompletableFactory, Config, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-import { assertContract, assertDuck } from "./helper.test";
+import { assertContract, assertGuard } from "./helper.test";
 
 describe('CompletableFactory Tests', () => {
   it('isCompletableFactory should return true for CompletableFactory', () => {
@@ -20,7 +20,7 @@ describe('CompletableFactory Exports', () => {
   });
 });
 
-assertDuck(guard, 'createCompletable');
+assertGuard(guard, 'createCompletable');
 
 assertContract(CONTRACT, 'CompletableFactory');
 

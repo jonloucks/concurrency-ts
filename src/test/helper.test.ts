@@ -11,55 +11,58 @@ describe('Helper Tests', () => {
 
 export function assertContract<T>(contract: Contract<T>, name: string): void {
   describe(`${name} CONTRACT test`, () => {
-    it(`${name} CONTRACT should be ratified`, () => {
-      ok(isRatifiedContract(contract), `${name} CONTRACT should be ratified`);  
-      ok(contract.name === name, `CONTRACT name should be ${name}`); 
-      ok(contract.cast(null) === null, `${name} CONTRACT.cast(null) should return null`);
-      ok(contract.cast(undefined) === undefined, `${name} CONTRACT.cast(undefined) should return undefined`);
+    it(`${name} CONTRACT should be ratified with a name`, () => {
+      ok(isRatifiedContract(contract), `${name} isRatifiedContract should return true`);
+      ok(contract.name == name, `CONTRACT name should be ${name}`);
+      if (contract.guarded == false) {
+        ok(contract.cast(null) === null, `${name} CONTRACT.cast(null) should return null`);
+        ok(contract.cast(undefined) === undefined, `${name} CONTRACT.cast(undefined) should return undefined`);
+      }
     });
   });
 }
 
-type IsDuck<T> = (o: unknown) => o is T;
+type Guard<T> = (o: unknown) => o is T;
 
-export function assertDuck<T>(isDuck: IsDuck<T>, ...propertyNames: (string | symbol)[]): void {
+export function assertGuard<T>(guard: Guard<T>, ...propertyNames: (string | symbol)[]): void {
   if (propertyNames.length === 0) {
     return;
   }
 
-  const combinations : (string | symbol)[][] = generateCombinations(propertyNames);
+  const combinations: (string | symbol)[][] = generateCombinations(propertyNames);
   combinations.forEach((combination) => {
     const joinedMixed: string = combination
       .map(item => typeof item === 'symbol' ? String(item) : item)
       .join(', ');
-    it(`isDuck should return true for object with properties: ${joinedMixed}`, () => {
+
+    it(`Guard should return true for object with properties: ${joinedMixed}`, () => {
       const obj: Record<string | symbol, unknown> = {};
       combination.forEach((prop) => {
-        obj[prop] = () : void => {}; // currently assuming a function
+        obj[prop] = (): void => { }; // currently assuming a function
       });
       if (combination.length === propertyNames.length) {
         // Full set of properties
-        ok(isDuck(obj), `Object with all properties ${joinedMixed} should be recognized as duck type`);
+        ok(guard(obj), `Object with all properties ${joinedMixed} should be recognized as duck type`);
       } else {
         // Partial set of properties
-        ok(!isDuck(obj), `Object with partial properties ${joinedMixed} should NOT be recognized as duck type`);
+        ok(!guard(obj), `Object with partial properties ${joinedMixed} should NOT be recognized as duck type`);
       }
     });
   });
-  it(`isDuck should return false for object with no properties`, () => {
+  it(`Guard should return false for object with no properties`, () => {
     const emptyObj: Record<string | symbol, unknown> = {};
-    ok(!isDuck(emptyObj), `Empty object should not be recognized as duck type`);
-  });  
-  it (`isDuck should return true for null and undefined`, () => {
-    ok(isDuck(null), 'null should be recognized as duck type');
-    ok(isDuck(undefined), 'undefined should be recognized as duck type');
+    ok(!guard(emptyObj), `Empty object should not be recognized as duck type`);
+  });
+  it(`Guard should return false for null and undefined`, () => {
+    ok(!guard(null), 'guard should never return null');
+    ok(!guard(undefined), 'guard should never return undefined');
   });
 };
 
 function generateCombinations<T>(items: T[]): T[][] {
   const result: T[][] = [];
 
-  function backtrack(index: number, currentCombination: T[]) : void  {
+  function backtrack(index: number, currentCombination: T[]): void {
     // Add the current combination to the results list
     result.push([...currentCombination]);
 

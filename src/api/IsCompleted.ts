@@ -1,4 +1,4 @@
-import { hasFunctions } from "@jonloucks/contracts-ts";
+import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * An interface to determine if an action or activity is completed
@@ -18,6 +18,6 @@ export interface IsCompleted {
  * @param instance the instance to check
  * @return true if instance is an IsCompleted, false otherwise
  */
-export function guard(instance: unknown): instance is IsCompleted {
-  return hasFunctions(instance, 'isCompleted');
+export function guard(instance: unknown): instance is RequiredType<IsCompleted> {
+  return guardFunctions(instance, 'isCompleted');
 }

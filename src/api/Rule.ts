@@ -1,4 +1,5 @@
-import { hasFunctions } from "@jonloucks/contracts-ts";
+import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+
 
 /**
 * Opt-in interface a state type can implement to assist in determining the valid transitions
@@ -21,6 +22,6 @@ export interface Rule<T> {
  * @param instance the instance to check
  * @return true if instance is a Rule
  */
-export function guard<T>(instance: unknown): instance is Rule<T> {
-  return hasFunctions(instance, 'canTransition');
+export function guard<T>(instance: unknown): instance is RequiredType<Rule<T>> {
+  return guardFunctions(instance, 'canTransition');
 } 

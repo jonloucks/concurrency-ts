@@ -2,9 +2,10 @@ import { Completable, Config as CompletableConfig } from "@jonloucks/concurrency
 import { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { Consumer, Supplier } from "@jonloucks/concurrency-ts/api/Types";
+import { Consumer, guardFunctions, Supplier } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
-import { AutoOpen, Contract, createContract, hasFunctions, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
+import { Open } from "@jonloucks/contracts-ts/api/Open";
+import { Contract, createContract, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
 import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
 
 export { Completable, Config as CompletableConfig } from "@jonloucks/concurrency-ts/api/Completable";
@@ -28,7 +29,7 @@ export interface Config {
 /**
  * The Concurrency API
  */
-export interface Concurrency extends AutoOpen {
+export interface Concurrency extends Open {
 
   /**
    * Create a new Waitable with the given initial value
@@ -98,8 +99,8 @@ export interface Concurrency extends AutoOpen {
  * @param instance the instance to test
  * @return true if the instance is a Concurrency
  */
-export function guard(instance: unknown): instance is Concurrency {
-  return hasFunctions(instance,
+export function guard(instance: unknown): instance is RequiredType<Concurrency> {
+  return guardFunctions(instance,
     'createWaitable',
     'createStateMachine',
     'createCompletable',

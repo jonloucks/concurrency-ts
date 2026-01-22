@@ -3,9 +3,8 @@ import { CompletionNotify } from "@jonloucks/concurrency-ts/api/CompletionNotify
 import { IsCompleted } from "@jonloucks/concurrency-ts/api/IsCompleted";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { WaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
-import { hasFunctions } from "@jonloucks/contracts-ts";
-import { AutoOpen } from "@jonloucks/contracts-ts/api/AutoOpen";
-import { OptionalType } from "./Types";
+import { Open } from "@jonloucks/contracts-ts/api/Open";
+import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Configuration for a Completable
@@ -21,7 +20,7 @@ export interface Config<T> {
  *
  * @param <T> the type of completion value
  */
-export interface Completable<T> extends AutoOpen, CompletionNotify<T>, OnCompletion<T>, IsCompleted {
+export interface Completable<T> extends Open, CompletionNotify<T>, OnCompletion<T>, IsCompleted {
 
   /**
    * @return observe state change
@@ -45,8 +44,8 @@ export interface Completable<T> extends AutoOpen, CompletionNotify<T>, OnComplet
  * @param instance the instance to check
  * @returns true if the instance implements Completable
  */
-export function guard<T>(instance: unknown): instance is Completable<T> {
-  return hasFunctions(instance,
+export function guard<T>(instance: unknown): instance is RequiredType<Completable<T>> {
+  return guardFunctions(instance,
     'open',
     'notifyState',
     'notifyValue',

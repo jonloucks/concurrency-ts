@@ -1,5 +1,4 @@
-import { Consumer, Duration, OptionalType, PredicateType, RequiredType, Supplier } from "@jonloucks/concurrency-ts/api/Types";
-import { hasFunctions } from "@jonloucks/contracts-ts";
+import { Consumer, Duration, RequiredType, OptionalType, PredicateType, Supplier, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Waitable consumer
@@ -47,8 +46,14 @@ export interface WaitableConsumer<T> extends Consumer<T> {
   acceptWhen(predicate: RequiredType<PredicateType<T>>, valueSupplier: RequiredType<Supplier<T>>, timeout?: OptionalType<Duration>): OptionalType<T>;
 }
 
-export function guard<T>(instance: unknown): instance is WaitableConsumer<T> {
-  return hasFunctions(instance,
+/**
+ * Determine if the given instance is a WaitableConsumer
+ *
+ * @param instance the instance to check
+ * @return true if the instance is a WaitableConsumer
+ */
+export function guard<T>(instance: unknown): instance is RequiredType<WaitableConsumer<T>> {
+  return guardFunctions(instance,
     'accept',
     'acceptIf',
     'acceptWhen'

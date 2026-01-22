@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Completable, guard } from "@jonloucks/concurrency-ts/api/Completable";
-import { assertDuck } from "./helper.test";
+import { assertGuard } from "./helper.test";
 
 describe('Completable Tests', () => {
   it('isCompletable should return true for Completable', () => {
@@ -11,7 +11,7 @@ describe('Completable Tests', () => {
   });
 });
 
-assertDuck(guard,
+assertGuard(guard,
   'open',
   'notifyState',
   'notifyValue',

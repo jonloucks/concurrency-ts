@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { CompletionFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/CompletionFactory";
-import { assertContract, assertDuck } from "./helper.test";
+import { assertContract, assertGuard } from "./helper.test";
 
 describe('CompletionFactory Tests', () => {
   it('isCompletionFactory should return true for CompletionFactory', () => {
@@ -11,7 +11,7 @@ describe('CompletionFactory Tests', () => {
   });
 });
 
-assertDuck(guard, 'createCompletion');
+assertGuard(guard, 'createCompletion');
 
 assertContract(CONTRACT, 'CompletionFactory');
 

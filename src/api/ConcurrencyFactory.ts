@@ -1,5 +1,6 @@
 import { Concurrency, Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
-import { Contract, createContract, hasFunctions, Repository, RequiredType } from "@jonloucks/contracts-ts";
+import { Contract, createContract, Repository } from "@jonloucks/contracts-ts";
+import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Responsible for creating new instances of Concurrency
@@ -16,7 +17,7 @@ export interface ConcurrencyFactory {
    * @return the new Concurrency instance
    * @throws IllegalArgumentException if config is null or when configuration is invalid
    */
-  create(config: ConcurrencyConfig): Concurrency;
+  createConcurrency(config: ConcurrencyConfig): Concurrency;
 
   /**
    * Install all the requirements and promises to the given Contracts Repository.
@@ -35,8 +36,8 @@ export interface ConcurrencyFactory {
  * @param instance the instance to check
  * @return true if instance is a ConcurrencyFactory, false otherwise
  */
-export function guard(instance: unknown): instance is ConcurrencyFactory {
-  return hasFunctions(instance, 'create', 'install');
+export function guard(instance: unknown): instance is RequiredType<ConcurrencyFactory> {
+  return guardFunctions(instance, 'createConcurrency', 'install');
 }
 
 /**
