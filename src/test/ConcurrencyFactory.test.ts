@@ -4,7 +4,7 @@ import { ok } from "node:assert";
 import { ConcurrencyFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
 import { OptionalType } from "@jonloucks/contracts-ts";
 import { Config } from "../api/Concurrency";
-import { assertContract, assertDuck } from "./helper.test";
+import { assertContract, assertGuard } from "./helper.test";
 
 describe("ConcurrencyFactory exports", () => {
   it("isConcurrencyFactory() should identify ConcurrencyFactory instances", () => {
@@ -31,6 +31,6 @@ function assertNothing(_value: OptionalType<unknown>): void {
   ok(true, 'This function is only for compile-time type checking and should never be called at runtime');
 }
 
-assertDuck(guard, 'create', 'install');
+assertGuard(guard, 'createConcurrency', 'install');
 
 assertContract(CONTRACT, 'ConcurrencyFactory');

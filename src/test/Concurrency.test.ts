@@ -14,7 +14,7 @@ import {
     Waitable
 } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { OptionalType } from "@jonloucks/contracts-ts";
-import { assertContract, assertDuck } from "./helper.test";
+import { assertContract, assertGuard } from "./helper.test";
 
 describe("Concurrency exports", () => {
   it("isConcurrency() should identify Concurrency instances", () => {
@@ -44,7 +44,7 @@ describe('Concurrency exports', () => {
   });
 });
 
-assertDuck(guard,
+assertGuard(guard,
   'createWaitable',
     'createStateMachine',
     'createCompletable',

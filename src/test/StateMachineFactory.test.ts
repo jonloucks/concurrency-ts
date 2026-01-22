@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { CONTRACT, StateMachineFactory, guard } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
-import { assertContract, assertDuck } from "./helper.test";
+import { assertContract, assertGuard } from "./helper.test";
 
 describe('StateMachineFactory Tests', () => {
   it('isStateMachineFactory should return true for StateMachineFactory', () => {
@@ -11,6 +11,6 @@ describe('StateMachineFactory Tests', () => {
   });
 });
 
-assertDuck(guard, 'create');
+assertGuard(guard, 'createStateMachine');
 
 assertContract(CONTRACT, 'StateMachineFactory');

@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { OnCompletion, guard } from "@jonloucks/concurrency-ts/api/OnCompletion";
-import { assertDuck } from "./helper.test";
+import { assertGuard } from "./helper.test";
 
 describe('OnCompletion Tests', () => {
   it('isOnCompletion should return true for OnCompletion', () => {
@@ -11,4 +11,4 @@ describe('OnCompletion Tests', () => {
   });
 });
 
-assertDuck(guard, 'onCompletion');
+assertGuard(guard, 'onCompletion');

@@ -1,5 +1,6 @@
-import { Contract, createContract, hasFunctions, RequiredType } from "@jonloucks/contracts-ts";
+import { Contract, createContract,RequiredType } from "@jonloucks/contracts-ts";
 
+import { guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
 
 /**
@@ -15,7 +16,7 @@ export interface WaitableFactory {
    * @param <T> the type of waitable
    * @throws IllegalArgumentException if initialValue is null
    */
-  create<T>(initialValue: T): RequiredType<Waitable<T>>;
+  createWaitable<T>(initialValue: T): RequiredType<Waitable<T>>;
 }
 
 /**
@@ -24,8 +25,8 @@ export interface WaitableFactory {
  * @param instance the instance to check
  * @return true if the instance is a WaitableFactory
  */
-export function guard(instance: unknown): instance is WaitableFactory {
-  return hasFunctions(instance, 'create');
+export function guard(instance: unknown): instance is RequiredType<WaitableFactory> {
+  return guardFunctions(instance, 'createWaitable');
 }
 
 /**

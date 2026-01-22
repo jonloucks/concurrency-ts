@@ -1,5 +1,5 @@
-import { Contract, createContract, hasFunctions, RequiredType } from "@jonloucks/contracts-ts";
-
+import { Contract, createContract} from "@jonloucks/contracts-ts";
+import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 import { Config, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 
 /**
@@ -14,7 +14,7 @@ export interface StateMachineFactory {
    * @param <T> the type of each state
    * @throws IllegalArgumentException if config is null or configuration is invalid
    */
-  create<T>(config: Config<T>): RequiredType<StateMachine<T>>;
+  createStateMachine<T>(config: Config<T>): RequiredType<StateMachine<T>>;
 
   /**
    * Create a new StateMachine
@@ -24,7 +24,7 @@ export interface StateMachineFactory {
    * @param <T> the type of each state
    * @throws IllegalArgumentException if initialState is null
    */
-  create<T>(initialState: T): RequiredType<StateMachine<T>>;
+  createStateMachine<T>(initialState: T): RequiredType<StateMachine<T>>;
 }
 
 /**
@@ -33,8 +33,8 @@ export interface StateMachineFactory {
  * @param instance the instance to check
  * @return true if the instance is a StateMachineFactory
  */
-export function guard(instance: unknown): instance is StateMachineFactory {
-  return hasFunctions(instance, 'create');
+export function guard(instance: unknown): instance is RequiredType<StateMachineFactory> {
+  return guardFunctions(instance, 'createStateMachine');
 }
 
 /**

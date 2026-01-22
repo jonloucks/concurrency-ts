@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Transition, guard } from "@jonloucks/concurrency-ts/api/Transition";
-import { assertDuck } from "./helper.test";
+import { assertGuard } from "./helper.test";
 
 describe('Transition Tests', () => {
   it('isTransition should return true for Transition', () => {
@@ -11,7 +11,7 @@ describe('Transition Tests', () => {
   });
 });
 
-assertDuck(guard,
+assertGuard(guard,
   'getEvent',
   'getSuccessState',
   'getErrorState',

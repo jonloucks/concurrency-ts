@@ -1,5 +1,6 @@
 import { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
-import { Contract, createContract, hasFunctions, RequiredType } from "@jonloucks/contracts-ts";
+import { Contract, createContract } from "@jonloucks/contracts-ts";
+import { guardFunctions, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Responsibility: Creating a new Completion
@@ -22,8 +23,8 @@ export interface CompletionFactory {
  * @param instance the instance to check
  * @returns true if the instance implements CompletionFactory
  */
-export function guard(instance: unknown): instance is CompletionFactory {
-  return hasFunctions(instance, 'createCompletion');
+export function guard(instance: unknown): instance is RequiredType<CompletionFactory> {
+  return guardFunctions(instance, 'createCompletion');
 }
 
 /**

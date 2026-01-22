@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Waitable, guard } from "@jonloucks/concurrency-ts/api/Waitable";
-import { assertDuck } from "./helper.test";
+import { assertGuard } from "./helper.test";
 
 describe('Waitable tests', () => {
   it('isWaitable should return true for Waitable', () => {
@@ -11,7 +11,7 @@ describe('Waitable tests', () => {
   });
 });
 
-assertDuck(guard,
+assertGuard(guard,
   'shutdown',
   'get',
   'getIf',

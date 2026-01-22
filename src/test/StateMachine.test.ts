@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Config, guard, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { assertDuck } from "./helper.test";
+import { assertGuard } from "./helper.test";
 
 describe('StateMachine Tests', () => {
   it('isStateMachine should return true for StateMachine', () => {
@@ -18,7 +18,7 @@ describe('StateMachine Config Tests', () => {
   });
 });
 
-assertDuck(guard,
+assertGuard(guard,
   'isTransitionAllowed',
   'getState',
   'setState',

@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { WaitableNotify, guard } from "@jonloucks/concurrency-ts/api/WaitableNotify";
-import { assertDuck } from "./helper.test";
+import { assertGuard } from "./helper.test";
 
 describe('WaitableNotify Tests', () => {
   it('isWaitableNotify should return true for WaitableNotify', () => {
@@ -11,6 +11,6 @@ describe('WaitableNotify Tests', () => {
   });
 });
 
-assertDuck(guard,
+assertGuard(guard,
   'notifyIf'
 );

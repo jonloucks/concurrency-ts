@@ -1,5 +1,6 @@
 import { Completable, Config } from "@jonloucks/concurrency-ts/api/Completable";
-import { Contract, createContract, hasFunctions } from "@jonloucks/contracts-ts";
+import { Contract, createContract } from "@jonloucks/contracts-ts";
+import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 export { Completable, Config } from "@jonloucks/concurrency-ts/api/Completable";
 
@@ -24,8 +25,8 @@ export interface CompletableFactory {
  * @param instance the instance to check
  * @returns true if the instance implements CompletableFactory
  */
-export function guard(instance: unknown): instance is CompletableFactory {
-  return hasFunctions(instance, 'createCompletable');
+export function guard(instance: unknown): instance is RequiredType<CompletableFactory> {
+  return guardFunctions(instance, 'createCompletable');
 }
 
 /**

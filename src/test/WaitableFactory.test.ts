@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { CONTRACT, WaitableFactory, guard } from "@jonloucks/concurrency-ts/api/WaitableFactory";
-import { assertContract, assertDuck } from "./helper.test";
+import { assertContract, assertGuard } from "./helper.test";
 
 describe('WaitableFactory Tests', () => {
   it('isWaitableFactory should return true for WaitableFactory', () => {
@@ -11,8 +11,8 @@ describe('WaitableFactory Tests', () => {
   });
 });
 
-assertDuck(guard,
-  'create'
+assertGuard(guard,
+  'createWaitable'
 );
 
 assertContract(CONTRACT, 'WaitableFactory');

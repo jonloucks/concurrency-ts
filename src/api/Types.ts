@@ -1,4 +1,4 @@
-export { isNotPresent, isNumber, isPresent, isString, OptionalType, RequiredType } from "@jonloucks/contracts-ts/api/Types";
+export { isNotPresent, isNumber, isPresent, isString, OptionalType, RequiredType, guardFunctions } from "@jonloucks/contracts-ts/api/Types";
 
 // candidate for inclusion in contracts-ts/api/Types.ts
 export type Throwable<T> = T | null | undefined;

@@ -2,7 +2,7 @@ import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { IsCompleted, guard } from "@jonloucks/concurrency-ts/api/IsCompleted";
-import { assertDuck } from "./helper.test";
+import { assertGuard } from "./helper.test";
 
 describe('IsCompleted Tests', () => {
   it('isIsCompleted should return true for IsCompleted', () => {
@@ -11,4 +11,4 @@ describe('IsCompleted Tests', () => {
   });
 });
 
-assertDuck(guard, 'isCompleted');
+assertGuard(guard, 'isCompleted');

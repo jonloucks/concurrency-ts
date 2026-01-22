@@ -1,5 +1,4 @@
-import { Duration, OptionalType, PredicateType, RequiredType, Supplier } from "@jonloucks/concurrency-ts/api/Types";
-import { hasFunctions } from "@jonloucks/contracts-ts";
+import { Duration, OptionalType, PredicateType, RequiredType, Supplier, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Waitable supplier
@@ -38,8 +37,8 @@ export interface WaitableSupplier<T> extends Supplier<T> {
  * @param instance the instance to check
  * @return true if the instance is a WaitableSupplier
  */
-export function guard<T>(instance: unknown): instance is WaitableSupplier<T> {
-  return hasFunctions(instance,
+export function guard<T>(instance: unknown): instance is RequiredType<WaitableSupplier<T>> {
+  return guardFunctions(instance,
     'get',
     'getIf',
     'getWhen'
