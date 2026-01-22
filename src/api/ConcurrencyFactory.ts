@@ -10,7 +10,7 @@ export interface ConcurrencyFactory {
   /**
    * Create a new instance of Concurrency
    * <p>
-   *     Note: caller is responsible for calling AutoOpen.open and calling
+   *     Note: caller is responsible for calling Open.open and calling
    *     the AutoClose.close when done with the instance.
    * </p>
    * @param config the Concurrency configuration for the new instance
