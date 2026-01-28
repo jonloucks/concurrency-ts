@@ -171,12 +171,40 @@ class WaitableImpl<T> implements Waitable<T> {
     const removeListener = (v : ValueObserver<T>): void => {
       this._valueObservers.delete(v);
     };
+    // Guard against re-entrant notifications from notifyCallback changing the value.
+    let notifying = false;
+    let pendingValue: OptionalType<T> | undefined;
 
     const valueObserver: ValueObserver<T> = {
       observeValue: function (value: T): void {
-        if (validPredicate.test(value)) {
-          // what to do if consume changes the value again, and again?
-          notifyCallback.consume(value);
+        if (!validPredicate.test(value)) {
+          return;
+        }
+
+        // If a notification is already in progress for this observer, coalesce
+        // subsequent value changes and process the latest one after the current
+        // callback completes to avoid unbounded recursion.
+        if (notifying) {
+          pendingValue = value;
+          return;
+        }
+
+        notifying = true;
+        try {
+          let current: OptionalType<T> | undefined = value;
+          // Process the initial value and any values observed during callbacks.
+          while (current !== undefined && validPredicate.test(current)) {
+            notifyCallback.consume(current);
+
+            if (pendingValue === undefined) {
+              break;
+            }
+
+            current = pendingValue;
+            pendingValue = undefined;
+          }
+        } finally {
+          notifying = false;
         }
       },
       close: function (): void {
