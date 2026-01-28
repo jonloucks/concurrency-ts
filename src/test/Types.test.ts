@@ -212,9 +212,7 @@ describe('Supplier Type', () => {
     const supplier: SupplierType<string> = {
       supply: () => "hello"
     };
-    if (typeof supplier !== 'function' && supplier !== null && typeof supplier === 'object' && 'supply' in supplier) {
-      strictEqual(supplier.supply(), "hello");
-    }
+    strictEqual(supplier.supply(), "hello");
   });
 
   it('should accept a direct value', () => {
