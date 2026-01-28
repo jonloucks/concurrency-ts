@@ -20,7 +20,7 @@ describe('StateMachineFactory Tests', () => {
     const stateMachine = stateMachineFactory.createStateMachine<string>({
       initialValue: 'INITIAL',
       states: ['INITIAL', 'STATE1', 'STATE2'],
-      getStateRules(state) {
+      getStateRules(_) {
         return [];
       },
     });

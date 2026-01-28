@@ -5,7 +5,6 @@ import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurr
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
 
-
 /**
  * State machine.
  * User defined states with rules to restrict state transitions.
@@ -87,7 +86,7 @@ export interface Config<T> {
    * @param state the state
    * @return the rules of the state
    */
-  getStateRules(state: T): Array<Rule<T>>;
+  getStateRules?(state: T): Array<Rule<T>>;
 }
 
 /**

@@ -93,7 +93,7 @@ describe('eventCheck function', () => {
 
 describe('ruleCheck function', () => {
   it('should return the provided rule when it is present', () => {
-    const rule = { condition: true, action: () => {} };
+    const rule = { condition: true, action: () : void => {} };
     const result = ruleCheck(rule);
     ok(result === rule, 'ruleCheck should return the original rule when present');
   });
@@ -151,7 +151,7 @@ describe('rulesCheck function', () => {
 
 describe('listenerCheck function', () => {
   it('should return the provided listener when it is present', () => {
-    const listener = () => {};
+    const listener = () : void => {};
     const result = listenerCheck(listener);
     ok(result === listener, 'listenerCheck should return the original listener when present');
   });
@@ -259,7 +259,7 @@ describe('completionCheck function', () => {
 
 describe('finallyBlockCheck function', () => {
   it('should return the provided finally block when it is present', () => {
-    const block = () => {};
+    const block = () : void => {};
     const result = finallyBlockCheck(block);
     ok(result === block, 'finallyBlockCheck should return the original block when present');
   });
@@ -285,7 +285,7 @@ describe('finallyBlockCheck function', () => {
 
 describe('predicateCheck function', () => {
   it('should return the provided predicate when it is present', () => {
-    const predicate = () => true;
+    const predicate = () : boolean => true;
     const result = predicateCheck(predicate);
     ok(result === predicate, 'predicateCheck should return the original predicate when present');
   });
@@ -311,7 +311,7 @@ describe('predicateCheck function', () => {
 
 describe('successBlockCheck function', () => {
   it('should return the provided success block when it is present', () => {
-    const onSuccess = () => {};
+    const onSuccess = () : void => {};
     const result = successBlockCheck(onSuccess);
     ok(result === onSuccess, 'successBlockCheck should return the original onSuccess when present');
   });
@@ -337,7 +337,7 @@ describe('successBlockCheck function', () => {
 
 describe('failureBlockCheck function', () => {
   it('should return the provided failure block when it is present', () => {
-    const onFailure = () => {};
+    const onFailure = () : void => {};
     const result = failureBlockCheck(onFailure);
     ok(result === onFailure, 'failureBlockCheck should return the original onFailure when present');
   });

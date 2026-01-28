@@ -1,6 +1,6 @@
 import { Config, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
-import { Duration, isPresent, OptionalType, RequiredType, Supplier } from "@jonloucks/concurrency-ts/api/Types";
+import { Duration, isPresent, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
 import { Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
@@ -24,7 +24,7 @@ export function create<T>(config: RequiredType<Config<T>>): StateMachine<T> {
 class StateMachineImpl<S> implements StateMachine<S> {
 
   // Statemachine.open
-  open() : AutoClose {
+  open(): AutoClose {
     return this.currentState.open();
   }
 
@@ -116,47 +116,39 @@ class StateMachineImpl<S> implements StateMachine<S> {
 
   private transitionCheck<R>(transition: Transition<S, R>): Transition<S, R> {
     const validTransition: Transition<S, R> = presentCheck(transition, "Transition must be present.");
-
-    this.existsCheck(validTransition.getSuccessState());
-
-    eventCheck(validTransition.getEvent());
-
+    this.existsCheck(validTransition.state);
+    eventCheck(validTransition.event);
     return validTransition;
   }
 
   private isAllowed<R>(transition: Transition<S, R>): boolean {
-    return this.isTransitionAllowed(transition.getEvent(), transition.getSuccessState());
+    return this.isTransitionAllowed(transition.event, transition.state);
   }
 
   private handleSuccess<R>(transition: Transition<S, R>): OptionalType<R> {
-    const value: OptionalType<R> = this.optionalSupplierValue(transition.getSuccessValue());
-    this.setState(transition.getEvent(), transition.getSuccessState());
+    const value: OptionalType<R> = transition.getSuccessValue?.();
+    this.setState(transition.event, transition.state);
     return value;
   }
 
-  private optionalSupplierValue<Z>(supplier: OptionalType<Supplier<Z>>): OptionalType<Z> {
-    if (isPresent(supplier)) {
-      return supplier.supply();
-    }
-    return undefined;
-  }
-
   private handleFailure<R>(transition: Transition<S, R>): R {
-    this.setOptionalState(transition.getFailedState(), transition.getEvent());
-    const onFailure: OptionalType<Supplier<R>> = transition.getFailedValue();
-    if (isPresent(onFailure)) {
-      return onFailure.supply();
+    this.setOptionalState(transition.failedState, transition.event);
+    const value: OptionalType<R> = transition.getFailedValue?.();
+
+    if (isPresent(value)) {
+      return value;
     } else {
       throw new ConcurrencyException("Illegal state transition from " + String(this.getState()) +
-        " to " + String(transition.getSuccessState()) + ".");
+        " to " + String(transition.state) + ".");
     }
   }
 
   private handleError<R>(transition: Transition<S, R>, thrown: unknown): R {
-    this.setOptionalState(transition.getErrorState(), transition.getEvent());
-    const onError: OptionalType<Supplier<R>> = transition.getErrorValue();
-    if (isPresent(onError)) {
-      return onError.supply();
+    this.setOptionalState(transition.errorState, transition.event);
+    const value: OptionalType<R> = transition.getErrorValue?.();
+
+    if (isPresent(value)) {
+      return value;
     } else {
       throw ConcurrencyException.rethrow(thrown);
     }
@@ -181,7 +173,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
     this.addStateAndRules(initialState, []);
     if (isPresent(validConfig.states) && validConfig.states.length > 0) {
       validConfig.states.forEach(state => {
-        this.addStateAndRules(state, validConfig.getStateRules(state) ?? []);
+        this.addStateAndRules(state, validConfig.getStateRules?.(state) ?? []);
       });
     }
   }

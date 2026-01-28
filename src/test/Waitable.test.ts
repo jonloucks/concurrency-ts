@@ -157,8 +157,8 @@ describe('Waitable tests', () => {
     const close1: AutoClose = waitable.open();
     close1.close();
     close1.close(); // second close should be no-op
-  
-    ok(true, 'Closing Waitable multiple times should not throw exception'); 
+
+    ok(true, 'Closing Waitable multiple times should not throw exception');
   });
 
   it('closing Waitable with notifyWhile active should stop notifications', async () => {
@@ -246,7 +246,7 @@ describe('Waitable tests', () => {
     ok(result === 10, 'supplyWhen should return value when predicate is satisfied');
   });
 
-    it('supplyWhen non changing values are skipped', async () => {
+  it('supplyWhen non changing values are skipped', async () => {
     const waitable: Waitable<number> = createWaitable<number>({ initialValue: 0 });
     using _usingWaitable = waitable.open();
 
@@ -280,7 +280,7 @@ describe('Waitable tests', () => {
     ok(result === undefined, 'supplyWhen should return undefined when closed before predicate is satisfied');
   });
 
-  it ('closing Waitable while consumeWhen is pending should reject the promise', async () => {
+  it('closing Waitable while consumeWhen is pending should reject the promise', async () => {
     const waitable: Waitable<number> = createWaitable<number>({ initialValue: 0 });
     const closeWaitable: AutoClose = waitable.open();
     const promise = waitable.consumeWhen((val) => val === 10, () => 20);
