@@ -276,7 +276,7 @@ describe('Waitable tests', () => {
     }
 
     const result = await promise.catch(() => { rejected = true });
-    ok(rejected, 'supplyWhen should be rejected when Waitable is closed before predicate is satisfied')
+    ok(rejected, 'supplyWhen should be rejected when Waitable is closed before predicate is satisfied');
     ok(result === undefined, 'supplyWhen should return undefined when closed before predicate is satisfied');
   });
 
