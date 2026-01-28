@@ -143,7 +143,6 @@ class WaitableImpl<T> implements Waitable<T> {
         if (validPredicate.test(value) && firstNotify.getAndSet(false)) {
           const suppliedValue: OptionalType<T> = validValueSupplier.supply();
           setTheValue(suppliedValue);
-          // what to do about unexpected use
           removeListener(this);
           exposedPromise.resolve(suppliedValue);
         }
