@@ -12,5 +12,5 @@ describe('WaitableNotify Tests', () => {
 });
 
 assertGuard(guard,
-  'notifyIf'
+  'notifyWhile'
 );

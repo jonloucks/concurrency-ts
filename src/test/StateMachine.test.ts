@@ -24,8 +24,8 @@ assertGuard(guard,
   'setState',
   'hasState',
   'transition',
-  'get',
-  'getIf',
-  'getWhen',
-  'notifyIf'
+  'supply',
+  'supplyIf',
+  'supplyWhen',
+  'notifyWhile'
 );
