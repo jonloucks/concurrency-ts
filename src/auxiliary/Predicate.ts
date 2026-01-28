@@ -5,7 +5,7 @@
  * Defines a Predicate type that can test values of type T.
  */
 
-import { guardFunctions, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
+import { guardFunctions, OptionalType, RequiredType } from "@jonloucks/contracts-ts/api/Types";
 import { presentCheck } from "./Checks";
 
 export type Method<T> = (value: T) => boolean;
