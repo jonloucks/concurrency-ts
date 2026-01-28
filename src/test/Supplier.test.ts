@@ -42,7 +42,7 @@ describe('check Tests', () => {
     let errorCaught = false;
     try {
       check<string>(null as unknown as Type<string>);
-    } catch (e) {
+    } catch (_) {
       errorCaught = true;
     }
     ok(errorCaught, 'check should throw an error for null Supplier');

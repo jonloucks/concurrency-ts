@@ -29,6 +29,7 @@ import {
   SupplierType,
   Throwable
 } from "@jonloucks/concurrency-ts/api/Types";
+import { Method } from "../auxiliary/Consumer";
 
 describe("Types", () => {
   describe("isThrowable", () => {
@@ -139,7 +140,7 @@ describe('consumerGuard function', () => {
   });
 
   it('should return false for consumer functions', () => {
-    const consumer = (_value: number) => { };
+    const consumer : Method<number> = (_: number) => { };
     strictEqual(consumerGuard(consumer), false, 'Should not identify function as Consumer object');
   });
 
@@ -169,8 +170,8 @@ describe('Predicate Type', () => {
   });
 
   it('should accept a boolean value', () => {
-    const alwaysTrue: PredicateType<any> = true;
-    const alwaysFalse: PredicateType<any> = false;
+    const alwaysTrue: PredicateType<unknown> = true;
+    const alwaysFalse: PredicateType<unknown> = false;
     strictEqual(alwaysTrue, true);
     strictEqual(alwaysFalse, false);
   });
@@ -185,7 +186,7 @@ describe('predicateGuard function', () => {
   });
 
   it('should return false for predicate functions', () => {
-    const predicate = (_value: number) => true;
+    const predicate : Method<number> = (_value: number) => true;
     strictEqual(predicateGuard(predicate), false, 'Should not identify function as Predicate object');
   });
 
@@ -231,7 +232,7 @@ describe('supplierGuard function', () => {
   });
 
   it('should return false for supplier functions', () => {
-    const supplier = () => 42;
+    const supplier : Method<number> = () => 42;
     strictEqual(supplierGuard(supplier), false, 'Should not identify function as Supplier object');
   });
 
@@ -333,8 +334,8 @@ describe('Function Type Aliases', () => {
 describe('guardFunctions utility', () => {
   it('should return true when object has specified method names', () => {
     const obj = {
-      consume: () => {},
-      supply: () => 42
+      consume: () : void => {},
+      supply: () : number => 42
     };
     strictEqual(guardFunctions(obj, 'consume'), true, 'Object should have consume method');
     strictEqual(guardFunctions(obj, 'supply'), true, 'Object should have supply method');
@@ -342,15 +343,15 @@ describe('guardFunctions utility', () => {
 
   it('should return true when object has all specified method names', () => {
     const obj = {
-      consume: () => {},
-      supply: () => 42
+      consume: () : void => {},
+      supply: () : number => 42
     };
     strictEqual(guardFunctions(obj, 'consume', 'supply'), true, 'Object should have both methods');
   });
 
   it('should return false when object does not have specified method', () => {
     const obj = {
-      consume: () => {}
+      consume: () : void => {}
     };
     strictEqual(guardFunctions(obj, 'supply'), false, 'Object should not have supply method');
   });

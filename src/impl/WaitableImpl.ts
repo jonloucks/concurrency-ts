@@ -69,17 +69,19 @@ class WaitableImpl<T> implements Waitable<T> {
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise<OptionalType<T>> = createExposedPromise();
-    const self: WaitableImpl<T> = this;
+    const removeListener = (v : ValueObserver<T>): void => {
+      this._valueObservers.delete(v);
+    };
 
     const valueObserver: ValueObserver<T> = {
       observeValue: function (value: T): void {
         if (validPredicate.test(value) && firstNotify.getAndSet(false)) {
-          self._valueObservers.delete(this);
+          removeListener(this);
           exposedPromise.resolve(value);
         }
       },
       close: function (): void {
-        self._valueObservers.delete(this);
+        removeListener(this);
         exposedPromise.reject(CLOSED_EXCEPTION);
       }
     };
@@ -125,20 +127,25 @@ class WaitableImpl<T> implements Waitable<T> {
     const validValueSupplier: Supplier<T> = supplierFromType(value);
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise<OptionalType<T>> = createExposedPromise();
-    const self: WaitableImpl<T> = this;
+    const removeListener = (v : ValueObserver<T>): void => {
+      this._valueObservers.delete(v);
+    };
+    const setTheValue : (T : OptionalType<T>) => void = (v : OptionalType<T>) : void => {
+      this.setValue(v);
+    };
 
     const valueObserver: ValueObserver<T> = {
       observeValue: function (value: T): void {
         if (validPredicate.test(value) && firstNotify.getAndSet(false)) {
           const suppliedValue: OptionalType<T> = validValueSupplier.supply();
-          self.setValue(suppliedValue);
+          setTheValue(suppliedValue);
           // what to do about unexpected use
-          self._valueObservers.delete(this);
+          removeListener(this);
           exposedPromise.resolve(suppliedValue);
         }
       },
       close: function (): void {
-        self._valueObservers.delete(this);
+        removeListener(this);
         exposedPromise.reject(CLOSED_EXCEPTION);
       }
     };
@@ -161,7 +168,9 @@ class WaitableImpl<T> implements Waitable<T> {
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
     const notifyCallback: Consumer<T> = consumerFromType(listener);
     const firstClose: AtomicBoolean = createAtomicBoolean(true);
-    const self: WaitableImpl<T> = this;
+    const removeListener = (v : ValueObserver<T>): void => {
+      this._valueObservers.delete(v);
+    };
 
     const valueObserver: ValueObserver<T> = {
       observeValue: function (value: T): void {
@@ -172,7 +181,7 @@ class WaitableImpl<T> implements Waitable<T> {
       },
       close: function (): void {
         if (firstClose.compareAndSet(true, false)) {
-          self._valueObservers.delete(valueObserver);
+          removeListener(this);
         }
       }
     };
@@ -211,7 +220,7 @@ class WaitableImpl<T> implements Waitable<T> {
     }
   }
 
-  private closeAllListeners() {
+  private closeAllListeners(): void {
     for (const valueObserver of this._valueObservers) {
       valueObserver.close();
     }

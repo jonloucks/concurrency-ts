@@ -13,7 +13,7 @@ describe('Consumer Tests', () => {
 
 describe('fromType Tests', () => {
   it('fromType should convert Method to Consumer', () => {
-    const method: Method<number> = (value: number) => { /* do nothing */ };
+    const method: Method<number> = (_: number) => { /* do nothing */ };
     const consumer: Consumer<number> = fromType<number>(method);
     ok(guard(consumer), 'fromType should return a valid Consumer');
   });
@@ -36,7 +36,7 @@ describe('check Tests', () => {
     let errorCaught = false;
     try {
       check<string>(null as unknown as Type<string>);
-    } catch (e) {
+    } catch (_) {
       errorCaught = true;
     }
     ok(errorCaught, 'check should throw an error for null Consumer');
