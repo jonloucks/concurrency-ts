@@ -46,7 +46,11 @@ class WaitableImpl<T> implements Waitable<T> {
 
   // WaitableSupplier.supply implementations
   supply(): T {
-    return this._reference.get() as T;
+    const value = this._reference.get();
+    if (value === undefined || value === null) {
+      throw new IllegalStateException("No value is currently available in Waitable.");
+    }
+    return value;
   }
 
   // WaitableSupplier.supplyIf implementation
