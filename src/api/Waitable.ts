@@ -2,6 +2,17 @@ import { WaitableConsumer, guard as guardWaitableConsumer } from "@jonloucks/con
 import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
 import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { Open } from "@jonloucks/contracts-ts/api/Open";
+
+/**
+ * Configuration for creating a Waitable
+ */
+export interface Config<T> {
+  /**
+   * Initial value of the Waitable
+   */
+  initialValue?: T;
+}
 
 /**
  * Provides mutable reference that allows other threads to wait until
@@ -9,14 +20,7 @@ import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Type
  *
  * @param <T> the type of references
  */
-export interface Waitable<T> extends WaitableSupplier<T>, WaitableConsumer<T>, WaitableNotify<T> {
-
-  /**
-   * Aborts all waiting threads.
-   * All subsequent wait related calls will return immediately.
-   * Shutdown is permanent
-   */
-  shutdown(): void;
+export interface Waitable<T> extends Open, WaitableSupplier<T>, WaitableConsumer<T>, WaitableNotify<T> {
 }
 
 /**
@@ -26,7 +30,7 @@ export interface Waitable<T> extends WaitableSupplier<T>, WaitableConsumer<T>, W
  * @return true if the instance is a Waitable
  */
 export function guard<T>(instance: unknown): instance is RequiredType<Waitable<T>> {
-  return guardFunctions(instance, 'shutdown')
+  return guardFunctions(instance, 'open')
     && guardWaitableConsumer<T>(instance)
     && guardWaitableNotify<T>(instance)
     && guardWaitableSupplier<T>(instance);

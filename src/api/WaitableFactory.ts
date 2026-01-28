@@ -1,7 +1,6 @@
 import { Contract, createContract,RequiredType } from "@jonloucks/contracts-ts";
-
 import { guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
-import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
+import { Waitable, Config } from "@jonloucks/concurrency-ts/api/Waitable";
 
 /**
  * Waitable Factory
@@ -11,12 +10,12 @@ export interface WaitableFactory {
   /**
    * Create a new Waitable with the given initial value
    *
-   * @param initialValue (null is not allowed)
+   * @param config the configuration for the waitable (null is not allowed)
    * @return the waitable
    * @param <T> the type of waitable
    * @throws IllegalArgumentException if initialValue is null
    */
-  createWaitable<T>(initialValue: T): RequiredType<Waitable<T>>;
+  createWaitable<T>(config?: Config<T>): RequiredType<Waitable<T>>;
 }
 
 /**

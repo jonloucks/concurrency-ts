@@ -12,7 +12,7 @@ describe('WaitableConsumer Tests', () => {
 });
 
 assertGuard(guard,
-  'accept',
-  'acceptIf',
-  'acceptWhen'
+  'consume',
+  'consumeIf',
+  'consumeWhen'
 );
