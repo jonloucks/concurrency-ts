@@ -32,7 +32,7 @@ describe('fromType Tests', () => {
     ok(guard(predicateFalse), 'fromType should return a valid Predicate for false');
   });
 
-  it ('fromType Predicate test method should return correct boolean', () => {
+  it('fromType Predicate test method should return correct boolean', () => {
     const predicateTrue: Predicate<number> = fromType<number>(true);
     const predicateFalse: Predicate<number> = fromType<number>(false);
     ok(predicateTrue.test(0) === true, 'Predicate test should return true for true type');
