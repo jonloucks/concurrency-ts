@@ -123,7 +123,25 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,52 +201,61 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Consumer, Duration, RequiredType, OptionalType, PredicateType, Supplier, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
+  Consumer, Duration,
+  guardFunctions,
+  OptionalType, PredicateType,
+  RequiredType,
+  SupplierType
+} from "@jonloucks/concurrency-ts/api/Types";
 &nbsp;
 /**
  * Waitable consumer
  * @param &lt;T&gt; the type of value
  */
 export interface WaitableConsumer&lt;T&gt; extends Consumer&lt;T&gt; {
+&nbsp;
   /**
    * Assign a new value
    *
    * @param value the new value
-   *  @throws IllegalArgumentException if value is null
+   * @throws IllegalArgumentException if value is null
    */
-&nbsp;
-  accept(value: T): void;
+  consume(value: SupplierType&lt;T&gt;): void;
 &nbsp;
   /**
-   * Assign a new value if conditions are satisfied
+   * Consume a new value if conditions are satisfied
+   * 
+   * In languages that support synchronization this method would lock
+   * before checking the predicate. In JavaScript/TypeScript this is not possible so
+   * if becomes a variant of an 'if' check followed by a 'set' operation.
    *
    * @param predicate the predicate to test if a value should be replaced
    * @param value the new value
-   * @return if accepted the value replaced.
+   * @return the supplied value if and only if the condition is satisfied
    * @throws IllegalArgumentException if predicate is null or if value is null
    */
-  acceptIf(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, value: T): OptionalType&lt;T&gt;;
+  consumeIf(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, value: SupplierType&lt;T&gt;): OptionalType&lt;T&gt;;
 &nbsp;
   /**
-   * Assign a new value if conditions are satisfied
+   * Consume a new value when conditions are satisfied
+   * 
+   * Create a one-time promise that evaluates the predicate against the current value.
+   * If the predicate is satisfied the value is replaced and the promise resolves with the previous value.
+   * 
+   * if the predicate is not satisfied the promise remains pending until either:
+   * - another thread updates the value and the predicate is satisfied, or
+   * - the optional timeout elapses
+   * 
+   * In languages that support synchronization this method would lock
    *
    * @param predicate the predicate to test if a value should be replaced
-   * @param valueSupplier the supplier of the new value
-   * @return if accepted the value replaced.
-   * @throws IllegalArgumentException if predicate is null or if value is null
+   * @param value the new value
+   * @param timeout how long to wait for the predicate to be satisfied
+   * @return the supplied value if and only if the condition is satisfied
+   * @throws IllegalArgumentException if predicate is not defined
    */
-  acceptIf(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, valueSupplier: RequiredType&lt;Supplier&lt;T&gt;&gt;): OptionalType&lt;T&gt;;
-&nbsp;
-  /**
-   * Assign a new value if conditions are satisfied
-   *
-   * @param predicate the predicate to test if a value should be replaced
-   * @param valueSupplier the new value supplier
-   * @param timeout how long to wait to for test is satisfied
-   * @return if accepted the value replaced.
-   * @throws IllegalArgumentException if predicate is null, valueSupplier is null, timeout is null or invalid
-   */
-  acceptWhen(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, valueSupplier: RequiredType&lt;Supplier&lt;T&gt;&gt;, timeout?: OptionalType&lt;Duration&gt;): OptionalType&lt;T&gt;;
+  consumeWhen(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, value: SupplierType&lt;T&gt;, timeout?: Duration): Promise&lt;OptionalType&lt;T&gt;&gt;;
 }
 &nbsp;
 /**
@@ -239,9 +266,9 @@ export interface WaitableConsumer&lt;T&gt; extends Consumer&lt;T&gt; {
  */
 export function guard&lt;T&gt;(instance: unknown): instance is RequiredType&lt;WaitableConsumer&lt;T&gt;&gt; {
   return guardFunctions(instance,
-    'accept',
-    'acceptIf',
-    'acceptWhen'
+    'consume',
+    'consumeIf',
+    'consumeWhen'
   );
 }</pre></td></tr></table></pre>
 
@@ -250,7 +277,7 @@ export function guard&lt;T&gt;(instance: unknown): instance is RequiredType&lt;W
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-22T22:52:07.375Z
+                at 2026-01-28T09:41:28.065Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

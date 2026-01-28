@@ -108,7 +108,47 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,7 +193,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Duration, OptionalType, PredicateType, RequiredType, Supplier, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+import { Duration, OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+&nbsp;
+import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
+import { Supplier } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
+&nbsp;
+export { RequiredType, OptionalType, Duration, PredicateType, Supplier }
 &nbsp;
 /**
  * Waitable supplier
@@ -164,26 +210,40 @@ export interface WaitableSupplier&lt;T&gt; extends Supplier&lt;T&gt; {
   /**
    * @return Get current value
    */
-  get(): T;
+  supply(): T;
 &nbsp;
   /**
    * Gets the current value if it satisfies a condition
+   * 
+   * In languages that support synchronization this method would lock before checking the predicate. In JavaScript/TypeScript this is not possible so
+   * this method creates a one-time promise that evaluates the predicate against the current value.
+   * If the predicate is satisfied the promise resolves with the current value.
    *
    * @param predicate the predicate
    * @return the current value if and only if the condition is satisfied
    * @throws IllegalArgumentException if predicate is null or if value is null
    */
-  getIf(predicate: PredicateType&lt;T&gt;): OptionalType&lt;T&gt;;
+  supplyIf(predicate: PredicateType&lt;T&gt;): OptionalType&lt;T&gt;;
 &nbsp;
   /**
    * Waits until the current value if it satisfies a condition or a timeout is reached
+   * 
+   * In languages that support synchronization this method would lock before checking the predicate. In JavaScript/TypeScript this is not possible so
+   * this method creates a one-time promise that evaluates the predicate against the current value.
+   * If the predicate is satisfied the promise resolves with the current value.
+   * 
+   * if the predicate is not satisfied the promise remains pending until either:
+   * - another thread updates the value and the predicate is satisfied, or
+   * - the optional timeout elapses
+   * 
+   * In languages that support synchronization this method would lock
    *
    * @param predicate the predicate to test if the value satisfies the stop waiting condition
    * @param timeout the time to wait for the value to satisfy the predicate
    * @return the current value if and only if the condition is satisfied
    * @throws IllegalArgumentException if predicate is null, duration is null, or duration is negative
    */
-  getWhen(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, timeout?: OptionalType&lt;Duration&gt;): OptionalType&lt;T&gt;;
+  supplyWhen(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, timeout?: Duration): Promise&lt;OptionalType&lt;T&gt;&gt;;
 }
 &nbsp;
 /**
@@ -194,9 +254,9 @@ export interface WaitableSupplier&lt;T&gt; extends Supplier&lt;T&gt; {
  */
 export function guard&lt;T&gt;(instance: unknown): instance is RequiredType&lt;WaitableSupplier&lt;T&gt;&gt; {
   return guardFunctions(instance,
-    'get',
-    'getIf',
-    'getWhen'
+    'supply',
+    'supplyIf',
+    'supplyWhen',
   );
 }</pre></td></tr></table></pre>
 
@@ -205,7 +265,7 @@ export function guard&lt;T&gt;(instance: unknown): instance is RequiredType&lt;W
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-22T22:52:07.375Z
+                at 2026-01-28T09:41:28.065Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
