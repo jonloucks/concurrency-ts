@@ -231,7 +231,7 @@ class WaitableImpl<T> implements Waitable<T> {
   private constructor(config?: RequiredType<Config<T>>) {
     const actualConfig = config ? config : {};
 
-    this._reference = createAtomicReference<OptionalType<T>>(actualConfig.initialValue)
+    this._reference = createAtomicReference<OptionalType<T>>(actualConfig.initialValue);
   }
 
   private isOpen(): boolean {
