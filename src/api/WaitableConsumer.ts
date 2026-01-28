@@ -48,7 +48,7 @@ export interface WaitableConsumer<T> extends Consumer<T> {
    *
    * @param predicate the predicate to test if a value should be replaced
    * @param value the new value
-   * @param timeout how long to wait to for test is satisfied
+   * @param timeout how long to wait for the predicate to be satisfied
    * @return the supplied value if and only if the condition is satisfied
    * @throws IllegalArgumentException if predicate is not defined
    */
