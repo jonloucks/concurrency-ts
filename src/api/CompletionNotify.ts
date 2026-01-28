@@ -2,8 +2,6 @@ import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { guardFunctions, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 
-
-
 /**
  * Responsibility: Dispatch Completion status to subscribers
  */

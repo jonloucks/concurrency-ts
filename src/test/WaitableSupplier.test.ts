@@ -12,7 +12,7 @@ describe('WaitableSupplier Tests', () => {
 });
 
 assertGuard(guard,
-  'get',
-  'getIf',
-  'getWhen'
+  'supply',
+  'supplyIf',
+  'supplyWhen'
 );
