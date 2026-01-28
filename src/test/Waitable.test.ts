@@ -2,12 +2,12 @@ import { mock } from "jest-mock-extended";
 import { ok, throws } from "node:assert";
 
 import { Waitable, guard } from "@jonloucks/concurrency-ts/api/Waitable";
+import { AutoClose } from "@jonloucks/contracts-ts";
+import { Consumer } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { assertGuard } from "./helper.test";
 
 //TODO: Replace with real import when available
-import { create as createWaitable } from "../impl/WaitableImpl";
-import { Consumer } from "../api/Concurrency";
-import { AutoClose } from "@jonloucks/contracts-ts";
+import { create as createWaitable } from "../impl/Waitable.impl";
 
 describe('Waitable tests', () => {
   it('isWaitable should return true for Waitable', () => {

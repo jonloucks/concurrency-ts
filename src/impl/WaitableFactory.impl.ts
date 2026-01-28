@@ -1,8 +1,8 @@
-import { WaitableFactory } from "@jonloucks/concurrency-ts/api/WaitableFactory";
-import { Waitable, Config } from "@jonloucks/concurrency-ts/api/Waitable";
 import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
+import { Config, Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
+import { WaitableFactory } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 
-import { create as createWaitableImpl } from "./WaitableImpl";
+import { create as createWaitableImpl } from "./Waitable.impl";
 
 /**
  * Create a new WaitableFactory

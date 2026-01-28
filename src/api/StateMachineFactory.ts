@@ -15,16 +15,6 @@ export interface StateMachineFactory {
    * @throws IllegalArgumentException if config is null or configuration is invalid
    */
   createStateMachine<T>(config: Config<T>): RequiredType<StateMachine<T>>;
-
-  /**
-   * Create a new StateMachine
-   *
-   * @param initialState the initial state
-   * @return the new StateMachine
-   * @param <T> the type of each state
-   * @throws IllegalArgumentException if initialState is null
-   */
-  createStateMachine<T>(initialState: T): RequiredType<StateMachine<T>>;
 }
 
 /**

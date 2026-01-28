@@ -1,7 +1,7 @@
 import { WaitableConsumer, guard as guardWaitableConsumer } from "@jonloucks/concurrency-ts/api/WaitableConsumer";
 import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
-import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
 
 /**
@@ -11,7 +11,7 @@ export interface Config<T> {
   /**
    * Initial value of the Waitable
    */
-  initialValue?: T;
+  initialValue?: OptionalType<T>;
 }
 
 /**

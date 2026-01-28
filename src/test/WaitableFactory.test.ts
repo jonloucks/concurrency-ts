@@ -5,7 +5,7 @@ import { CONTRACT, WaitableFactory, guard } from "@jonloucks/concurrency-ts/api/
 import { assertContract, assertGuard } from "./helper.test";
 
 //TODO: Replace with real import when available
-import { create as createWaitableFactory } from "@jonloucks/concurrency-ts/impl/WaitableFactoryImpl";
+import { create as createWaitableFactory } from "@jonloucks/concurrency-ts/impl/WaitableFactory.impl";
 import { isPresent } from "@jonloucks/concurrency-ts/api/Types";
 
 describe('WaitableFactory Tests', () => {

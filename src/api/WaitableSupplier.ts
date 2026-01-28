@@ -48,7 +48,7 @@ export interface WaitableSupplier<T> extends Supplier<T> {
    * @return the current value if and only if the condition is satisfied
    * @throws IllegalArgumentException if predicate is null, duration is null, or duration is negative
    */
-  supplyWhen(predicate: RequiredType<PredicateType<T>>, timeout?: Duration): Promise<OptionalType<T>>;
+  supplyWhen(predicate: RequiredType<PredicateType<T>>, timeout?: Duration): Promise<T>;
 }
 
 /**

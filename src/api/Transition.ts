@@ -21,6 +21,7 @@ export interface Transition<S, R> {
    * @return the optional state if an exception is thrown
    */
   getErrorState(): OptionalType<S>;
+  // getErrorState?(): S;
 
   /**
    * @return the optional state if the transition is not allowed
