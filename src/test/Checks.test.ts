@@ -33,7 +33,7 @@ describe('onFailureCheck function', () => {
 
 describe('onFinallyCheck function', () => {
   it('should return the provided consumer when it is present', () => {
-    const consumer : ConsumerFunction<string> = (_value: string) => { /* do something finally */   };
+    const consumer: ConsumerFunction<string> = (_value: string) => { };
     const result = onFinallyCheck(consumer);
     ok(result === consumer, 'onFinallyCheck should return the original consumer when present');
   });
