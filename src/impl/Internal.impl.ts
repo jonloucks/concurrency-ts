@@ -53,9 +53,10 @@ export const Internal = {
     }   
 
     const timeoutPromise = new Promise<T>((_, reject) => {
+      const delay = validMilliSeconds === 0 ? 0 : Math.max(10, validMilliSeconds);
       const timeoutId = setTimeout(() => {
         reject(new TimeoutException(errorMessage || `Promise timed out after ${validMilliSeconds} ms`));
-      }, Math.max(10, validMilliSeconds));
+      }, delay);
 
       // Clear the timeout if the original promise resolves or rejects first
       promise.finally(() => {
