@@ -43,7 +43,7 @@ describe('onFinallyCheck function', () => {
       onFinallyCheck(null);
     }, {
       name: 'IllegalArgumentException',
-      message: 'OnFinally consumer must be Present.'
+      message: 'OnFinally consumer must be present.'
     });
   });
 
@@ -52,7 +52,7 @@ describe('onFinallyCheck function', () => {
       onFinallyCheck(undefined);
     }, {
       name: 'IllegalArgumentException',
-      message: 'OnFinally consumer must be Present.'
+      message: 'OnFinally consumer must be present.'
     });
   });
 });
@@ -69,7 +69,7 @@ describe('successBlockCheck function', () => {
       successBlockCheck(null);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Success block must be Present.'
+      message: 'Success block must be present.'
     });
   });
 
@@ -78,7 +78,7 @@ describe('successBlockCheck function', () => {
       successBlockCheck(undefined);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Success block must be Present.'
+      message: 'Success block must be present.'
     });
   });
 });
@@ -95,7 +95,7 @@ describe('failureBlockCheck function', () => {
       failureBlockCheck(null);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Failure block must be Present.'
+      message: 'Failure block must be present.'
     });
   });
 
@@ -104,7 +104,7 @@ describe('failureBlockCheck function', () => {
       failureBlockCheck(undefined);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Failure block must be Present.'
+      message: 'Failure block must be present.'
     });
   });
 });
@@ -121,7 +121,7 @@ describe('finallyBlockCheck function', () => {
       finallyBlockCheck(null);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Finally block must be Present.'
+      message: 'Finally block must be present.'
     });
   });
 
@@ -130,7 +130,7 @@ describe('finallyBlockCheck function', () => {
       finallyBlockCheck(undefined);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Finally block must be Present.'
+      message: 'Finally block must be present.'
     });
   });
 });
@@ -147,7 +147,7 @@ describe('predicateCheck function', () => {
       predicateCheck(null);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Predicate must be Present.'
+      message: 'Predicate must be present.'
     });
   });
 
@@ -156,7 +156,7 @@ describe('predicateCheck function', () => {
       predicateCheck(undefined);
     }, {
       name: 'IllegalArgumentException',
-      message: 'Predicate must be Present.'
+      message: 'Predicate must be present.'
     });
   });
 });
@@ -167,7 +167,7 @@ describe('onSuccessCheck function edge cases', () => {
       onSuccessCheck(null);
     }, {
       name: 'IllegalArgumentException',
-      message: 'OnSuccess consumer must be Present.'
+      message: 'OnSuccess consumer must be present.'
     });
   });
 
@@ -176,7 +176,7 @@ describe('onSuccessCheck function edge cases', () => {
       onSuccessCheck(undefined);
     }, {
       name: 'IllegalArgumentException',
-      message: 'OnSuccess consumer must be Present.'
+      message: 'OnSuccess consumer must be present.'
     });
   });
 });
@@ -187,7 +187,7 @@ describe('onFailureCheck function edge cases', () => {
       onFailureCheck(null);
     }, {
       name: 'IllegalArgumentException',
-      message: 'OnFailure consumer must be Present.'
+      message: 'OnFailure consumer must be present.'
     });
   });
 
@@ -196,7 +196,7 @@ describe('onFailureCheck function edge cases', () => {
       onFailureCheck(undefined);
     }, {
       name: 'IllegalArgumentException',
-      message: 'OnFailure consumer must be Present.'
+      message: 'OnFailure consumer must be present.'
     });
   });
 });

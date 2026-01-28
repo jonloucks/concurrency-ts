@@ -47,10 +47,10 @@ class WaitableImpl<T> implements Waitable<T> {
   // WaitableSupplier.supply implementations
   supply(): T {
     const value = this._reference.get();
-    if (value === undefined || value === null) {
-      throw new IllegalStateException("No value is currently available in Waitable.");
-    }
-    return value;
+    // if (value === undefined || value === null) {
+    //   throw new IllegalStateException("No value is currently available in Waitable.");
+    // }
+    return value as T;
   }
 
   // WaitableSupplier.supplyIf implementation
@@ -73,7 +73,7 @@ class WaitableImpl<T> implements Waitable<T> {
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise<OptionalType<T>> = createExposedPromise();
-    const removeListener = (v : ValueObserver<T>): void => {
+    const removeListener = (v: ValueObserver<T>): void => {
       this._valueObservers.delete(v);
     };
 
@@ -131,10 +131,10 @@ class WaitableImpl<T> implements Waitable<T> {
     const validValueSupplier: Supplier<T> = supplierFromType(value);
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise<OptionalType<T>> = createExposedPromise();
-    const removeListener = (v : ValueObserver<T>): void => {
+    const removeListener = (v: ValueObserver<T>): void => {
       this._valueObservers.delete(v);
     };
-    const setTheValue : (T : OptionalType<T>) => void = (v : OptionalType<T>) : void => {
+    const setTheValue: (T: OptionalType<T>) => void = (v: OptionalType<T>): void => {
       this.setValue(v);
     };
 
@@ -171,44 +171,15 @@ class WaitableImpl<T> implements Waitable<T> {
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
     const notifyCallback: Consumer<T> = consumerFromType(listener);
     const firstClose: AtomicBoolean = createAtomicBoolean(true);
-    const removeListener = (v : ValueObserver<T>): void => {
+    const removeListener = (v: ValueObserver<T>): void => {
       this._valueObservers.delete(v);
     };
-    // Guard against re-entrant notifications from notifyCallback changing the value.
-    let notifying = false;
-    let pendingValue: OptionalType<T> | undefined;
-
     const valueObserver: ValueObserver<T> = {
       observeValue: function (value: T): void {
         if (!validPredicate.test(value)) {
           return;
         }
-
-        // If a notification is already in progress for this observer, coalesce
-        // subsequent value changes and process the latest one after the current
-        // callback completes to avoid unbounded recursion.
-        if (notifying) {
-          pendingValue = value;
-          return;
-        }
-
-        notifying = true;
-        try {
-          let current: OptionalType<T> | undefined = value;
-          // Process the initial value and any values observed during callbacks.
-          while (current !== undefined && validPredicate.test(current)) {
-            notifyCallback.consume(current);
-
-            if (pendingValue === undefined) {
-              break;
-            }
-
-            current = pendingValue;
-            pendingValue = undefined;
-          }
-        } finally {
-          notifying = false;
-        }
+        notifyCallback.consume(value);
       },
       close: function (): void {
         if (firstClose.compareAndSet(true, false)) {
