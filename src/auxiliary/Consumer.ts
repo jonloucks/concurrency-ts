@@ -28,5 +28,5 @@ export function fromType<T>(type: Type<T>): RequiredType<Consumer<T>> {
 }
 
 export function check<T>(consumer: Type<T>): Type<T> {
-  return presentCheck(consumer, "Consumer must be Present.");
+  return presentCheck(consumer, "Consumer must be present.");
 }
