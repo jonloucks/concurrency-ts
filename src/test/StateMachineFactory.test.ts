@@ -15,7 +15,7 @@ describe('StateMachineFactory Tests', () => {
     const stateMachineFactory: StateMachineFactory = create();
     ok(stateMachineFactory, 'StateMachineFactory instance should be created');
   });
-  it ('createStateMachine should create a StateMachine instance', () => {
+  it('createStateMachine should create a StateMachine instance', () => {
     const stateMachineFactory: StateMachineFactory = create();
     const stateMachine = stateMachineFactory.createStateMachine<string>({
       initialValue: 'INITIAL',
