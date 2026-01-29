@@ -9,7 +9,7 @@ import { Open } from "@jonloucks/contracts-ts/api/Open";
  */
 export interface Config<T> {
   /**
-   * Initial value of the Waitable
+   * Optional initial value of the Waitable
    */
   initialValue?: OptionalType<T>;
 }
