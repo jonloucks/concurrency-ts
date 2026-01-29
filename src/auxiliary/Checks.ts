@@ -26,7 +26,7 @@ export function listenerCheck<T>(consumer: T): T {
 export function timeoutCheck(timeout: Duration): Duration {
   const presentTimeout = presentCheck(timeout, "Timeout must be present.");
   illegalCheck(timeout, timeout.milliSeconds < 0, "Timeout must not be negative.");
-  illegalCheck(timeout, timeout.milliSeconds > MAX_TIMEOUT.milliSeconds, "Timeout must less than or equal to maximum time.");
+  illegalCheck(timeout, timeout.milliSeconds > MAX_TIMEOUT.milliSeconds, "Timeout must be less than or equal to maximum time.");
   return presentTimeout;
 }
 
