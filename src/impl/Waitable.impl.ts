@@ -10,7 +10,7 @@ import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/Illegal
 
 import { AUTO_CLOSE_NONE, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { ExposedPromise } from "./ExposedPromise";
-import { create as createExposedPromise } from "./ExposedPromiseImpl";
+import { create as createExposedPromise } from "./ExposedPromise.impl";
 import { Internal } from "./Internal.impl";
 
 /**
@@ -18,7 +18,7 @@ import { Internal } from "./Internal.impl";
  *
  * @return the new Waitable
  */
-export function create<T>(config?: RequiredType<Config<T>>): Waitable<T> {
+export function create<T>(config?: Config<T>): Waitable<T> {
   return WaitableImpl.internalCreate(config);
 }
 
@@ -65,14 +65,14 @@ class WaitableImpl<T> implements Waitable<T> {
   }
 
   // WaitableSupplier.supplyWhen implementation
-  async supplyWhen(predicate: RequiredType<PredicateType<T>>, timeout?: Duration): Promise<OptionalType<T>> {
+  async supplyWhen(predicate: RequiredType<PredicateType<T>>, timeout?: Duration): Promise<T> {
     if (!this.isOpen()) {
       return Promise.reject(CLOSED_EXCEPTION);
     }
 
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
-    const exposedPromise: ExposedPromise<OptionalType<T>> = createExposedPromise();
+    const exposedPromise: ExposedPromise<T> = createExposedPromise();
     const removeListener = (v: ValueObserver<T>): void => {
       this._valueObservers.delete(v);
     };
@@ -92,7 +92,7 @@ class WaitableImpl<T> implements Waitable<T> {
 
     // maybe have the timeout delete the observer as well
 
-    const returnPromise: Promise<OptionalType<T>> = Internal.wrapPromiseWithTimeout<OptionalType<T>>(
+    const returnPromise: Promise<T> = Internal.wrapPromiseWithTimeout<T>(
       exposedPromise.getPromise(),
       timeout
     );
@@ -199,7 +199,7 @@ class WaitableImpl<T> implements Waitable<T> {
     return new WaitableImpl(config);
   }
 
-  private constructor(config?: RequiredType<Config<T>>) {
+  private constructor(config?: Config<T>) {
     const actualConfig = config ? config : {};
 
     this._reference = createAtomicReference<OptionalType<T>>(actualConfig.initialValue);

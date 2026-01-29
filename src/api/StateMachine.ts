@@ -3,7 +3,7 @@ import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
 import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
-
+import { Open } from "@jonloucks/contracts-ts/api/Open";
 
 /**
  * State machine.
@@ -11,7 +11,7 @@ import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/con
  *
  * @param <T> the user defined state type
  */
-export interface StateMachine<T> extends WaitableSupplier<T>, WaitableNotify<T> {
+export interface StateMachine<T> extends Open, WaitableSupplier<T>, WaitableNotify<T> {
 
   /**
    * Set the current state, state must already exist and be an allowed transition
@@ -57,7 +57,7 @@ export interface StateMachine<T> extends WaitableSupplier<T>, WaitableNotify<T> 
    * @return the transition return value
    * @throws IllegalArgumentException when transition is null or required fields are not present.
    */
-  transition<R>(transition: Transition<T, R>): R;
+  transition<R>(transition: Transition<T, R>): OptionalType<R>;
 }
 
 /**
@@ -86,7 +86,7 @@ export interface Config<T> {
    * @param state the state
    * @return the rules of the state
    */
-  getStateRules(state: T): Array<Rule<T>>;
+  getStateRules?(state: T): Array<Rule<T>>;
 }
 
 /**
@@ -101,6 +101,7 @@ export function guard<T>(instance: unknown): instance is RequiredType<StateMachi
     'getState',
     'setState',
     'hasState',
-    'transition'
+    'transition',
+    'open'
   ) && guardWaitableNotify<T>(instance) && guardWaitableSupplier<T>(instance);
 }

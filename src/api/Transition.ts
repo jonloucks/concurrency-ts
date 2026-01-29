@@ -1,4 +1,4 @@
-import { OptionalType, RequiredType, Supplier, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
 /**
  * Defines how a transition between states will be done
@@ -10,37 +10,37 @@ export interface Transition<S, R> {
   /**
    * @return the name of the event
    */
-  getEvent(): string;
+  event: string;
 
   /**
    * @return the success state of this transition
    */
-  getSuccessState(): S;
+  state: S;
 
   /**
    * @return the optional state if an exception is thrown
    */
-  getErrorState(): OptionalType<S>;
+  errorState?: S
 
   /**
-   * @return the optional state if the transition is not allowed
+   * The optional state if the transition is not allowed.
    */
-  getFailedState(): OptionalType<S>;
+  failedState?: S
 
   /**
    * @return the optional return value on success
    */
-  getSuccessValue(): OptionalType<Supplier<R>>;
+  getSuccessValue?(): R;
 
   /**
    * @return the optional return value on exception thrown
    */
-  getErrorValue(): OptionalType<Supplier<R>>;
+  getErrorValue?(): R;
 
   /**
    * @return the optional return value if transition is not allowed
    */
-  getFailedValue(): OptionalType<Supplier<R>>;
+  getFailedValue?(): R;
 }
 
 /**

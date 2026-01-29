@@ -1,32 +1,55 @@
-import { presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
-import { ConsumerType, OptionalType, PredicateType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
+import { Duration, MAX_TIMEOUT, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
+import { illegalCheck, presentCheck, configCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
-export { presentCheck };
+export { presentCheck, illegalCheck, configCheck };
 
-export function successBlockCheck<T>(block: OptionalType<SupplierType<T>>): RequiredType<SupplierType<T>> {
-  return presentCheck(block, "Success block must be present.");
+export function stateCheck<T>(state: T): T {
+  return presentCheck(state, "State must be present.");
 }
 
-export function failureBlockCheck<T>(block: OptionalType<SupplierType<T>>): RequiredType<SupplierType<T>> {
-  return presentCheck(block, "Failure block must be present.");
+export function eventCheck(event: string): string {
+  return presentCheck(event, "Event must be present.");
 }
 
-export function finallyBlockCheck<T>(block: OptionalType<SupplierType<T>>): RequiredType<SupplierType<T>> {
-  return presentCheck(block, "Finally block must be present.");
+export function ruleCheck<T>(rule: T): T {
+  return presentCheck(rule, "Rule must be present.");
 }
 
-export function onSuccessCheck<T>(onSuccess: OptionalType<ConsumerType<T>>): RequiredType<ConsumerType<T>> {
+export function rulesCheck<T>(rules: T[]): T[] {
+  return presentCheck(rules, "Rules must be present.");
+} 
+
+export function listenerCheck<T>(consumer: T): T {
+  return presentCheck(consumer, "Listener must be present.");
+}
+
+export function timeoutCheck(timeout: Duration): Duration {
+  const presentTimeout = presentCheck(timeout, "Timeout must be present.");
+  illegalCheck(timeout, timeout.milliSeconds < 0, "Timeout must not be negative.");
+  illegalCheck(timeout, timeout.milliSeconds > MAX_TIMEOUT.milliSeconds, "Timeout must be less than or equal to maximum time.");
+  return presentTimeout;
+}
+
+export function completionCheck<T>(completion: OptionalType<T>): RequiredType<T> {
+  return presentCheck(completion, "Completion must be present.");
+}
+
+export function finallyBlockCheck<T>(block: OptionalType<T>): RequiredType<T> {
+  return presentCheck(block, "OnFinally consumer must be present.");
+}
+
+export function successBlockCheck<T>(onSuccess: OptionalType<T>): RequiredType<T> {
   return presentCheck(onSuccess, "OnSuccess consumer must be present.");
 }
 
-export function onFailureCheck(onFailure: OptionalType<ConsumerType<Error>>): RequiredType<ConsumerType<Error>> {
+export function failureBlockCheck<T>(onFailure: OptionalType<T>): RequiredType<T> {
   return presentCheck(onFailure, "OnFailure consumer must be present.");
 }
 
-export function onFinallyCheck<T>(onFinally: OptionalType<ConsumerType<T>>): RequiredType<ConsumerType<T>> {
-  return presentCheck(onFinally, "OnFinally consumer must be present.");
+export function predicateCheck<T>(predicate: OptionalType<T>): RequiredType<T> {
+  return presentCheck(predicate, "Predicate must be present.");
 }
 
-export function predicateCheck<T>(predicate: OptionalType<PredicateType<T>>): RequiredType<PredicateType<T>> {
-  return presentCheck(predicate, "Predicate must be present.");
+export function initialValueCheck<T>(initialValue: OptionalType<T>): RequiredType<T> {
+  return presentCheck(initialValue, "Initial value must be present.");
 }
