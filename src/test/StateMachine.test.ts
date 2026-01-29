@@ -41,7 +41,7 @@ assertGuard(guard,
 
 describe('StateMachine Functional Tests', () => {
   let stateMachine: StateMachine<string>;
-  let closeMachine: AutoClose
+  let closeMachine: AutoClose;
 
   beforeEach(() => {
     const states: string[] = ['STATE1', 'STATE2', 'STATE3', 'GAME_OVER'];
