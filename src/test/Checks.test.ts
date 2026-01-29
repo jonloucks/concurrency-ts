@@ -220,7 +220,7 @@ describe('timeoutCheck function', () => {
       timeoutCheck({ milliSeconds: Number.MAX_SAFE_INTEGER + 1 });
     }, {
       name: 'IllegalArgumentException',
-      message: 'Timeout must less than or equal to maximum time.'
+      message: 'Timeout must be less than or equal to maximum time.'
     });
   });
 
