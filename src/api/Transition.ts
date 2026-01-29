@@ -23,7 +23,7 @@ export interface Transition<S, R> {
   errorState?: S
 
   /**
-   * @return the optional state if the transition is not allowed
+   * The optional state if the transition is not allowed.
    */
   failedState?: S
 
