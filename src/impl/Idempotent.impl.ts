@@ -5,7 +5,7 @@ import { Open, guard as guardOpen } from "@jonloucks/contracts-ts/api/Open";
 import { guard as guardAutoOpen } from "@jonloucks/contracts-ts/api/AutoOpen";
 import { State } from "@jonloucks/concurrency-ts/api/CompletionState";
 import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { IdempotentState, getStateMachineConfig } from "@jonloucks/concurrency-ts/api/IdempotenState";
+import { IdempotentState, getStateMachineConfig } from "@jonloucks/concurrency-ts/api/IdempotentState";
 import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
 import { create as createStateMachine } from "./StateMachine.impl";
