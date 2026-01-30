@@ -55,8 +55,8 @@ export function getStateRules(state: State): Array<Rule<State>> {
     case 'DESTROYED':
       return [
         {
-          canTransition: (_: string, goal: State): boolean => {
-            return goal === 'DESTROYED' || goal === 'OPENABLE';
+          canTransition: (_: string, __: State): boolean => {
+            return false;
           },
           isTerminal: true
         }

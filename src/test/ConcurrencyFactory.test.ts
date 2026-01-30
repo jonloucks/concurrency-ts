@@ -1,17 +1,23 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok, strictEqual } from "node:assert";
 
 import { ConcurrencyFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
 import { CONTRACTS, isPresent, OptionalType, Repository } from "@jonloucks/contracts-ts";
 import { Config } from "../api/Concurrency";
 import { create as createConcurrencyFactory } from "../impl/ConcurrencyFactory.impl";
-import { assertContract, assertGuard } from "./helper.test";
-import { mockGuardFix } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test";
+
+const FUNCTION_NAMES: (string | symbol)[] = [
+  'createConcurrency',
+  'install'
+];
+
+const REPOSITORY_FUNCTION_NAMES: (string | symbol)[] = [
+  "keep", "store", "require", "check", "open"
+];
 
 describe("ConcurrencyFactory exports", () => {
   it("isConcurrencyFactory() should identify ConcurrencyFactory instances", () => {
-    const instance: MockProxy<ConcurrencyFactory> = mock<ConcurrencyFactory>();
-    mockGuardFix(instance, 'createConcurrency', 'install');
+    const instance: ConcurrencyFactory = mockDuck<ConcurrencyFactory>(...FUNCTION_NAMES);
 
     ok(guard(instance), "The instance should be identified as ConcurrencyFactory");
   });
@@ -19,8 +25,7 @@ describe("ConcurrencyFactory exports", () => {
 
 describe("Config tests", () => {
   it("Config interface should be usable", () => {
-    const config: MockProxy<Config> = mock<Config>();
-    mockGuardFix(config, 'contracts');
+    const config: Config = mockDuck<Config>("contracts");
     ok(config, "Config instance should be created");
   });
 });
@@ -110,7 +115,7 @@ describe('ConcurrencyFactory Install Tests', () => {
 
   beforeEach(() => {
     factory = createConcurrencyFactory({ contracts: CONTRACTS });
-    repository = mock<Repository>();
+    repository = mockDuck<Repository>(...REPOSITORY_FUNCTION_NAMES);
   });
 
   it('should install with valid config and repository', () => {
@@ -127,7 +132,7 @@ describe('ConcurrencyFactory Install Tests', () => {
 
   it('should call repository.keep for each factory', () => {
     const config = { contracts: CONTRACTS };
-    const mockRepository = mock<Repository>();
+    const mockRepository = mockDuck<Repository>(...REPOSITORY_FUNCTION_NAMES);
     let callCount = 0;
     
     mockRepository.keep.mockImplementation(() => {
@@ -140,8 +145,8 @@ describe('ConcurrencyFactory Install Tests', () => {
 
   it('should install multiple times', () => {
     const config = { contracts: CONTRACTS };
-    const mockRepository1 = mock<Repository>();
-    const mockRepository2 = mock<Repository>();
+    const mockRepository1 = mockDuck<Repository>(...REPOSITORY_FUNCTION_NAMES);
+    const mockRepository2 = mockDuck<Repository>(...REPOSITORY_FUNCTION_NAMES);
     
     factory.install(config, mockRepository1);
     factory.install(config, mockRepository2);
@@ -217,7 +222,7 @@ describe('ConcurrencyFactory Integration Tests', () => {
 
   it('should install into repository and create concurrency', () => {
     const factory = createConcurrencyFactory({ contracts: CONTRACTS });
-    const mockRepository = mock<Repository>();
+    const mockRepository = mockDuck<Repository>("keep", "store", "require", "check", "open");
     
     factory.install({ contracts: CONTRACTS }, mockRepository);
     const concurrency = factory.createConcurrency({ contracts: CONTRACTS });
@@ -238,7 +243,7 @@ describe('ConcurrencyFactory Integration Tests', () => {
 
   it('should allow complex factory usage pattern', () => {
     const factory = createConcurrencyFactory({ contracts: CONTRACTS });
-    const repository = mock<Repository>();
+    const repository = mockDuck<Repository>(...REPOSITORY_FUNCTION_NAMES);
     
     // Install
     factory.install({ contracts: CONTRACTS }, repository);

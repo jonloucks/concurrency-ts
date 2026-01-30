@@ -1,11 +1,10 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok, strictEqual, throws } from "node:assert";
 
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config, guard, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
 
-import { assertGuard, mockGuardFix } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test";
 
 // temporary imports until Concurrency CONTRACT is available
 import { AutoClose, isPresent, OptionalType } from "@jonloucks/contracts-ts";
@@ -28,15 +27,14 @@ const FUNCTION_NAMES: (string | symbol)[] = [
 
 describe('StateMachine Tests', () => {
   it('isStateMachine should return true for StateMachine', () => {
-    const stateMachine: MockProxy<StateMachine<string>> = mock<StateMachine<string>>();
-    mockGuardFix(stateMachine, ...FUNCTION_NAMES);
+    const stateMachine: StateMachine<string> = mockDuck<StateMachine<string>>(...FUNCTION_NAMES);
     ok(guard(stateMachine), 'StateMachine should return true');
   });
 });
 
 describe('StateMachine Config Tests', () => {
   it('Config should exist', () => {
-    const config: Config<string> = mock<Config<string>>();
+    const config: Config<string> = mockDuck<Config<string>>("contracts", "initialValue", "states", "getStateRules");
     ok(config, 'Config instance should be created');
   });
 });

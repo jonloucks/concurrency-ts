@@ -1,10 +1,9 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok, strictEqual } from "node:assert";
 
 import { CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
 import { CompletionFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/CompletionFactory";
 import { isPresent } from "@jonloucks/contracts-ts";
-import { assertContract, assertGuard, mockGuardFix } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
 import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { create as createCompletionFactory } from "../impl/CompletionFactory.impl";
@@ -15,8 +14,7 @@ const FUNCTION_NAMES : (string|symbol)[] = [
 
 describe('CompletionFactory Tests', () => {
   it('isCompletionFactory should return true for CompletionFactory', () => {
-    const factory: MockProxy<CompletionFactory> = mock<CompletionFactory>();
-    mockGuardFix(factory, ...FUNCTION_NAMES);
+    const factory: CompletionFactory = mockDuck<CompletionFactory>(...FUNCTION_NAMES);
     ok(guard(factory), 'CompletionFactory should return true');
   });
 });

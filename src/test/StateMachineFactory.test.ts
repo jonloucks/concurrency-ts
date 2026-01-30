@@ -1,12 +1,10 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { CONTRACT, StateMachineFactory, guard } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
-import { assertContract, assertGuard } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test";
 //TODO: Replace with real import when available
 import { create } from "../impl/StateMachineFactory.impl";
 import { CONTRACTS } from "@jonloucks/contracts-ts";
-import { mockGuardFix } from "./helper.test";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'createStateMachine'
@@ -14,8 +12,7 @@ const FUNCTION_NAMES: (string | symbol)[] = [
 
 describe('StateMachineFactory Tests', () => {
   it('isStateMachineFactory should return true for StateMachineFactory', () => {
-    const stateMachineFactory: MockProxy<StateMachineFactory> = mock<StateMachineFactory>();
-    mockGuardFix(stateMachineFactory, ...FUNCTION_NAMES);
+    const stateMachineFactory: StateMachineFactory = mockDuck<StateMachineFactory>(...FUNCTION_NAMES);
     ok(guard(stateMachineFactory), 'StateMachineFactory should return true');
   });
   it('createStateMachineFactory should create an instance', () => {

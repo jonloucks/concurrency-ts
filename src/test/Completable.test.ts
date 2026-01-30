@@ -1,9 +1,8 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok, strictEqual, throws } from "node:assert";
 
 import { Completable, Config as CompletableConfig, guard } from "@jonloucks/concurrency-ts/api/Completable";
 import { CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
-import { assertGuard, mockGuardFix } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test";
 
 import { create as createCompletable } from "../impl/Completable.impl";
 
@@ -19,8 +18,7 @@ const FUNCTION_NAMES: (string | symbol)[] = [
 
 describe('Completable Tests', () => {
   it('isCompletable should return true for Completable', () => {
-    const completable: MockProxy<Completable<number>> = mock<Completable<number>>();
-    mockGuardFix(completable, ...FUNCTION_NAMES);
+    const completable: Completable<number> = mockDuck<Completable<number>>(...FUNCTION_NAMES);
     ok(guard(completable), 'Completable should return true');
   });
 });
@@ -277,7 +275,7 @@ describe('Completable Not Implemented Methods Tests', () => {
 
   it('notify method should throw not implemented error', () => {
     throws(() => {
-      completable.notify(mock());
+      completable.notify(mockDuck());
     }, {
       message: /not implemented/i
     });
@@ -285,7 +283,7 @@ describe('Completable Not Implemented Methods Tests', () => {
 
   it('onCompletion method should throw not implemented error', () => {
     throws(() => {
-      completable.onCompletion(mock());
+      completable.onCompletion(mockDuck());
     }, {
       message: /not implemented/i
     });

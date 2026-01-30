@@ -1,4 +1,3 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok, strictEqual, throws } from "node:assert";
 
 import {
@@ -15,7 +14,7 @@ import {
 } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { CONTRACTS, isPresent, OptionalType } from "@jonloucks/contracts-ts";
 import { create as createConcurrency } from "../impl/Concurrency.impl";
-import { assertContract, assertGuard, mockGuardFix } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
 const FUNCTION_NAMES : (string|symbol)[] = [
   'createWaitable',
@@ -29,16 +28,14 @@ const FUNCTION_NAMES : (string|symbol)[] = [
 
 describe("Concurrency exports", () => {
   it("isConcurrency() should identify Concurrency instances", () => {
-    const concurrencyInstance: MockProxy<Concurrency> = mock<Concurrency>();
-    mockGuardFix(concurrencyInstance, ...FUNCTION_NAMES);
+    const concurrencyInstance: Concurrency = mockDuck<Concurrency>(...FUNCTION_NAMES);
     ok(guard(concurrencyInstance), "The instance should be identified as Concurrency");
   });
 });
 
 describe("Config tests", () => {
   it("Config interface should be usable", () => {
-    const config: MockProxy<ConcurrencyConfig> = mock<ConcurrencyConfig>();
-    mockGuardFix(config, 'contracts');
+    const config: ConcurrencyConfig = mockDuck<ConcurrencyConfig>(...FUNCTION_NAMES);
     ok(config, "Config instance should be created");
   });
 });
@@ -155,8 +152,8 @@ describe('Concurrency Not Implemented Methods Tests', () => {
   });
 
   it('completeLater should throw not implemented error', () => {
-    const onCompletion = mock<OnCompletion<unknown>>();
-    const consumer = mock<Consumer<OnCompletion<unknown>>>();
+    const onCompletion = mockDuck<OnCompletion<unknown>>("onCompletion");
+    const consumer = mockDuck<Consumer<OnCompletion<unknown>>>("consume");
     
     throws(() => {
       concurrency.completeLater(onCompletion, consumer);
@@ -166,8 +163,8 @@ describe('Concurrency Not Implemented Methods Tests', () => {
   });
 
   it('completeNow should throw not implemented error', () => {
-    const onCompletion = mock<OnCompletion<unknown>>();
-    const supplier = mock<Supplier<unknown>>();
+    const onCompletion = mockDuck<OnCompletion<unknown>>("onCompletion");
+    const supplier = mockDuck<Supplier<unknown>>("supply");
     
     throws(() => {
       concurrency.completeNow(onCompletion, supplier);

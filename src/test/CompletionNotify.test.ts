@@ -1,8 +1,7 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { CompletionNotify, guard } from "@jonloucks/concurrency-ts/api/CompletionNotify";
-import { assertGuard, mockGuardFix } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test";
 
 const FUNCTION_NAMES : (string|symbol)[] = [
   'notify'
@@ -10,8 +9,7 @@ const FUNCTION_NAMES : (string|symbol)[] = [
 
 describe('CompletionNotify Tests', () => {
   it('isCompletionNotify should return true for CompletionNotify', () => {
-    const completionNotify: MockProxy<CompletionNotify<number>> = mock<CompletionNotify<number>>();
-    mockGuardFix(completionNotify, ...FUNCTION_NAMES);
+    const completionNotify: CompletionNotify<number> = mockDuck<CompletionNotify<number>>(...FUNCTION_NAMES);
     ok(guard(completionNotify), 'CompletionNotify should return true');
   });
 });

@@ -1,9 +1,8 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok, strictEqual } from "node:assert";
 
 import { Completable, CompletableFactory, Config, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/CompletableFactory";
 import { CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
-import { assertContract, assertGuard, mockGuardFix } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
 import { create as createCompletableFactory } from "../impl/CompletableFactory.impl";
 
@@ -13,18 +12,15 @@ const FUNCTION_NAMES : (string|symbol)[] = [
 
 describe('CompletableFactory Tests', () => {
   it('isCompletableFactory should return true for CompletableFactory', () => {
-    const completableFactory: MockProxy<CompletableFactory> = mock<CompletableFactory>();
-    mockGuardFix(completableFactory, ...FUNCTION_NAMES);
+    const completableFactory: CompletableFactory = mockDuck<CompletableFactory>(...FUNCTION_NAMES);
     ok(guard(completableFactory), 'CompletableFactory should return true');
   });
 });
 
 describe('CompletableFactory Exports', () => {
   it('should export Completable and Config', () => {
-    const config: MockProxy<Config<number>> = mock<Config<number>>();
-    mockGuardFix(config, "contracts", "initialValue");  
-    const completable: MockProxy<Completable<number>> = mock<Completable<number>>();
-    mockGuardFix(completable, "open", "isCompleted");
+    const config: Config<number> = mockDuck<Config<number>>("contracts", "initialValue");
+    const completable: Completable<number> = mockDuck<Completable<number>>("open", "isCompleted");
     ok(config !== undefined, 'Config should be defined');
     ok(completable !== undefined, 'Completable should be defined');
   });

@@ -1,9 +1,8 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok, strictEqual } from "node:assert";
 
 import { Completion, Config, guard } from "@jonloucks/concurrency-ts/api/Completion";
 import { isPresent } from "@jonloucks/contracts-ts";
-import { assertGuard, mockGuardFix } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test";
 
 import { create as createCompletion } from "../impl/Completion.impl";
 
@@ -17,8 +16,7 @@ const FUNCTION_NAMES : (string|symbol)[] = [
 
 describe('isCompletion Tests', () => {
   it('isCompletion should return true for Completion', () => {
-    const completion: MockProxy<Completion<number>> = mock<Completion<number>>();
-    mockGuardFix(completion, ...FUNCTION_NAMES);
+    const completion: Completion<number> = mockDuck<Completion<number>>(...FUNCTION_NAMES);
     ok(guard(completion), 'Completion should return true');
   });
 });
@@ -27,8 +25,8 @@ assertGuard(guard, ...FUNCTION_NAMES);
 
 describe('Completion Exports', () => {
   it('should export Completion and Config', () => {
-    const config: Config<number> = mock<Config<number>>();
-    const completion: Completion<number> = mock<Completion<number>>();
+    const config: Config<number> = mockDuck<Config<number>>(...FUNCTION_NAMES);
+    const completion: Completion<number> = mockDuck<Completion<number>>(...FUNCTION_NAMES);
     ok(config !== undefined, 'Config should be defined');
     ok(completion !== undefined, 'Completion should be defined');
   });

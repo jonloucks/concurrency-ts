@@ -1,8 +1,7 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { WaitableConsumer, guard } from "@jonloucks/concurrency-ts/api/WaitableConsumer";
-import { assertGuard, mockGuardFix } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'consume',
@@ -12,8 +11,7 @@ const FUNCTION_NAMES: (string | symbol)[] = [
 
 describe('WaitableConsumer Tests', () => {
   it('isWaitableConsumer should return true for WaitableConsumer', () => {
-    const waitableConsumer: MockProxy<WaitableConsumer<number>> = mock<WaitableConsumer<number>>();
-    mockGuardFix(waitableConsumer, ...FUNCTION_NAMES);
+    const waitableConsumer: WaitableConsumer<number> = mockDuck<WaitableConsumer<number>>(...FUNCTION_NAMES);
     ok(guard(waitableConsumer), 'WaitableConsumer should return true');
   });
 });

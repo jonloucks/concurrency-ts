@@ -222,11 +222,11 @@ describe('Idempotent DESTROYED State Rules', () => {
   });
 
   it('should allow transition to DESTROYED', () => {
-    ok(rules[0].canTransition('event', 'DESTROYED'), 'Should allow transition from DESTROYED to DESTROYED');
+    ok(!rules[0].canTransition('event', 'DESTROYED'), 'Should not allow transition from DESTROYED to DESTROYED');
   });
 
-  it('should allow transition to OPENABLE', () => {
-    ok(rules[0].canTransition('event', 'OPENABLE'), 'Should allow transition from DESTROYED to OPENABLE');
+  it('should not allow transition to OPENABLE', () => {
+    ok(!rules[0].canTransition('event', 'OPENABLE'), 'Should not allow transition from DESTROYED to OPENABLE');
   });
 
   it('should not allow transition to OPENING', () => {

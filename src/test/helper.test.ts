@@ -1,8 +1,9 @@
-import { ok } from "node:assert";
+import assert, { ok } from "node:assert";
 
 import { Contract } from "@jonloucks/contracts-ts/api/Contract";
 import { isRatifiedContract } from "@jonloucks/contracts-ts/api/RatifiedContract";
 import { MockProxy } from "jest-mock-extended/lib/Mock";
+import { mock } from "jest-mock-extended";
 
 describe('Helper Tests', () => {
   it('should run a place holder test', () => {
@@ -30,15 +31,16 @@ type Guard<T> = (o: unknown) => o is T;
  * Production code now avoids calls that would trigger mock to create any method or property.
  * This behavior would cause ALL guard checks to pass incorrectly.
  * 
- * @param mocked the mocked instance
  * @param propertyNames the names of methods to be auto created
  */
-export function mockGuardFix<T>(mocked: MockProxy<T> , ...propertyNames: (string | symbol)[]): void {
+export function mockDuck<T>(...propertyNames: (string | symbol)[]): MockProxy<T> {
+  const mocked: MockProxy<T> = mock<T>();
   const lookup = mocked as Record<string | symbol, unknown>;
   for (const propertyName of propertyNames) {
     // Access the property to force jest-mock-extended to create the method
-    const _ = lookup[propertyName];
+    assert(lookup[propertyName]);
   }
+  return mocked;
 }
 
 export function assertGuard<T>(guard: Guard<T>, ...propertyNames: (string | symbol)[]): void {

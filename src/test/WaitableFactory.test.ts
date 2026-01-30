@@ -1,8 +1,7 @@
-import { mock, MockProxy } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { CONTRACT, WaitableFactory, guard } from "@jonloucks/concurrency-ts/api/WaitableFactory";
-import { assertContract, assertGuard, mockGuardFix } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
 //TODO: Replace with real import when available
 import { create as createWaitableFactory } from "@jonloucks/concurrency-ts/impl/WaitableFactory.impl";
@@ -15,8 +14,7 @@ const FUNCTION_NAMES: (string | symbol)[] = [
 
 describe('WaitableFactory Tests', () => {
   it('isWaitableFactory should return true for WaitableFactory', () => {
-    const factory: MockProxy<WaitableFactory> = mock<WaitableFactory>();
-    mockGuardFix(factory, ...FUNCTION_NAMES);
+    const factory: WaitableFactory = mockDuck<WaitableFactory>(...FUNCTION_NAMES);
     ok(guard(factory), 'WaitableFactory should return true');
   });
 });

@@ -11,7 +11,7 @@ export type OpenType = AutoOpen | Open | (() => CloseType);
 export interface Config {
 
   contracts: Contracts;
-  
+
   open: OpenType;
 }
 
@@ -29,6 +29,7 @@ export interface Idempotent extends Open {
  */
 export function guard(instance: unknown): instance is RequiredType<Idempotent> {
   return guardFunctions(instance,
-    'getState'
+    'getState',
+    'open',
   );
 } 
