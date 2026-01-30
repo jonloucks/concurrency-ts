@@ -34,7 +34,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
     const rules: Set<Rule<S>> | undefined = this.stateToRulesLookup.get(state);
     if (isPresent(rules) && rules.size > 0) {
       for (const rule of rules) {
-        if (rule.isTerminal == true) {
+        if (rule.isTerminal) {
           return true;
         }
       }
