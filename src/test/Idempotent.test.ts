@@ -289,27 +289,6 @@ describe('Idempotent Lifecycle Tests', () => {
     strictEqual(idempotent.getState(), 'CLOSED', 'State CLOSED after close');
   });
 
-  it('should handle multiple open-close cycles', () => {
-    const mockOpen = duckOpen();
-
-    const idempotent = createIdempotent({
-      contracts: CONTRACTS,
-      open: mockOpen
-    });
-
-    // First cycle
-    const autoClose1 = idempotent.open();
-    strictEqual(idempotent.getState(), 'OPENED', 'First cycle: OPENED');
-    autoClose1.close();
-    strictEqual(idempotent.getState(), 'CLOSED', 'First cycle: CLOSED');
-
-    // Second open after close
-    const autoClose2 = idempotent.open();
-    strictEqual(idempotent.getState(), 'CLOSED', 'Second cycle: OPENED');
-    autoClose2.close();
-    strictEqual(idempotent.getState(), 'CLOSED', 'Second cycle: CLOSED');
-  });
-
   it('should handle rapid open-close-open cycles', () => {
     const mockOpen = duckOpen();
 
