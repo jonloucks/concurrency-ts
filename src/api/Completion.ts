@@ -10,7 +10,7 @@ export { CompletionState };
  */
 export interface Config<T> {
 
-  /** The optional completion state */
+  /** The completion state */
   state: RequiredType<CompletionState>;
 
   /** The optional thrown exception */
