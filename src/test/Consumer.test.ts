@@ -1,12 +1,17 @@
-import { mock } from "jest-mock-extended";
+import { mock, MockProxy } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Consumer, Type, guard, Method, fromType, check } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
-import { assertGuard } from "./helper.test";
+import { assertGuard, mockGuardFix } from "./helper.test";
+
+const FUNCTION_NAMES : (string|symbol)[] = [
+  'consume'
+];
 
 describe('Consumer Tests', () => {
   it('isConsumer should return true for Consumer', () => {
-    const consumer: Consumer<string> = mock<Consumer<string>>();
+    const consumer: MockProxy<Consumer<string>> = mock<Consumer<string>>();
+    mockGuardFix(consumer, ...FUNCTION_NAMES);
     ok(guard(consumer), 'Consumer should return true');
   });
 });
@@ -19,7 +24,8 @@ describe('fromType Tests', () => {
   });
 
   it('fromType should return Consumer as is', () => {
-    const originalConsumer: Consumer<number> = mock<Consumer<number>>();
+    const originalConsumer: MockProxy<Consumer<number>> = mock<Consumer<number>>();
+    mockGuardFix(originalConsumer, ...FUNCTION_NAMES);
     const consumer: Consumer<number> = fromType<number>(originalConsumer);
     ok(consumer === originalConsumer, 'fromType should return the original Consumer');
   });
@@ -27,7 +33,8 @@ describe('fromType Tests', () => {
 
 describe('check Tests', () => {
   it('check should return the Consumer if present', () => {
-    const consumer: Consumer<string> = mock<Consumer<string>>();
+    const consumer: MockProxy<Consumer<string>> = mock<Consumer<string>>();
+    mockGuardFix(consumer, ...FUNCTION_NAMES);
     const checkedConsumer: Type<string> = check<string>(consumer);
     ok(checkedConsumer === consumer, 'check should return the original Consumer');
   });
@@ -43,4 +50,4 @@ describe('check Tests', () => {
   });
 });
 
-assertGuard(guard, 'consume');
+assertGuard(guard, ...FUNCTION_NAMES);

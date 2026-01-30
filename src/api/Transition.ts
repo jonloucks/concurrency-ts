@@ -13,9 +13,9 @@ export interface Transition<S, R> {
   event: string;
 
   /**
-   * @return the success state of this transition
+   * @return the goal state of this transition
    */
-  state: S;
+  successState: S;
 
   /**
    * @return the optional state if an exception is thrown
@@ -52,10 +52,10 @@ export interface Transition<S, R> {
 export function guard<S, R>(instance: unknown): instance is RequiredType<Transition<S, R>> {
   return guardFunctions(
     instance,
-    'getEvent',
-    'getSuccessState',
-    'getErrorState',
-    'getFailedState',
+    'event',
+    'goalState',
+    'errorState',
+    'failedState',
     'getSuccessValue',
     'getErrorValue',
     'getFailedValue'

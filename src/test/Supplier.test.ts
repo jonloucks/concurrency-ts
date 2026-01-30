@@ -1,12 +1,17 @@
-import { mock } from "jest-mock-extended";
+import { mock, MockProxy } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Supplier, Type, guard, Method, fromType, toValue, check } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
-import { assertGuard } from "./helper.test";
+import { assertGuard, mockGuardFix } from "./helper.test";
+
+const FUNCTION_NAMES: (string | symbol)[] = [
+  'supply'
+];
 
 describe('Supplier Tests', () => {
   it('isSupplier should return true for Supplier', () => {
-    const supplier: Supplier<string> = mock<Supplier<string>>();
+    const supplier: MockProxy<Supplier<string>> = mock<Supplier<string>>();
+    mockGuardFix(supplier, ...FUNCTION_NAMES);
     ok(guard(supplier), 'Supplier should return true');
   });
 });
@@ -19,12 +24,13 @@ describe('fromType Tests', () => {
   });
 
   it('fromType should return Supplier as is', () => {
-    const originalSupplier: Supplier<number> = mock<Supplier<number>>();
+    const originalSupplier: MockProxy<Supplier<number>> = mock<Supplier<number>>();
+    mockGuardFix(originalSupplier, ...FUNCTION_NAMES);
     const supplier: Supplier<number> = fromType<number>(originalSupplier);
     ok(supplier === originalSupplier, 'fromType should return the original Supplier');
   });
 
-  it ('fromType should convert value to Supplier', () => {
+  it('fromType should convert value to Supplier', () => {
     const supplier: Supplier<number> = fromType<number>(100);
     ok(guard(supplier), 'fromType should return a valid Supplier for value');
     ok(supplier.supply() === 100, 'Supplier supply method should return the correct value');
@@ -33,7 +39,8 @@ describe('fromType Tests', () => {
 
 describe('check Tests', () => {
   it('check should return the Supplier if present', () => {
-    const supplier: Supplier<string> = mock<Supplier<string>>();
+    const supplier: MockProxy<Supplier<string>> = mock<Supplier<string>>();
+    mockGuardFix(supplier, ...FUNCTION_NAMES);
     const checkedSupplier: Type<string> = check<string>(supplier);
     ok(checkedSupplier === supplier, 'check should return the original Supplier');
   });
@@ -70,4 +77,4 @@ describe('toValue Tests', () => {
   });
 });
 
-assertGuard(guard, 'supply');
+assertGuard(guard, ...FUNCTION_NAMES);

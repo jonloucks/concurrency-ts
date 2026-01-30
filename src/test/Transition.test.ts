@@ -1,22 +1,26 @@
-import { mock } from "jest-mock-extended";
+import { mock, MockProxy } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Transition, guard } from "@jonloucks/concurrency-ts/api/Transition";
-import { assertGuard } from "./helper.test";
+import { assertGuard, mockGuardFix } from "./helper.test";
+
+
+const FUNCTION_NAMES: (string | symbol)[] = [
+  'event',
+  'goalState',
+  'errorState',
+  'failedState',
+  'getSuccessValue',
+  'getErrorValue',
+  'getFailedValue'
+];
 
 describe('Transition Tests', () => {
   it('isTransition should return true for Transition', () => {
-    const transition: Transition<string, number> = mock<Transition<string, number>>();
+    const transition: MockProxy<Transition<string, number>> = mock<Transition<string, number>>();
+    mockGuardFix(transition, ...FUNCTION_NAMES);
     ok(guard(transition), 'Transition should return true');
   });
 });
 
-assertGuard(guard,
-  'getEvent',
-  'getSuccessState',
-  'getErrorState',
-  'getFailedState',
-  'getSuccessValue',
-  'getErrorValue',
-  'getFailedValue'
-);
+assertGuard(guard, ...FUNCTION_NAMES);

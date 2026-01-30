@@ -1,14 +1,8 @@
 import { IsCompleted } from "@jonloucks/concurrency-ts/api/IsCompleted";
 import { OptionalType, RequiredType, Throwable, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { CompletionState } from "@jonloucks/concurrency-ts/api/CompletionState";
 
-/**
- * The possible states of a Completion
- */
-export type State =
-    | 'PENDING'
-    | 'FAILED'
-    | 'CANCELLED'
-    | 'SUCCEEDED';
+export { CompletionState };
 
 /** Configuration for a Completion
  *
@@ -17,7 +11,7 @@ export type State =
 export interface Config<T> {
 
   /** The optional completion state */
-  state?: OptionalType<State>;
+  state: RequiredType<CompletionState>;
 
   /** The optional thrown exception */
   thrown?: OptionalType<Throwable<unknown>>;
@@ -29,6 +23,8 @@ export interface Config<T> {
   promise?: OptionalType<Promise<T>>;
 }
 
+export { Config as CompletionConfig };
+
 /**
  * Responsibility: Represent a progression step in the life cycle of an activity.
  */
@@ -37,7 +33,7 @@ export interface Completion<T> extends IsCompleted {
   /**
    * @return the completion state
    */
-  getState(): RequiredType<State>;
+  getState(): RequiredType<CompletionState>;
 
   /**
    * @return optional thrown exception

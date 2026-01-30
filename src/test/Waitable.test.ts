@@ -1,17 +1,29 @@
-import { mock } from "jest-mock-extended";
+import { mock, MockProxy } from "jest-mock-extended";
 import { ok, throws } from "node:assert";
 
 import { Waitable, guard } from "@jonloucks/concurrency-ts/api/Waitable";
 import { AutoClose } from "@jonloucks/contracts-ts";
 import { Consumer } from "@jonloucks/concurrency-ts/api/Concurrency";
-import { assertGuard } from "./helper.test";
+import { assertGuard, mockGuardFix } from "./helper.test";
 
 //TODO: Replace with real import when available
 import { create as createWaitable } from "../impl/Waitable.impl";
 
+const FUNCTION_NAMES: (string | symbol)[] = [
+  'open',
+  'supply',
+  'supplyIf',
+  'supplyWhen',
+  'consume',
+  'consumeIf',
+  'consumeWhen',
+  'notifyWhile'
+];
+
 describe('Waitable tests', () => {
   it('isWaitable should return true for Waitable', () => {
-    const waitable: Waitable<string> = mock<Waitable<string>>();
+    const waitable: MockProxy<Waitable<string>> = mock<Waitable<string>>();
+    mockGuardFix(waitable, ...FUNCTION_NAMES);
     ok(guard(waitable), 'Waitable should return true');
   });
 });
@@ -299,15 +311,6 @@ describe('Waitable tests', () => {
   });
 });
 
-assertGuard(guard,
-  'open',
-  'supply',
-  'supplyIf',
-  'supplyWhen',
-  'consume',
-  'consumeIf',
-  'consumeWhen',
-  'notifyWhile'
-);
+assertGuard(guard, ...FUNCTION_NAMES);
 
 

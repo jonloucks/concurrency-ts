@@ -1,6 +1,7 @@
 import { StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
-import { StateMachine, Config } from "@jonloucks/concurrency-ts/api/StateMachine";
+import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
+import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
 
 import { create as createStateMachineImpl } from "./StateMachine.impl";
 
@@ -9,21 +10,25 @@ import { create as createStateMachineImpl } from "./StateMachine.impl";
  *
  * @return the new StateMachineFactory
  */
-export function create(): StateMachineFactory {
-  return StateMachineFactoryImpl.internalCreate();
+export function create(config: ConcurrencyConfig): StateMachineFactory {
+  return StateMachineFactoryImpl.internalCreate(config);
 }
 
 // ---- Implementation details below ----
 
 class StateMachineFactoryImpl implements StateMachineFactory {
-  createStateMachine<T>(config: Config<T>): RequiredType<StateMachine<T>> {
-    return createStateMachineImpl(config);
+  createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>> {
+    const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
+    return createStateMachineImpl(combinedConfig);
   }
 
-  static internalCreate(): StateMachineFactory {
-    return new StateMachineFactoryImpl();
+  static internalCreate(config: ConcurrencyConfig): StateMachineFactory {
+    return new StateMachineFactoryImpl(config);
   }
 
-  private constructor() {
+  private constructor(config: ConcurrencyConfig) {
+    this.concurrencyConfig = config;
   }
+
+  private readonly concurrencyConfig: ConcurrencyConfig;
 };
