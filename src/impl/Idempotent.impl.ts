@@ -79,7 +79,8 @@ class IdempotentImpl implements Idempotent {
     const closeFactory: AutoCloseFactory = contracts.enforce(AUTO_CLOSE_FACTORY);
     this.closeMany = closeFactory.createAutoCloseMany();
     this.delegate = typeToOpen(config.open);
-    this.stateMachine = createStateMachine(getStateMachineConfig());
+    const stateMachineConfig = getStateMachineConfig();
+    this.stateMachine = createStateMachine({ ...stateMachineConfig, contracts });
     this.firstClose = inlineAutoClose(() => {
       this.stateMachine.transition<void>({
         event: "close",
