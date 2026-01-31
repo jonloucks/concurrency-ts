@@ -7,7 +7,8 @@ import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
 import { configCheck, eventCheck, illegalCheck, initialValueCheck, presentCheck, ruleCheck, rulesCheck, stateCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
-import { AutoClose } from "@jonloucks/contracts-ts";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+
 import { create as createWaitable } from "./Waitable.impl";
 
 /** 

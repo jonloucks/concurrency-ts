@@ -1,14 +1,15 @@
 import { ok, strictEqual, throws } from "node:assert";
 
+import { isPresent, OptionalType } from "@jonloucks/contracts-ts/api/Types";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config, guard, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
+import { Consumer } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 
 import { assertGuard, mockDuck } from "./helper.test";
 
 // temporary imports until Concurrency CONTRACT is available
-import { AutoClose, isPresent, OptionalType } from "@jonloucks/contracts-ts";
-import { Consumer } from "../auxiliary/Consumer";
 import { create as createStateMachine } from "../impl/StateMachine.impl";
 
 const FUNCTION_NAMES: (string | symbol)[] = [

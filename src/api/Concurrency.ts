@@ -5,8 +5,7 @@ import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurren
 import { Consumer, ConsumerType, guardFunctions, Supplier, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
-import { Contract, createContract, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
-import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
+import { Contract, Contracts, createContract, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
 
 export {
   Completable, 

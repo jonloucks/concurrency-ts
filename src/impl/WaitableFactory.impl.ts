@@ -29,5 +29,6 @@ class WaitableFactoryImpl implements WaitableFactory {
   private constructor(config: ConcurrencyConfig) {
     this.concurrencyConfig = config;
   }
+  
   private readonly concurrencyConfig: ConcurrencyConfig;
 };

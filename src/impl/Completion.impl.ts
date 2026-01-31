@@ -4,6 +4,13 @@ import { Throwable } from '@jonloucks/concurrency-ts/api/Types';
 import { isTerminalState } from '@jonloucks/concurrency-ts/api/CompletionState';
 import { stateCheck } from '@jonloucks/concurrency-ts/auxiliary/Checks';
 
+/** 
+ * Create a new Completion
+ *
+ * @param config the Completion configuration
+ * @return the new Completion
+ * @param <T> the type of completion value
+ */
 export function create<T>(config: Config<T>): Completion<T> {
   return CompletionImpl.createInternal(config);
 }

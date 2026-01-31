@@ -1,13 +1,14 @@
 import { ok, strictEqual, throws } from "node:assert";
+import { MockProxy } from "jest-mock-extended";
 
 import { Idempotent, guard as isIdempotent } from "@jonloucks/concurrency-ts/api/Idempotent";
 import { AutoOpen, CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
 import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { Open } from "@jonloucks/contracts-ts/api/Open";
+import { IdempotentState } from "@jonloucks/concurrency-ts/api/IdempotenState";
+
 import { create as createIdempotent } from "../impl/Idempotent.impl";
 import { assertGuard, mockDuck } from "./helper.test";
-import { Open } from "@jonloucks/contracts-ts/api/Open";
-import { IdempotentState } from "../api/IdempotenState";
-import { MockProxy } from "jest-mock-extended";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'getState',

@@ -2,7 +2,7 @@ import { ok, strictEqual } from "node:assert";
 
 import { ConcurrencyFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
 import { CONTRACTS, isPresent, OptionalType, Repository } from "@jonloucks/contracts-ts";
-import { Config } from "../api/Concurrency";
+import { Config } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { create as createConcurrencyFactory } from "../impl/ConcurrencyFactory.impl";
 import { assertContract, assertGuard, mockDuck } from "./helper.test";
 

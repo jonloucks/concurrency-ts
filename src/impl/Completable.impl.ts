@@ -17,7 +17,6 @@ import { create as createStateMachine } from "./StateMachine.impl";
 import { create as createWaitable } from "./Waitable.impl";
 import { create as createIdempotent } from "./Idempotent.impl";
 
-
 /** 
  * Create a new Completable
  *

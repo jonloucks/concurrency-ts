@@ -4,7 +4,7 @@ import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurren
 import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
-import { IsCompleted } from "./IsCompleted";
+import { IsCompleted } from "@jonloucks/concurrency-ts/api/IsCompleted";
 import { Contracts } from "@jonloucks/contracts-ts";
 
 /**

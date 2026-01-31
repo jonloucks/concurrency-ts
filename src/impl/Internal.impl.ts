@@ -42,6 +42,15 @@ export const Internal = {
     }
   },
 
+  /** 
+   * Wraps a promise with a timeout. If the promise does not settle within the specified duration,
+   * it rejects with a TimeoutException.
+   * 
+   * @param promise the promise to wrap
+   * @param timeout the timeout duration
+   * @param errorMessage optional error message for the TimeoutException
+   * @return a promise that rejects with TimeoutException if the original promise does not settle in time
+   */
   async wrapPromiseWithTimeout<T>(promise: Promise<T>, timeout?: Duration, errorMessage?: string): Promise<T> {
     // Create a promise that rejects after the specified time
     const milliSeconds: number = timeout?.milliSeconds ?? MAX_TIMEOUT.milliSeconds;

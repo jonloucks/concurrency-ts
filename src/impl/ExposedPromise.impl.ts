@@ -1,5 +1,11 @@
 import { ExposedPromise } from "./ExposedPromise";
 
+/** 
+ * Create a new ExposedPromise
+ *
+ * @return the new ExposedPromise
+ * @param <T> the type of promise value
+ */
 export function create<T>(): ExposedPromise<T> {
   return ExposedPromiseImpl.internalCreate<T>();
 }
