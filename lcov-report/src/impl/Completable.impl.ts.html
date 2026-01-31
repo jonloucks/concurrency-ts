@@ -402,19 +402,19 @@ interface Observer&lt;T&gt; extends OnCompletion&lt;T&gt;, Close {
 &nbsp;
 class CompletableImpl&lt;T&gt; implements Completable&lt;T&gt; {
   open(): AutoClose {
-    return this.idempotent.open();
+    return this._idempotent.open();
   }
 &nbsp;
   notifyState(): WaitableNotify&lt;CompletionState&gt; {
-    return this.completionStateMachine;
+    return this._completionStateMachine;
   }
 &nbsp;
   notifyValue(): WaitableNotify&lt;T&gt; {
-    return this.waitableValue;
+    return this._waitableValue;
   }
 &nbsp;
   getCompletion(): OptionalType&lt;Completion&lt;T&gt;&gt; {
-    return this.completion;
+    return this._completion;
   }
 &nbsp;
   notify(onCompletion: OnCompletion&lt;T&gt;): AutoClose {
@@ -423,7 +423,7 @@ class CompletableImpl&lt;T&gt; implements Completable&lt;T&gt; {
     const isLive: AtomicBoolean = createAtomicBoolean(true);
 &nbsp;
     const removeObserver = (v: Observer&lt;T&gt;): void =&gt; {
-      this.observers.delete(v);
+      this._observers.delete(v);
     };
     const observer: Observer&lt;T&gt; = {
       onCompletion: function (completion: Completion&lt;T&gt;): void {
@@ -438,11 +438,11 @@ class CompletableImpl&lt;T&gt; implements Completable&lt;T&gt; {
         }
       }
     };
-    this.observers.add(observer);
+    this._observers.add(observer);
 &nbsp;
-    if (isPresent(this.completion)) {
+    if (isPresent(this._completion)) {
       try {
-        observer.onCompletion(this.completion!);
+        observer.onCompletion(this._completion!);
       } catch (e) {
 <span class="cstat-no" title="statement not covered" >        removeObserver(observer);</span>
 <span class="cstat-no" title="statement not covered" >        throw e;</span>
@@ -459,37 +459,37 @@ class CompletableImpl&lt;T&gt; implements Completable&lt;T&gt; {
 &nbsp;
     this.assertNotRejecting();
 &nbsp;
-    if (this.completionStateMachine.setState("onCompletion", validCompletion.state)) {
-      this.completion = validCompletion;
+    if (this._completionStateMachine.setState("onCompletion", validCompletion.state)) {
+      this._completion = validCompletion;
 &nbsp;
       const value = validCompletion.value;
       if (this.isCompleted() &amp;&amp; isPresent(value)) {
-        this.waitableValue.consume(value!);
+        this._waitableValue.consume(value!);
       }
       this.notifyObservers(validCompletion);
     }
   }
 &nbsp;
   isCompleted(): boolean {
-    return this.completionStateMachine.isCompleted();
+    return this._completionStateMachine.isCompleted();
   }
 &nbsp;
   private realOpen(): AutoClose {
-    this.closeMany.add(this.waitableValue.open());
-    this.closeMany.add(this.completionStateMachine.open());
+    this._closeMany.add(this._waitableValue.open());
+    this._closeMany.add(this._completionStateMachine.open());
     return inlineAutoClose((): void =&gt; {
-      this.closeMany.close();
+      this._closeMany.close();
     });
   }
 &nbsp;
   private notifyObservers(newValue: Completion&lt;T&gt;): void {
-    for (const observer of this.observers) {
+    for (const observer of this._observers) {
       observer.onCompletion(newValue);
     }
   }
 &nbsp;
   private assertNotRejecting(): void {
-    switch (this.idempotent.getState()) {
+    switch (this._idempotent.getState()) {
 <span class="branch-0 cbranch-no" title="branch not covered" >      case 'OPENABLE':</span>
 <span class="branch-1 cbranch-no" title="branch not covered" >      case 'DESTROYED':</span>
       case 'CLOSED':
@@ -504,18 +504,18 @@ class CompletableImpl&lt;T&gt; implements Completable&lt;T&gt; {
   private constructor(config: Config&lt;T&gt;) {
     const contracts: Contracts = contractsCheck(config.contracts);
     const closeFactory: AutoCloseFactory = contracts.enforce(AUTO_CLOSE_FACTORY);
-    this.closeMany = closeFactory.createAutoCloseMany();
-    this.waitableValue = createWaitable&lt;T&gt;({ contracts: contracts, initialValue: config.initialValue });
-    this.idempotent = createIdempotent({ contracts: contracts, open: () =&gt; this.realOpen() });
-    this.completionStateMachine = createStateMachine(getCompletionStateConfig());
+    this._closeMany = closeFactory.createAutoCloseMany();
+    this._waitableValue = createWaitable&lt;T&gt;({ contracts: contracts, initialValue: config.initialValue });
+    this._idempotent = createIdempotent({ contracts: contracts, open: () =&gt; this.realOpen() });
+    this._completionStateMachine = createStateMachine(getCompletionStateConfig());
   }
 &nbsp;
-  private readonly completionStateMachine: StateMachine&lt;CompletionState&gt;;
-  private readonly idempotent: Idempotent;
-  private completion: OptionalType&lt;Completion&lt;T&gt;&gt; = null;
-  private readonly waitableValue: Waitable&lt;T&gt;;
-  private readonly closeMany: AutoCloseMany;
-  private readonly observers: Set&lt;Observer&lt;T&gt;&gt; = new Set&lt;Observer&lt;T&gt;&gt;();
+  private readonly _completionStateMachine: StateMachine&lt;CompletionState&gt;;
+  private readonly _idempotent: Idempotent;
+  private _completion: OptionalType&lt;Completion&lt;T&gt;&gt; = null;
+  private readonly _waitableValue: Waitable&lt;T&gt;;
+  private readonly _closeMany: AutoCloseMany;
+  private readonly _observers: Set&lt;Observer&lt;T&gt;&gt; = new Set&lt;Observer&lt;T&gt;&gt;();
 };</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -523,7 +523,7 @@ class CompletableImpl&lt;T&gt; implements Completable&lt;T&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T23:10:51.876Z
+                at 2026-01-31T23:21:50.851Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

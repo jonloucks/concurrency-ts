@@ -495,7 +495,7 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
 &nbsp;
   // Statemachine.open
   open(): AutoClose {
-    return this.currentState.open();
+    return this._currentState.open();
   }
 &nbsp;
   // IsCompleted.
@@ -506,7 +506,7 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
   // StateMachine.setState implementation
   setState(event: string, state: S): boolean {
     if (this.isTransitionAllowed(event, stateCheck(state))) {
-      this.currentState.consume(state);
+      this._currentState.consume(state);
       this.updateIsCompleted(state);
       return true;
     }
@@ -520,7 +520,7 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
 &nbsp;
   // StateMachine.hasState implementation
   hasState(state: S): boolean {
-    return this.stateToRulesLookup.has(stateCheck(state));
+    return this._stateToRulesLookup.has(stateCheck(state));
   }
 &nbsp;
   // StateMachine.isTransitionAllowed implementation
@@ -529,7 +529,7 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
     const toState: S = stateCheck(state);
     const fromState: S = this.getState();
     if (this.hasState(toState) &amp;&amp; fromState !== toState) {
-      const rules: Set&lt;Rule&lt;S&gt;&gt; | undefined = this.stateToRulesLookup.get(fromState);
+      const rules: Set&lt;Rule&lt;S&gt;&gt; | undefined = this._stateToRulesLookup.get(fromState);
       if (isPresent(rules) &amp;&amp; rules.size &gt; 0) {
         return Array.from(rules).every((r) =&gt; r.canTransition(validEvent, toState));
       }
@@ -554,22 +554,22 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
 &nbsp;
   // StateMachine.supply implementations
   supply(): S {
-    return this.currentState.supply();
+    return this._currentState.supply();
   }
 &nbsp;
   // StateMachine.supplyIf implementation
   supplyIf(predicate: PredicateType&lt;S&gt;): OptionalType&lt;S&gt; {
-    return this.currentState.supplyIf(predicate);
+    return this._currentState.supplyIf(predicate);
   }
 &nbsp;
   // StateMachine.supplyWhen implementation
   async supplyWhen(predicate: RequiredType&lt;PredicateType&lt;S&gt;&gt;, timeout?: Duration): Promise&lt;S&gt; {
-    return this.currentState.supplyWhen(predicate, timeout);
+    return this._currentState.supplyWhen(predicate, timeout);
   }
 &nbsp;
   // StateMachine.notifyWhile implementation
   notifyWhile(predicate: RequiredType&lt;PredicateType&lt;S&gt;&gt;, listener: RequiredType&lt;ConsumerType&lt;S&gt;&gt;): RequiredType&lt;AutoClose&gt; {
-    return this.currentState.notifyWhile(predicate, listener);
+    return this._currentState.notifyWhile(predicate, listener);
   }
 &nbsp;
   static internalCreate&lt;T&gt;(config: Config&lt;T&gt;): StateMachine&lt;T&gt; {
@@ -584,10 +584,10 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
   }
 &nbsp;
   private getStateRules(state: S): Set&lt;Rule&lt;S&gt;&gt; {
-    if (!this.stateToRulesLookup.has(state)) {
-      this.stateToRulesLookup.set(state, new Set&lt;Rule&lt;S&gt;&gt;());
+    if (!this._stateToRulesLookup.has(state)) {
+      this._stateToRulesLookup.set(state, new Set&lt;Rule&lt;S&gt;&gt;());
     }
-    return this.stateToRulesLookup.get(state)!;
+    return this._stateToRulesLookup.get(state)!;
   }
 &nbsp;
   private transitionCheck&lt;R&gt;(transition: Transition&lt;S, R&gt;): Transition&lt;S, R&gt; {
@@ -642,7 +642,7 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
   }
 &nbsp;
   private updateIsCompleted(state: S): void {
-    const rules: Set&lt;Rule&lt;S&gt;&gt; | undefined = this.stateToRulesLookup.get(state);
+    const rules: Set&lt;Rule&lt;S&gt;&gt; | undefined = this._stateToRulesLookup.get(state);
     if (isPresent(rules) &amp;&amp; rules.size &gt; 0) {
       for (const rule of rules) {
         if (rule.isTerminal) {
@@ -657,7 +657,7 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
     const validConfig: Config&lt;S&gt; = configCheck(config);
     const initialState: S = initialValueCheck(validConfig.initialValue);
 &nbsp;
-    this.currentState = createWaitable&lt;S&gt;({ initialValue: initialState });
+    this._currentState = createWaitable&lt;S&gt;({ initialValue: initialState });
     this.addStateAndRules(initialState, []);
     <span class="missing-if-branch" title="else path not taken" >E</span>if (isPresent(validConfig.states) &amp;&amp; validConfig.states.length &gt; 0) {
       validConfig.states.forEach(state =&gt; {
@@ -666,8 +666,8 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
     }
   }
 &nbsp;
-  private readonly stateToRulesLookup: Map&lt;S, Set&lt;Rule&lt;S&gt;&gt;&gt; = new Map&lt;S, Set&lt;Rule&lt;S&gt;&gt;&gt;();
-  private readonly currentState: Waitable&lt;S&gt;;
+  private readonly _stateToRulesLookup: Map&lt;S, Set&lt;Rule&lt;S&gt;&gt;&gt; = new Map&lt;S, Set&lt;Rule&lt;S&gt;&gt;&gt;();
+  private readonly _currentState: Waitable&lt;S&gt;;
   private _isCompleted: boolean = false;
 };</pre></td></tr></table></pre>
 
@@ -676,7 +676,7 @@ class StateMachineImpl&lt;S&gt; implements StateMachine&lt;S&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T23:10:51.876Z
+                at 2026-01-31T23:21:50.851Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
