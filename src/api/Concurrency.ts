@@ -2,7 +2,7 @@ import { Completable, Config as CompletableConfig } from "@jonloucks/concurrency
 import { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { Consumer, guardFunctions, Supplier } from "@jonloucks/concurrency-ts/api/Types";
+import { Consumer, ConsumerType, guardFunctions, Supplier, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
 import { Contract, createContract, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
@@ -19,7 +19,9 @@ export {
   WaitableConfig,
   OnCompletion,
   Consumer,
+  ConsumerType,
   Supplier,
+  SupplierType,
   Contracts
 }
 
@@ -86,7 +88,7 @@ export interface Concurrency extends Open {
    * @param delegate the intended delegate to receive the OnCompletion
    * @param <T> the completion value type
    */
-  completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<Consumer<OnCompletion<T>>>): void;
+  completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<ConsumerType<OnCompletion<T>>>): void;
 
   /**
    * Guaranteed execution: complete now block
@@ -99,7 +101,7 @@ export interface Concurrency extends Open {
    * @return the final completion value
    * @param <T> the completion value type
    */
-  completeNow<T>(onCompletion: RequiredType<OnCompletion<T>>, successBlock: RequiredType<Supplier<T>>): OptionalType<T>;
+  completeNow<T>(onCompletion: RequiredType<OnCompletion<T>>, successBlock: RequiredType<SupplierType<T>>): OptionalType<T>;
 }
 
 /**

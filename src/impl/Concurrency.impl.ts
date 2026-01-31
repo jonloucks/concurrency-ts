@@ -9,9 +9,11 @@ import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api
 import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/CompletableFactory";
 import { CONTRACT as COMPLETION_FACTORY } from "@jonloucks/concurrency-ts/api/CompletionFactory";
 
-import { Consumer, OptionalType, RequiredType, Supplier } from "@jonloucks/concurrency-ts/api/Types";
+import { ConsumerType, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
 import { AutoClose, Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 import { AUTO_CLOSE_NONE } from "@jonloucks/contracts-ts/api/AutoClose";
+import { completeLater as completeLaterImpl } from "./CompleteLater.impl";
+import { completeNow as completeNowImpl } from "./CompleteNow.impl";
 
 export function create(config: ConcurrencyConfig): Concurrency {
   return ConcurrencyImpl.internalCreate(config);
@@ -42,12 +44,12 @@ class ConcurrencyImpl implements Concurrency {
     return this.contracts.enforce(COMPLETION_FACTORY).createCompletion<T>(config);
   }
 
-  completeLater<T>(_onCompletion: RequiredType<OnCompletion<T>>, _delegate: RequiredType<Consumer<OnCompletion<T>>>): void {
-    throw new Error("Method not implemented.");
+  completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<ConsumerType<OnCompletion<T>>>): void {
+    completeLaterImpl(onCompletion, delegate);
   }
 
-  completeNow<T>(_onCompletion: RequiredType<OnCompletion<T>>, _successBlock: RequiredType<Supplier<T>>): OptionalType<T> {
-    throw new Error("Method not implemented.");
+  completeNow<T>(onCompletion: RequiredType<OnCompletion<T>>, successBlock: RequiredType<SupplierType<T>>): OptionalType<T> {
+    return completeNowImpl(onCompletion, successBlock);
   }
 
   static internalCreate(config: ConcurrencyConfig): Concurrency {
