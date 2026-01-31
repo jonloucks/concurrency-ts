@@ -1,5 +1,5 @@
 import { Completable, Config as CompletableConfig } from "@jonloucks/concurrency-ts/api/Completable";
-import { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
+import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Consumer, ConsumerType, guardFunctions, Supplier, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
@@ -11,7 +11,6 @@ export {
   Completable, 
   CompletableConfig,
   Completion,
-  CompletionConfig,
   StateMachine,
   StateMachineConfig,
   Waitable,
@@ -70,15 +69,6 @@ export interface Concurrency extends Open {
   createCompletable<T>(config: CompletableConfig<T>): RequiredType<Completable<T>>;
 
   /**
-   * Create a new Completion
-   *
-   * @param config the Completion configuration
-   * @return the new Completable
-   * @param <T> the type of completion value
-   */
-  createCompletion<T>(config: CompletionConfig<T>): RequiredType<Completion<T>>;
-
-  /**
    * Guaranteed execution: complete later block.
    * Either the delegate successfully takes ownership of the OnCompletion or
    * a final FAILED completion is dispatched
@@ -114,7 +104,6 @@ export function guard(instance: unknown): instance is RequiredType<Concurrency> 
     'createWaitable',
     'createStateMachine',
     'createCompletable',
-    'createCompletion',
     'completeLater',
     'completeNow',
     'open'

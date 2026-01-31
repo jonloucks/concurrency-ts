@@ -92,10 +92,10 @@ class CompletableImpl<T> implements Completable<T> {
 
     this.assertNotRejecting();
 
-    if (this.completionStateMachine.setState("onCompletion", validCompletion.getState())) {
+    if (this.completionStateMachine.setState("onCompletion", validCompletion.state)) {
       this.completion = validCompletion;
 
-      const value = validCompletion.getValue();
+      const value = validCompletion.value;
       if (this.isCompleted() && isPresent(value)) {
         this.waitableValue.consume(value!);
       }

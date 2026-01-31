@@ -4,8 +4,6 @@ import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { onCompletionCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { CompletionState } from "@jonloucks/concurrency-ts/api/CompletionState";
 
-import { create as createCompletionImpl } from "./Completion.impl";
-
 /**
  * Completes the given OnCompletion immediately with the result of the successBlock.
  * If the successBlock throws, the OnCompletion is completed with FAILED state.
@@ -32,7 +30,7 @@ export function completeNow<T>(onCompletion: RequiredType<OnCompletion<T>>, succ
     state = 'FAILED';
     throw thrown;
   } finally {
-    validOnCompletion.onCompletion(createCompletionImpl<T>({ state, thrown, value }));
+    validOnCompletion.onCompletion({ state, thrown, value });
   }
 }
 

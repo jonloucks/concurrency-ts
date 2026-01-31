@@ -5,7 +5,7 @@ import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurr
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
 import { IsCompleted } from "@jonloucks/concurrency-ts/api/IsCompleted";
-import { Contracts } from "@jonloucks/contracts-ts";
+import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
 
 /**
  * State machine.
