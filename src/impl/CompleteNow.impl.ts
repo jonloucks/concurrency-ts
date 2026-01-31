@@ -17,7 +17,7 @@ import { create as createCompletionImpl } from "./Completion.impl";
  */
 export function completeNow<T>(onCompletion: RequiredType<OnCompletion<T>>, successBlock: RequiredType<SupplierType<T>>): OptionalType<T> {
   const validOnCompletion = onCompletionCheck(onCompletion); // only validate onCompletion here
-  let state: CompletionState = 'PENDING';
+  let state!: CompletionState;
   let thrown: OptionalType<Throwable<unknown>> = undefined;
   let value: OptionalType<T> = undefined;
 
