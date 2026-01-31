@@ -1,4 +1,4 @@
-import { ok, strictEqual, throws } from "node:assert";
+import { ok, strictEqual } from "node:assert";
 
 import { Completable, Config as CompletableConfig, guard } from "@jonloucks/concurrency-ts/api/Completable";
 import { CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
@@ -261,32 +261,6 @@ describe('Completable Open Interface Tests', () => {
     const autoClose2 = completable.open();
     ok(isPresent(autoClose1), 'First open call should succeed');
     ok(isPresent(autoClose2), 'Second open call should succeed');
-  });
-});
-
-describe('Completable Not Implemented Methods Tests', () => {
-  let completable: Completable<string>;
-
-  beforeEach(() => {
-    completable = createCompletable({
-      contracts: CONTRACTS
-    });
-  });
-
-  it('notify method should throw not implemented error', () => {
-    throws(() => {
-      completable.notify(mockDuck());
-    }, {
-      message: /not implemented/i
-    });
-  });
-
-  it('onCompletion method should throw not implemented error', () => {
-    throws(() => {
-      completable.onCompletion(mockDuck());
-    }, {
-      message: /not implemented/i
-    });
   });
 });
 

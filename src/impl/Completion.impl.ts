@@ -2,6 +2,7 @@ import { Completion, CompletionState, Config } from '@jonloucks/concurrency-ts/a
 import { RequiredType, OptionalType } from '@jonloucks/contracts-ts/api/Types';
 import { Throwable } from '@jonloucks/concurrency-ts/api/Types';
 import { isTerminalState } from '@jonloucks/concurrency-ts/api/CompletionState';
+import { stateCheck } from '@jonloucks/concurrency-ts/auxiliary/Checks';
 
 export function create<T>(config: Config<T>): Completion<T> {
   return CompletionImpl.createInternal(config);
@@ -35,5 +36,6 @@ class CompletionImpl<T> implements Completion<T> {
   }
 
   private constructor(private readonly config: Config<T>) {
+    stateCheck(config.state);
   }  
 }

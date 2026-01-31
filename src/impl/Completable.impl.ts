@@ -5,14 +5,17 @@ import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
 import { WaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { AUTO_CLOSE_FACTORY, AutoClose, AutoCloseFactory, Contracts, OptionalType } from "@jonloucks/contracts-ts";
+import { AUTO_CLOSE_FACTORY, AutoClose, AutoCloseFactory, Contracts, isPresent, OptionalType } from "@jonloucks/contracts-ts";
 import { Idempotent } from "@jonloucks/concurrency-ts/api/Idempotent";
+import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
+import { AutoCloseMany, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { completionCheck, onCompletionCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
 import { create as createStateMachine } from "./StateMachine.impl";
 import { create as createWaitable } from "./Waitable.impl";
 import { create as createIdempotent } from "./Idempotent.impl";
-import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
-import { AutoCloseMany, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { AtomicBoolean, createAtomicBoolean } from "@jonloucks/contracts-ts/auxiliary/Convenience";
+import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/IllegalStateException";
 
 /** 
  * Create a new Completable
@@ -26,6 +29,9 @@ export function create<T>(config: Config<T>): Completable<T> {
 }
 
 // ---- Implementation details below ----
+
+interface Observer<T> extends OnCompletion<T>, Close {
+};
 
 class CompletableImpl<T> implements Completable<T> {
   open(): AutoClose {
@@ -44,12 +50,47 @@ class CompletableImpl<T> implements Completable<T> {
     return this.completion;
   }
 
-  notify(_onCompletion: OnCompletion<T>): AutoClose {
-    throw new Error("Method not implemented.");
+  notify(onCompletion: OnCompletion<T>): AutoClose {
+    const referentOnCompletion: OnCompletion<T> = onCompletionCheck(onCompletion);
+    const firstClose: AtomicBoolean = createAtomicBoolean(true);
+    const isLive: AtomicBoolean = createAtomicBoolean(true);
+
+    const removeObserver = (v: Observer<T>): void => {
+      this.observers.delete(v);
+    };
+    const observer: Observer<T> = {
+      onCompletion: function (completion: Completion<T>): void {
+        if (isLive.get()) {
+          referentOnCompletion.onCompletion(completion);
+        }
+      },
+      close: function (): void {
+        if (firstClose.compareAndSet(true, false)) {
+          removeObserver(this);
+        }
+      }
+    };
+    this.observers.add(observer);
+
+    if (isPresent(this.completion)) {
+      observer.onCompletion(this.completion!);
+    }
+
+    return inlineAutoClose((): void => {
+      observer.close();
+    });
   }
 
-  onCompletion(_completion: Completion<T>): void {
-    throw new Error("Method not implemented.");
+  onCompletion(completion: Completion<T>): void {
+    const validCompletion: Completion<T> = completionCheck(completion);
+
+    this.assertNotRejecting();
+
+    if (this.completionStateMachine.setState("onCompletion", validCompletion.getState())) {
+      this.completion = validCompletion;
+      this.waitableValue.consume(validCompletion.getValue()!); // review null safety
+      this.notifyObservers(validCompletion);
+    }
   }
 
   isCompleted(): boolean {
@@ -62,6 +103,21 @@ class CompletableImpl<T> implements Completable<T> {
     return inlineAutoClose((): void => {
       this.closeMany.close();
     });
+  }
+
+  private notifyObservers(newValue: Completion<T>): void {
+    for (const observer of this.observers) {
+      observer.onCompletion(newValue);
+    }
+  }
+
+  private assertNotRejecting(): void {
+    switch (this.idempotent.getState()) {
+      case 'OPENABLE':
+      case 'DESTROYED':
+      case 'CLOSED':
+        throw new IllegalStateException("Completable is rejecting.");
+    }
   }
 
   static internalCreate<T>(config: Config<T>): Completable<T> {
@@ -81,6 +137,6 @@ class CompletableImpl<T> implements Completable<T> {
   private readonly idempotent: Idempotent;
   private completion: OptionalType<Completion<T>> = null;
   private readonly waitableValue: Waitable<T>;
-  private readonly subscriptions: Set<unknown> = new Set<unknown>();
   private readonly closeMany: AutoCloseMany;
+  private readonly observers: Set<Observer<unknown>> = new Set<Observer<unknown>>();
 };
