@@ -1,6 +1,7 @@
 import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Config, Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
 import { WaitableFactory } from "@jonloucks/concurrency-ts/api/WaitableFactory";
+import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
 
 import { create as createWaitableImpl } from "./Waitable.impl";
 
@@ -9,21 +10,24 @@ import { create as createWaitableImpl } from "./Waitable.impl";
  *
  * @return the new WaitableFactory
  */
-export function create() : WaitableFactory {
-  return WaitableFactoryImpl.internalCreate();
+export function create(config: ConcurrencyConfig): WaitableFactory {
+  return WaitableFactoryImpl.internalCreate(config);
 } 
 
 // ---- Implementation details below ----
 
 class WaitableFactoryImpl implements WaitableFactory {
   createWaitable<T>(config?: Config<T>): RequiredType<Waitable<T>> {
-    return createWaitableImpl(config);
+    const combinedConfig : Config<T> = { contracts: this.concurrencyConfig.contracts!, ...(config ?? {}) };
+    return createWaitableImpl(combinedConfig);
   }
 
-  static internalCreate(): WaitableFactory {
-    return new WaitableFactoryImpl();
+  static internalCreate(config: ConcurrencyConfig): WaitableFactory {
+    return new WaitableFactoryImpl(config);
   }
 
-  private constructor() {
+  private constructor(config: ConcurrencyConfig) {
+    this.concurrencyConfig = config;
   }
+  private readonly concurrencyConfig: ConcurrencyConfig;
 };

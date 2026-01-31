@@ -1,13 +1,13 @@
+import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
+import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
 import { Duration, isPresent, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
+import { configCheck, eventCheck, illegalCheck, initialValueCheck, presentCheck, ruleCheck, rulesCheck, stateCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
 import { AutoClose } from "@jonloucks/contracts-ts";
-import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
-import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
-import { configCheck, eventCheck, illegalCheck, initialValueCheck, presentCheck, ruleCheck, rulesCheck, stateCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { create as createWaitable } from "./Waitable.impl";
 
 /** 
@@ -26,6 +26,20 @@ class StateMachineImpl<S> implements StateMachine<S> {
   // Statemachine.open
   open(): AutoClose {
     return this.currentState.open();
+  }
+
+  // IsCompleted.
+  isCompleted(): boolean {
+    const state = this.getState();
+    const rules: Set<Rule<S>> | undefined = this.stateToRulesLookup.get(state);
+    if (isPresent(rules) && rules.size > 0) {
+      for (const rule of rules) {
+        if (rule.isTerminal) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   // StateMachine.setState implementation
@@ -116,18 +130,18 @@ class StateMachineImpl<S> implements StateMachine<S> {
 
   private transitionCheck<R>(transition: Transition<S, R>): Transition<S, R> {
     const validTransition: Transition<S, R> = presentCheck(transition, "Transition must be present.");
-    this.existsCheck(validTransition.state);
+    this.existsCheck(validTransition.successState);
     eventCheck(validTransition.event);
     return validTransition;
   }
 
   private isAllowed<R>(transition: Transition<S, R>): boolean {
-    return this.isTransitionAllowed(transition.event, transition.state);
+    return this.isTransitionAllowed(transition.event, transition.successState);
   }
 
   private handleSuccess<R>(transition: Transition<S, R>): OptionalType<R> {
     const value: OptionalType<R> = transition.getSuccessValue?.();
-    this.setState(transition.event, transition.state);
+    this.setState(transition.event, transition.successState);
     return value;
   }
 
@@ -139,7 +153,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
       return value;
     } else {
       throw new ConcurrencyException("Illegal state transition from " + String(this.getState()) +
-        " to " + String(transition.state) + ".");
+        " to " + String(transition.successState) + ".");
     }
   }
 

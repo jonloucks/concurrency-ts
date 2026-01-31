@@ -3,16 +3,24 @@ import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurr
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
 import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
+import { Contracts } from "@jonloucks/contracts-ts";
 
 /**
  * Configuration for creating a Waitable
  */
 export interface Config<T> {
   /**
+   * Optional contracts for validation or other purposes
+   */
+  contracts?: Contracts;
+  
+  /**
    * Optional initial value of the Waitable
    */
   initialValue?: OptionalType<T>;
 }
+
+export { Config as WaitableConfig } ;
 
 /**
  * Provides mutable reference that allows other threads to wait until

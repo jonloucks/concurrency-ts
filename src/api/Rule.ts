@@ -1,6 +1,5 @@
 import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
-
 /**
 * Opt-in interface a state type can implement to assist in determining the valid transitions
 */
@@ -14,6 +13,13 @@ export interface Rule<T> {
    * @return true if the transition is valid
    */
   canTransition(event: string, goal: T): boolean;
+
+  /**
+   * Determine if the given state is a terminal state
+   *
+   * @return true if the state is terminal
+   */
+  isTerminal?: boolean;
 }
 
 /**

@@ -1,13 +1,16 @@
-import { mock } from "jest-mock-extended";
 import { ok } from "node:assert";
 
 import { Predicate, Type, guard, Method, fromType, check, toValue } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
-import { assertGuard } from "./helper.test";
-import { OptionalType } from "../api/Types";
+import { assertGuard, mockDuck } from "./helper.test";
+import { OptionalType } from "@jonloucks/contracts-ts/api/Types";
+
+const FUNCTION_NAMES : (string|symbol)[] = [
+  'test'
+];
 
 describe('Predicate Tests', () => {
   it('isPredicate should return true for Predicate', () => {
-    const predicate: Predicate<string> = mock<Predicate<string>>();
+    const predicate: Predicate<string> = mockDuck<Predicate<string>>(...FUNCTION_NAMES);
     ok(guard(predicate), 'Predicate should return true');
   });
 });
@@ -20,7 +23,7 @@ describe('fromType Tests', () => {
   });
 
   it('fromType should return Predicate as is', () => {
-    const originalPredicate: Predicate<number> = mock<Predicate<number>>();
+    const originalPredicate: Predicate<number> = mockDuck<Predicate<number>>(...FUNCTION_NAMES);
     const predicate: Predicate<number> = fromType<number>(originalPredicate);
     ok(predicate === originalPredicate, 'fromType should return the original Predicate');
   });
@@ -65,7 +68,7 @@ describe('toValue Tests', () => {
 
 describe('check Tests', () => {
   it('check should return the Predicate if present', () => {
-    const predicate: Predicate<string> = mock<Predicate<string>>();
+    const predicate: Predicate<string> = mockDuck<Predicate<string>>(...FUNCTION_NAMES);
     const checkedPredicate: Type<string> = check<string>(predicate);
     ok(checkedPredicate === predicate, 'check should return the original Predicate');
   });
@@ -81,4 +84,4 @@ describe('check Tests', () => {
   });
 });
 
-assertGuard(guard, 'test');
+assertGuard(guard, ...FUNCTION_NAMES);
