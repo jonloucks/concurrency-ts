@@ -88,7 +88,12 @@ class CompletableImpl<T> implements Completable<T> {
 
     if (this.completionStateMachine.setState("onCompletion", validCompletion.getState())) {
       this.completion = validCompletion;
-      this.waitableValue.consume(validCompletion.getValue()!); // review null safety
+
+      const state: CompletionState = validCompletion.getState();
+      const value = validCompletion.getValue();
+      if (state === CompletionState.SUCCEEDED && isPresent(value)) {
+        this.waitableValue.consume(value as T);
+      }
       this.notifyObservers(validCompletion);
     }
   }
