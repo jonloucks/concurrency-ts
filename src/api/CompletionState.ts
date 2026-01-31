@@ -11,12 +11,10 @@ export const STATES: string[] = ['PENDING', 'FAILED', 'CANCELLED', 'SUCCEEDED'] 
  */
 export type State = typeof STATES[number];
 
-/** The CompletionState type
- */
+/** The CompletionState type */
 export { State as CompletionState };
 
-/** The starting state for a Completion
- */
+/** The starting state for a Completion */
 export const START_STATE: State = 'PENDING';
 
 /**
