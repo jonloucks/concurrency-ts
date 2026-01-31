@@ -1,7 +1,7 @@
 # @jonloucks/concurrency-ts
 
 ## Badges
-[![CI](https://github.com/jonloucks/concurrency-ts/workflows/CI/badge.svg)](https://github.com/jonloucks/concurrency-ts/actions)
+[![CI](https://github.com/jonloucks/concurrency-ts/workflows/main-push/badge.svg)](https://github.com/jonloucks/concurrency-ts/actions)
 [![npm version](https://raw.githubusercontent.com/jonloucks/concurrency-ts/refs/heads/badges/main-npm.svg)](https://www.npmjs.com/package/@jonloucks/concurrency-ts)
 [![Coverage Badge](https://raw.githubusercontent.com/jonloucks/concurrency-ts/refs/heads/badges/main-coverage.svg)](https://jonloucks.github.io/concurrency-ts/lcov-report/)
 [![Typedoc Badge](https://raw.githubusercontent.com/jonloucks/concurrency-ts/refs/heads/badges/main-typedoc.svg)](https://jonloucks.github.io/concurrency-ts/typedoc/)
