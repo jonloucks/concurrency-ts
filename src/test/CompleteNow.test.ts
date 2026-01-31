@@ -245,8 +245,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, 0, 'Should return zero');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<string>).getValue(), 0, 'Value should be zero');
+      strictEqual((receivedCompletion as Completion<number>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<number>).getValue(), 0, 'Value should be zero');
     });
 
     it('should work with false value', () => {
