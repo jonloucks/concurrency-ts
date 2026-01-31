@@ -66,6 +66,7 @@ class CompletableImpl<T> implements Completable<T> {
       },
       close: function (): void {
         if (firstClose.compareAndSet(true, false)) {
+          isLive.set(false);
           removeObserver(this);
         }
       }
