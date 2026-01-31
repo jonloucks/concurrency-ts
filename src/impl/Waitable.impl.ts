@@ -171,18 +171,20 @@ class WaitableImpl<T> implements Waitable<T> {
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
     const notifyCallback: Consumer<T> = consumerFromType(listener);
     const firstClose: AtomicBoolean = createAtomicBoolean(true);
+    const isLive: AtomicBoolean = createAtomicBoolean(true);
     const removeListener = (v: ValueObserver<T>): void => {
       this._valueObservers.delete(v);
     };
     const valueObserver: ValueObserver<T> = {
       observeValue: function (value: T): void {
-        if (!validPredicate.test(value)) {
+        if (!isLive.get() || !validPredicate.test(value)) {
           return;
         }
         notifyCallback.consume(value);
       },
       close: function (): void {
         if (firstClose.compareAndSet(true, false)) {
+          isLive.set(false);
           removeListener(this);
         }
       }

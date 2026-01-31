@@ -30,22 +30,14 @@ class StateMachineImpl<S> implements StateMachine<S> {
 
   // IsCompleted.
   isCompleted(): boolean {
-    const state = this.getState();
-    const rules: Set<Rule<S>> | undefined = this.stateToRulesLookup.get(state);
-    if (isPresent(rules) && rules.size > 0) {
-      for (const rule of rules) {
-        if (rule.isTerminal) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return this._isCompleted;
   }
 
   // StateMachine.setState implementation
   setState(event: string, state: S): boolean {
     if (this.isTransitionAllowed(event, stateCheck(state))) {
       this.currentState.consume(state);
+      this.updateIsCompleted(state);
       return true;
     }
     return false;
@@ -179,6 +171,18 @@ class StateMachineImpl<S> implements StateMachine<S> {
     return illegalCheck(validState, !this.hasState(validState), "State must be known.");
   }
 
+  private updateIsCompleted(state: S): void {
+    const rules: Set<Rule<S>> | undefined = this.stateToRulesLookup.get(state);
+    if (isPresent(rules) && rules.size > 0) {
+      for (const rule of rules) {
+        if (rule.isTerminal) {
+          this._isCompleted = true;
+          return;
+        }
+      }
+    }
+  }
+
   private constructor(config: Config<S>) {
     const validConfig: Config<S> = configCheck(config);
     const initialState: S = initialValueCheck(validConfig.initialValue);
@@ -194,4 +198,5 @@ class StateMachineImpl<S> implements StateMachine<S> {
 
   private readonly stateToRulesLookup: Map<S, Set<Rule<S>>> = new Map<S, Set<Rule<S>>>();
   private readonly currentState: Waitable<S>;
+  private _isCompleted: boolean = false;
 };

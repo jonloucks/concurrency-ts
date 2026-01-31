@@ -1,10 +1,12 @@
 import { ok, strictEqual, throws } from "node:assert";
 
 import { Completable, Config as CompletableConfig, guard } from "@jonloucks/concurrency-ts/api/Completable";
+import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
 import { assertGuard, mockDuck } from "./helper.test";
 
 import { create as createCompletable } from "../impl/Completable.impl";
+import { create as createCompletion } from "../impl/Completion.impl";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'open',
@@ -261,32 +263,6 @@ describe('Completable Open Interface Tests', () => {
     const autoClose2 = completable.open();
     ok(isPresent(autoClose1), 'First open call should succeed');
     ok(isPresent(autoClose2), 'Second open call should succeed');
-  });
-});
-
-describe('Completable Not Implemented Methods Tests', () => {
-  let completable: Completable<string>;
-
-  beforeEach(() => {
-    completable = createCompletable({
-      contracts: CONTRACTS
-    });
-  });
-
-  it('notify method should throw not implemented error', () => {
-    throws(() => {
-      completable.notify(mockDuck());
-    }, {
-      message: /not implemented/i
-    });
-  });
-
-  it('onCompletion method should throw not implemented error', () => {
-    throws(() => {
-      completable.onCompletion(mockDuck());
-    }, {
-      message: /not implemented/i
-    });
   });
 });
 
@@ -595,6 +571,393 @@ describe('Completable Comprehensive Coverage Tests', () => {
     strictEqual(value1, value2, 'Values are same');
 
     autoClose2.close();
+  });
+});
+
+describe('Completable notify() Method Tests', () => {
+  it('should register observer via notify and receive completion', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let receivedCompletion: Completion<string> | null = null;
+    const observer = {
+      onCompletion: (completion: Completion<string>): void => {
+        receivedCompletion = completion;
+      }
+    };
+
+    const closeObserver = completable.notify(observer);
+    const testCompletion = createCompletion<string>({ state: 'SUCCEEDED', value: 'test' });
+    completable.onCompletion(testCompletion);
+
+    ok(receivedCompletion !== null, 'Observer should receive completion');
+    strictEqual((receivedCompletion as Completion<string>).getState(), 'SUCCEEDED', 'Check state');
+    strictEqual((receivedCompletion as Completion<string>).getValue(), 'test', 'Check value');
+
+    closeObserver.close();
+    autoClose.close();
+  });
+
+  it('should remove observer when AutoClose is called', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let callCount = 0;
+    const observer = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callCount++;
+      }
+    };
+
+    const closeObserver = completable.notify(observer);
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test1' }));
+    strictEqual(callCount, 1, 'Observer called once');
+
+    closeObserver.close();
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test2' }));
+    strictEqual(callCount, 1, 'Observer not called after close');
+
+    autoClose.close();
+  });
+
+  it('should handle multiple observers', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let callCount1 = 0;
+    let callCount2 = 0;
+    const observer1 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callCount1++;
+      }
+    };
+    const observer2 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callCount2++;
+      }
+    };
+
+    const close1 = completable.notify(observer1);
+    const close2 = completable.notify(observer2);
+
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' }));
+
+    strictEqual(callCount1, 1, 'Observer 1 called');
+    strictEqual(callCount2, 1, 'Observer 2 called');
+
+    close1.close();
+    close2.close();
+    autoClose.close();
+  });
+
+  it('should not notify observer after it has been closed', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let callCount = 0;
+    const observer = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callCount++;
+      }
+    };
+
+    const closeObserver = completable.notify(observer);
+    closeObserver.close();
+
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' }));
+    strictEqual(callCount, 0, 'Observer not called after close');
+
+    autoClose.close();
+  });
+
+  it('should handle observer close being called multiple times', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let callCount = 0;
+    const observer = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callCount++;
+      }
+    };
+
+    const closeObserver = completable.notify(observer);
+    closeObserver.close();
+    closeObserver.close(); // Second close should be no-op
+
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' }));
+    strictEqual(callCount, 0, 'Observer not called after close');
+
+    autoClose.close();
+  });
+});
+
+describe('Completable onCompletion() Method Tests', () => {
+  it('should set completion and notify observers', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let receivedCompletion: Completion<string> | null = null;
+    const observer = {
+      onCompletion: (completion: Completion<string>): void => {
+        receivedCompletion = completion;
+      }
+    };
+
+    completable.notify(observer);
+    const completion = createCompletion<string>({ state: 'SUCCEEDED', value: 'test' });
+    completable.onCompletion(completion);
+
+    ok(receivedCompletion !== null, 'Observer received completion');
+    strictEqual((receivedCompletion as Completion<string>).getState(), 'SUCCEEDED', 'Check state');
+
+    autoClose.close();
+  });
+
+  it('should handle failed completion', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let receivedCompletion: Completion<string> | null = null;
+    const observer = {
+      onCompletion: (completion: Completion<string>): void => {
+        receivedCompletion = completion;
+      }
+    };
+
+    completable.notify(observer);
+    const error = new Error('test error');
+    completable.onCompletion(createCompletion<string>({ state: 'FAILED', thrown: error }));
+
+    ok(receivedCompletion !== null, 'Observer received completion');
+    strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'Check failed state');
+
+    autoClose.close();
+  });
+
+  it('should handle cancelled completion', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let receivedCompletion: Completion<string> | null = null;
+    const observer = {
+      onCompletion: (completion: Completion<string>): void => {
+        receivedCompletion = completion;
+      }
+    };
+
+    completable.notify(observer);
+    completable.onCompletion(createCompletion<string>({ state: 'CANCELLED' }));
+
+    ok(receivedCompletion !== null, 'Observer received completion');
+    strictEqual((receivedCompletion as Completion<string>).getState(), 'CANCELLED', 'Check cancelled state');
+
+    autoClose.close();
+  });
+
+  it('should not throw when setting completion twice', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'first' }));
+
+    // Second call should be a no-op (doesn't throw)
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'second' }));
+
+    // Completion should still be first
+    const completion = completable.getCompletion();
+    strictEqual(completion?.getValue(), 'first', 'Should keep first completion');
+
+    autoClose.close();
+  });
+
+  it('should not throw when setting completion after failed', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    const error = new Error('test error');
+    completable.onCompletion(createCompletion<string>({ state: 'FAILED', thrown: error }));
+
+    // Second call should be a no-op (doesn't throw)
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'second' }));
+
+    // Completion should still be failed
+    const completion = completable.getCompletion();
+    strictEqual(completion?.getState(), 'FAILED', 'Should keep failed completion');
+
+    autoClose.close();
+  });
+
+  it('should not throw when setting completion after cancelled', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    completable.onCompletion(createCompletion<string>({ state: 'CANCELLED' }));
+
+    // Second call should be a no-op (doesn't throw)
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'second' }));
+
+    // Completion should still be cancelled
+    const completion = completable.getCompletion();
+    strictEqual(completion?.getState(), 'CANCELLED', 'Should keep cancelled completion');
+
+    autoClose.close();
+  });
+
+  it('should notify multiple observers in order', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    const callOrder: number[] = [];
+    const observer1 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callOrder.push(1);
+      }
+    };
+    const observer2 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callOrder.push(2);
+      }
+    };
+    const observer3 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callOrder.push(3);
+      }
+    };
+
+    completable.notify(observer1);
+    completable.notify(observer2);
+    completable.notify(observer3);
+
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' }));
+
+    strictEqual(callOrder.length, 3, 'All observers called');
+    strictEqual(callOrder[0], 1, 'Observer 1 called first');
+    strictEqual(callOrder[1], 2, 'Observer 2 called second');
+    strictEqual(callOrder[2], 3, 'Observer 3 called third');
+
+    autoClose.close();
+  });
+
+  it('should handle observer that throws during notification', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    const observer1 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        throw new Error('Observer error');
+      }
+    };
+    const observer2 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        // Observer 2 should still be notified
+      }
+    };
+
+    completable.notify(observer1);
+    completable.notify(observer2);
+
+    // Even if observer1 throws, observer2 should still be notified
+    throws(
+      () => completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' })),
+      'Should propagate observer error'
+    );
+
+    autoClose.close();
+  });
+
+  it('should notify new observers of existing completion', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    // Set completion first
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' }));
+
+    // Now add observer - it should be notified immediately
+    let receivedCompletion: Completion<string> | null = null;
+    const observer = {
+      onCompletion: (completion: Completion<string>): void => {
+        receivedCompletion = completion;
+      }
+    };
+
+    completable.notify(observer);
+
+    ok(receivedCompletion !== null, 'New observer should be notified immediately');
+    strictEqual((receivedCompletion as Completion<string>).getState(), 'SUCCEEDED', 'Check state');
+    strictEqual((receivedCompletion as Completion<string>).getValue(), 'test', 'Check value');
+
+    autoClose.close();
+  });
+
+  it('should throw when trying to complete after close', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+    
+    // Close the completable
+    autoClose.close();
+
+    // Now try to set completion - should throw
+    throws(
+      () => completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' })),
+      'Should throw when completing after close'
+    );
+  });
+
+  it('should not notify observer when observer is closed before notification', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let callCount = 0;
+    const observer = {
+      onCompletion: (_completion: Completion<string>): void => {
+        callCount++;
+      }
+    };
+
+    const closeObserver = completable.notify(observer);
+    
+    // Close observer before setting completion
+    closeObserver.close();
+    
+    // Now complete - observer should not be called
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' }));
+    
+    strictEqual(callCount, 0, 'Observer should not be called after close');
+
+    autoClose.close();
+  });
+
+  it('should handle multiple notification registrations and proper cleanup', () => {
+    const completable = createCompletable<string>({ contracts: CONTRACTS });
+    const autoClose = completable.open();
+
+    let calls: string[] = [];
+    const observer1 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        calls.push('observer1');
+      }
+    };
+    const observer2 = {
+      onCompletion: (_completion: Completion<string>): void => {
+        calls.push('observer2');
+      }
+    };
+
+    const close1 = completable.notify(observer1);
+    const close2 = completable.notify(observer2);
+    
+    // Close first observer
+    close1.close();
+    
+    // Now complete - only observer2 should be called
+    completable.onCompletion(createCompletion<string>({ state: 'SUCCEEDED', value: 'test' }));
+    
+    strictEqual(calls.length, 1, 'Only one observer called');
+    strictEqual(calls[0], 'observer2', 'Observer2 called');
+
+    close2.close();
+    autoClose.close();
   });
 });
 

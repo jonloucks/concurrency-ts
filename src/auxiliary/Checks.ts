@@ -34,6 +34,10 @@ export function completionCheck<T>(completion: OptionalType<T>): RequiredType<T>
   return presentCheck(completion, "Completion must be present.");
 }
 
+export function onCompletionCheck<T>(onCompletion: OptionalType<T>): RequiredType<T> {
+  return presentCheck(onCompletion, "OnCompletion consumer must be present.");
+} 
+
 export function finallyBlockCheck<T>(block: OptionalType<T>): RequiredType<T> {
   return presentCheck(block, "OnFinally consumer must be present.");
 }
