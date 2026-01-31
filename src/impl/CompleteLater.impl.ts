@@ -17,7 +17,6 @@ export function completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, de
   const validOnCompletion = onCompletionCheck(onCompletion); // only validate onCompletion here
   let state: CompletionState = 'PENDING';
   let thrown: OptionalType<Throwable<unknown>> = undefined;
-  let value: OptionalType<T> = undefined;
   let delegated: boolean = false;
 
   try {
@@ -30,7 +29,7 @@ export function completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, de
     throw thrown;
   } finally {
     if (!delegated) {
-      validOnCompletion.onCompletion(createCompletionImpl<T>({ state, thrown, value }));
+      validOnCompletion.onCompletion(createCompletionImpl<T>({ state, thrown }));
     }
   }
 }
