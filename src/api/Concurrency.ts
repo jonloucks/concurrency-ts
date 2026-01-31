@@ -1,20 +1,27 @@
 import { Completable, Config as CompletableConfig } from "@jonloucks/concurrency-ts/api/Completable";
 import { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
-import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
+import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Consumer, guardFunctions, Supplier } from "@jonloucks/concurrency-ts/api/Types";
-import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
+import { Waitable, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
 import { Contract, createContract, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
 import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
 
-export { Completable, Config as CompletableConfig } from "@jonloucks/concurrency-ts/api/Completable";
-export { Completion, Config as CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
-export { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
-export { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
-export { Consumer, Supplier } from "@jonloucks/concurrency-ts/api/Types";
-export { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
-export { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
+export {
+  Completable, 
+  CompletableConfig,
+  Completion,
+  CompletionConfig,
+  StateMachine,
+  StateMachineConfig,
+  Waitable,
+  WaitableConfig,
+  OnCompletion,
+  Consumer,
+  Supplier,
+  Contracts
+}
 
 /**
  * The configuration used to create a new Concurrency instance.
@@ -26,29 +33,31 @@ export interface Config {
   contracts?: OptionalType<Contracts>;
 }
 
+export { Config as ConcurrencyConfig };
+
 /**
  * The Concurrency API
  */
 export interface Concurrency extends Open {
 
   /**
-   * Create a new Waitable with the given initial value
+   * Create a new Waitable with the given configuration
    *
-   * @param initialValue the initial value, null is allowed
+   * @param config the waitable configuration
    * @return the waitable
    * @param <T> the type of waitable
    */
-  createWaitable<T>(initialValue: OptionalType<T>): RequiredType<Waitable<T>>;
+  createWaitable<T>(config: WaitableConfig<T>): RequiredType<Waitable<T>>;
 
   /**
    * Create a new StateMachine
    *
-   * @param initialState the initial state
+   * @param config the state machine configuration
    * @return the new StateMachine
    * @param <T> the type of each state
    * @throws IllegalArgumentException if initialState is null
    */
-  createStateMachine<T>(initialState: OptionalType<T>): RequiredType<StateMachine<T>>;
+  createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>>;
 
   /**
    * Create a new Completable

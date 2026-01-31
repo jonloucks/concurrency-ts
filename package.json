@@ -34,6 +34,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "test:verbose": "jest --verbose",
     "test:watch": "jest --watch --watchAll",
     "test:coverage": "jest --coverage",
     "test:diagnostics": "jest --detectOpenHandles",
@@ -78,6 +79,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@jonloucks/contracts-ts": "^1.0.4"
+    "@jonloucks/contracts-ts": "^1.1.0"
   }
 }

@@ -4,6 +4,8 @@ import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurren
 import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
+import { IsCompleted } from "./IsCompleted";
+import { Contracts } from "@jonloucks/contracts-ts";
 
 /**
  * State machine.
@@ -11,7 +13,7 @@ import { Open } from "@jonloucks/contracts-ts/api/Open";
  *
  * @param <T> the user defined state type
  */
-export interface StateMachine<T> extends Open, WaitableSupplier<T>, WaitableNotify<T> {
+export interface StateMachine<T> extends Open, WaitableSupplier<T>, WaitableNotify<T>, IsCompleted {
 
   /**
    * Set the current state, state must already exist and be an allowed transition
@@ -68,6 +70,11 @@ export interface StateMachine<T> extends Open, WaitableSupplier<T>, WaitableNoti
 export interface Config<T> {
 
   /**
+   * The contracts to use
+   */
+  contracts?: Contracts;
+
+  /**
    * Return the initial value. It is required, the use of required is because
    * the builder may not have provided a value
    *
@@ -89,6 +96,8 @@ export interface Config<T> {
   getStateRules?(state: T): Array<Rule<T>>;
 }
 
+export { Config as StateMachineConfig } ;
+
 /**
  * Determine if the given instance is a StateMachine
  *
@@ -98,6 +107,7 @@ export interface Config<T> {
 export function guard<T>(instance: unknown): instance is RequiredType<StateMachine<T>> {
   return guardFunctions(instance,
     'isTransitionAllowed',
+    'isCompleted',
     'getState',
     'setState',
     'hasState',

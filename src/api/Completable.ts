@@ -1,10 +1,11 @@
-import { Completion, State as CompletionState } from "@jonloucks/concurrency-ts/api/Completion";
+import { Completion, CompletionState } from "@jonloucks/concurrency-ts/api/Completion";
 import { CompletionNotify } from "@jonloucks/concurrency-ts/api/CompletionNotify";
 import { IsCompleted } from "@jonloucks/concurrency-ts/api/IsCompleted";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
-import { WaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
-import { Open } from "@jonloucks/contracts-ts/api/Open";
 import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { WaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
+import { Contracts } from "@jonloucks/contracts-ts";
+import { Open } from "@jonloucks/contracts-ts/api/Open";
 
 /**
  * Configuration for a Completable
@@ -12,8 +13,18 @@ import { OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurren
  * @param <T> the type of completion value  
  */
 export interface Config<T> {
-  intiatialValue?: OptionalType<T>;
+  /**
+   * Optional contracts for validation or other purposes
+   */
+  contracts?: Contracts;
+
+  /**
+   * Optional initial value for the completable
+   */
+  initialValue?: OptionalType<T>;
 }
+
+export { Config as CompletableConfig };
 
 /**
  * Responsibility: Observe a single activity from start to finish
