@@ -10,12 +10,13 @@ import { Idempotent } from "@jonloucks/concurrency-ts/api/Idempotent";
 import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 import { AutoCloseMany, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { completionCheck, onCompletionCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { AtomicBoolean, createAtomicBoolean } from "@jonloucks/contracts-ts/auxiliary/Convenience";
+import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/IllegalStateException";
 
 import { create as createStateMachine } from "./StateMachine.impl";
 import { create as createWaitable } from "./Waitable.impl";
 import { create as createIdempotent } from "./Idempotent.impl";
-import { AtomicBoolean, createAtomicBoolean } from "@jonloucks/contracts-ts/auxiliary/Convenience";
-import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/IllegalStateException";
+
 
 /** 
  * Create a new Completable
@@ -143,5 +144,5 @@ class CompletableImpl<T> implements Completable<T> {
   private completion: OptionalType<Completion<T>> = null;
   private readonly waitableValue: Waitable<T>;
   private readonly closeMany: AutoCloseMany;
-  private readonly observers: Set<Observer<unknown>> = new Set<Observer<unknown>>();
+  private readonly observers: Set<Observer<T>> = new Set<Observer<T>>();
 };
