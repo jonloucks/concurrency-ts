@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/18</span>
+                <span class='fraction'>14/20</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/10</span>
+                <span class='fraction'>4/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/18</span>
+                <span class='fraction'>14/20</span>
             </div>
         
             
@@ -126,7 +126,9 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -140,9 +142,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">81x</span>
+<span class="cline-any cline-yes">79x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,20 +175,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">81x</span>
+<span class="cline-any cline-yes">79x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">81x</span>
-<span class="cline-any cline-yes">81x</span>
+<span class="cline-any cline-yes">79x</span>
+<span class="cline-any cline-yes">79x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,9 +204,11 @@ import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api
 import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/CompletableFactory";
 import { CONTRACT as COMPLETION_FACTORY } from "@jonloucks/concurrency-ts/api/CompletionFactory";
 &nbsp;
-import { Consumer, OptionalType, RequiredType, Supplier } from "@jonloucks/concurrency-ts/api/Types";
+import { ConsumerType, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
 import { AutoClose, Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 import { AUTO_CLOSE_NONE } from "@jonloucks/contracts-ts/api/AutoClose";
+import { completeLater as completeLaterImpl } from "./CompleteLater.impl";
+import { completeNow as completeNowImpl } from "./CompleteNow.impl";
 &nbsp;
 export function create(config: ConcurrencyConfig): Concurrency {
   return ConcurrencyImpl.internalCreate(config);
@@ -233,12 +239,12 @@ class ConcurrencyImpl implements Concurrency {
 <span class="cstat-no" title="statement not covered" >    return this.contracts.enforce(COMPLETION_FACTORY).createCompletion&lt;T&gt;(config);</span>
   }
 &nbsp;
-  completeLater&lt;T&gt;(_onCompletion: RequiredType&lt;OnCompletion&lt;T&gt;&gt;, _delegate: RequiredType&lt;Consumer&lt;OnCompletion&lt;T&gt;&gt;&gt;): void {
-    throw new Error("Method not implemented.");
+<span class="fstat-no" title="function not covered" >  completeLater&lt;</span>T&gt;(onCompletion: RequiredType&lt;OnCompletion&lt;T&gt;&gt;, delegate: RequiredType&lt;ConsumerType&lt;OnCompletion&lt;T&gt;&gt;&gt;): void {
+<span class="cstat-no" title="statement not covered" >    completeLaterImpl(onCompletion, delegate);</span>
   }
 &nbsp;
-  completeNow&lt;T&gt;(_onCompletion: RequiredType&lt;OnCompletion&lt;T&gt;&gt;, _successBlock: RequiredType&lt;Supplier&lt;T&gt;&gt;): OptionalType&lt;T&gt; {
-    throw new Error("Method not implemented.");
+<span class="fstat-no" title="function not covered" >  completeNow&lt;</span>T&gt;(onCompletion: RequiredType&lt;OnCompletion&lt;T&gt;&gt;, successBlock: RequiredType&lt;SupplierType&lt;T&gt;&gt;): OptionalType&lt;T&gt; {
+<span class="cstat-no" title="statement not covered" >    return completeNowImpl(onCompletion, successBlock);</span>
   }
 &nbsp;
   static internalCreate(config: ConcurrencyConfig): Concurrency {
@@ -259,7 +265,7 @@ class ConcurrencyImpl implements Concurrency {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T16:06:49.366Z
+                at 2026-01-31T19:59:04.851Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
