@@ -755,7 +755,7 @@ describe('Completable onCompletion() Method Tests', () => {
     autoClose.close();
   });
 
-  it('should notthrow when setting completion twice', () => {
+  it('should not throw when setting completion twice', () => {
     const completable = createCompletable<string>({ contracts: CONTRACTS });
     const autoClose = completable.open();
 
