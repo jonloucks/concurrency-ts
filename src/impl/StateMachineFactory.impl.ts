@@ -18,8 +18,8 @@ export function create(config: ConcurrencyConfig): StateMachineFactory {
 
 class StateMachineFactoryImpl implements StateMachineFactory {
   createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>> {
-    const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
-    return createStateMachineImpl(combinedConfig);
+    // const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
+    return createStateMachineImpl(config);
   }
 
   static internalCreate(config: ConcurrencyConfig): StateMachineFactory {

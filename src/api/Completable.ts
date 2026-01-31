@@ -16,7 +16,7 @@ export interface Config<T> {
   /**
    * Optional contracts for validation or other purposes
    */
-  contracts: Contracts;
+  contracts?: Contracts;
 
   /**
    * Optional initial value for the completable

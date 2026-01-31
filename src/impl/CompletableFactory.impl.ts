@@ -17,9 +17,9 @@ export function create(config: ConcurrencyConfig): CompletableFactory {
 
 class CompletableFactoryImpl implements CompletableFactory {
   createCompletable<T>(config: CompletableConfig<T>): Completable<T> {
-    const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
+    // const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
 
-    return createCompletableImpl<T>(combinedConfig);
+    return createCompletableImpl<T>(config)
   }
 
   static internalCreate(config: ConcurrencyConfig): CompletableFactory {

@@ -60,11 +60,9 @@ describe('Idempotent Creation Tests', () => {
   });
 
   it('should create Idempotent with AutoOpen interface', () => {
-    const mockAutoOpen = duckAutoOpen();
-
     const idempotent = createIdempotent({
       contracts: CONTRACTS,
-      open: mockAutoOpen
+      open: duckAutoOpen()
     });
 
     ok(isPresent(idempotent), 'Idempotent should be created with AutoOpen');
@@ -72,8 +70,7 @@ describe('Idempotent Creation Tests', () => {
   });
 
   it('should create Idempotent with function returning AutoClose', () => {
-    const mockAutoClose = mockDuck<AutoClose>();
-    const openFn = (): AutoClose => mockAutoClose;
+    const openFn = (): AutoClose => duckAutoClose();
 
     const idempotent = createIdempotent({
       contracts: CONTRACTS,
@@ -98,11 +95,9 @@ describe('Idempotent Creation Tests', () => {
 
 describe('Idempotent State Tests', () => {
   it('should return initial state OPENABLE', () => {
-    const mockOpen = duckOpen();
-
     const idempotent = createIdempotent({
       contracts: CONTRACTS,
-      open: mockOpen
+      open: duckOpen()
     });
 
     const state = idempotent.getState();
@@ -130,11 +125,9 @@ describe('Idempotent State Tests', () => {
   });
 
   it('should transition state to CLOSED on close', () => {
-    const mockOpen: MockProxy<Open> = duckOpen();
-
     const idempotent = createIdempotent({
       contracts: CONTRACTS,
-      open: mockOpen
+      open: duckOpen()
     });
 
     const autoClose = idempotent.open();
@@ -147,13 +140,9 @@ describe('Idempotent State Tests', () => {
   });
 
   it('should return OPENED state after first open', () => {
-    const mockAutoClose = mockDuck<AutoClose>(...AUTO_CLOSE_FUNCTION_NAMES);
-    const mockOpen = mockDuck<{ open: () => AutoClose }>("open");
-    mockOpen.open.mockReturnValue(mockAutoClose);
-
     const idempotent = createIdempotent({
       contracts: CONTRACTS,
-      open: mockOpen
+      open: duckOpen()
     });
 
     idempotent.open();
@@ -162,13 +151,9 @@ describe('Idempotent State Tests', () => {
   });
 
   it('should stay OPENED on second open attempt', () => {
-    const mockAutoClose = mockDuck<AutoClose>(...AUTO_CLOSE_FUNCTION_NAMES);
-    const mockOpen = mockDuck<{ open: () => AutoClose }>("open");
-    mockOpen.open.mockReturnValue(mockAutoClose);
-
     const idempotent = createIdempotent({
       contracts: CONTRACTS,
-      open: mockOpen
+      open: duckOpen()
     });
 
     const autoClose1 = idempotent.open();

@@ -1,11 +1,10 @@
 import { isFunction } from "@jonloucks/contracts-ts/api/Types";
 import { Idempotent, Config, OpenType } from "@jonloucks/concurrency-ts/api/Idempotent";
+import { IdempotentState, getStateMachineConfig } from "@jonloucks/concurrency-ts/api/IdempotenState";
 import { AUTO_CLOSE_NONE, AutoClose, AutoCloseMany, inlineAutoClose, typeToAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { Open, guard as guardOpen } from "@jonloucks/contracts-ts/api/Open";
 import { guard as guardAutoOpen } from "@jonloucks/contracts-ts/api/AutoOpen";
-import { State } from "@jonloucks/concurrency-ts/api/CompletionState";
 import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { IdempotentState, getStateMachineConfig } from "@jonloucks/concurrency-ts/api/IdempotentState";
 import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
 import { create as createStateMachine } from "./StateMachine.impl";
@@ -45,7 +44,7 @@ export function typeToOpen(type: OpenType): Open {
 class IdempotentImpl implements Idempotent {
 
   // Idempotent.getState
-  getState(): State {
+  getState(): IdempotentState {
     return this.stateMachine.getState();
   }
 
@@ -75,12 +74,12 @@ class IdempotentImpl implements Idempotent {
   }
 
   private constructor(config: Config) {
-    const contracts: Contracts = contractsCheck(config.contracts);
-    const closeFactory: AutoCloseFactory = contracts.enforce(AUTO_CLOSE_FACTORY);
+    const validContracts: Contracts = contractsCheck(config.contracts);
+    const closeFactory: AutoCloseFactory = validContracts.enforce(AUTO_CLOSE_FACTORY);
     this.closeMany = closeFactory.createAutoCloseMany();
     this.delegate = typeToOpen(config.open);
     const stateMachineConfig = getStateMachineConfig();
-    this.stateMachine = createStateMachine({ ...stateMachineConfig, contracts });
+    this.stateMachine = createStateMachine({ contracts: validContracts, ...stateMachineConfig });
     this.firstClose = inlineAutoClose(() => {
       this.stateMachine.transition<void>({
         event: "close",

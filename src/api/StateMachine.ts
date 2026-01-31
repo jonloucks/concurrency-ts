@@ -5,6 +5,7 @@ import { WaitableNotify, guard as guardWaitableNotify } from "@jonloucks/concurr
 import { WaitableSupplier, guard as guardWaitableSupplier } from "@jonloucks/concurrency-ts/api/WaitableSupplier";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
 import { IsCompleted } from "./IsCompleted";
+import { Contracts } from "@jonloucks/contracts-ts";
 
 /**
  * State machine.
@@ -67,6 +68,11 @@ export interface StateMachine<T> extends Open, WaitableSupplier<T>, WaitableNoti
  * @param <T> the type of each state
  */
 export interface Config<T> {
+
+  /**
+   * The contracts to use
+   */
+  contracts?: Contracts;
 
   /**
    * Return the initial value. It is required, the use of required is because

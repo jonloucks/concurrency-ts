@@ -34,6 +34,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "test:verbose": "jest --verbose",
     "test:watch": "jest --watch --watchAll",
     "test:coverage": "jest --coverage",
     "test:diagnostics": "jest --detectOpenHandles",
