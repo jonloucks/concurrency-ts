@@ -22,7 +22,7 @@ export function completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, de
 
   try {
     const validDelegate: Consumer<OnCompletion<T>> = fromTypeToConsumer(delegate);
-    validDelegate.consume(onCompletion); // ownership transfered
+    validDelegate.consume(onCompletion); // ownership transferred
     delegated = true;
   } catch (caught) {
     thrown = caught;
