@@ -45,12 +45,12 @@ class IdempotentImpl implements Idempotent {
 
   // Idempotent.getState
   getState(): IdempotentState {
-    return this.stateMachine.getState();
+    return this._stateMachine.getState();
   }
 
   // Idempotent.open
   open(): AutoClose {
-    return this.stateMachine.transition<AutoClose>({
+    return this._stateMachine.transition<AutoClose>({
       event: "open",
       successState: "OPENED",
       getSuccessValue: (): AutoClose => this.firstOpen(),
@@ -60,11 +60,11 @@ class IdempotentImpl implements Idempotent {
   }
 
   private firstOpen(): AutoClose {
-    this.closeMany.add(presentCheck(this.delegate.open(), "Close must be present."))
+    this._closeMany.add(presentCheck(this._delegate.open(), "Close must be present."))
     try {
-      return this.firstClose;
+      return this._firstClose;
     } catch (thrown) {
-      this.closeMany.close();
+      this._closeMany.close();
       throw thrown;
     }
   }
@@ -76,23 +76,23 @@ class IdempotentImpl implements Idempotent {
   private constructor(config: Config) {
     const validContracts: Contracts = contractsCheck(config.contracts);
     const closeFactory: AutoCloseFactory = validContracts.enforce(AUTO_CLOSE_FACTORY);
-    this.closeMany = closeFactory.createAutoCloseMany();
-    this.delegate = typeToOpen(config.open);
+    this._closeMany = closeFactory.createAutoCloseMany();
+    this._delegate = typeToOpen(config.open);
     const stateMachineConfig = getStateMachineConfig();
-    this.stateMachine = createStateMachine({ contracts: validContracts, ...stateMachineConfig });
-    this.firstClose = inlineAutoClose(() => {
-      this.stateMachine.transition<void>({
+    this._stateMachine = createStateMachine({ contracts: validContracts, ...stateMachineConfig });
+    this._firstClose = inlineAutoClose(() => {
+      this._stateMachine.transition<void>({
         event: "close",
         successState: "CLOSED",
-        getSuccessValue: (): void => this.closeMany.close(),
+        getSuccessValue: (): void => this._closeMany.close(),
         getFailedValue: (): boolean => { return true },
         getErrorValue: (): boolean => { return true; } // review this, should not error on close?
       });
     });
   }
 
-  private readonly delegate: Open;
-  private readonly closeMany: AutoCloseMany;
-  private readonly stateMachine: StateMachine<IdempotentState>;
-  private readonly firstClose: AutoClose;
+  private readonly _delegate: Open;
+  private readonly _closeMany: AutoCloseMany;
+  private readonly _stateMachine: StateMachine<IdempotentState>;
+  private readonly _firstClose: AutoClose;
 }

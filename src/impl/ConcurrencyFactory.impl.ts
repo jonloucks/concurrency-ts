@@ -29,12 +29,12 @@ export function create(config: ConcurrencyConfig): ConcurrencyFactory {
 class ConcurrencyFactoryImpl implements ConcurrencyFactory {
 
   createConcurrency(config: ConcurrencyConfig): Concurrency {
-    return createConcurrencyImpl({ ...this.concurrencyConfig, ...config });
+    return createConcurrencyImpl({ ...this._concurrencyConfig, ...config });
   }
 
   install(config: ConcurrencyConfig, repository: RequiredType<Repository>): void {
     // potential unexpected behavior might occur when merging configs
-    const validConfig: ConcurrencyConfig = { ...this.concurrencyConfig, ...configCheck(config) };
+    const validConfig: ConcurrencyConfig = { ...this._concurrencyConfig, ...configCheck(config) };
     const validRepository: RequiredType<Repository> = presentCheck(repository, "Repository must be present.");
 
     validRepository.keep(WAITABLE_FACTORY, createWaitableFactoryImpl(validConfig));
@@ -47,8 +47,8 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
   }
 
   private constructor(config: ConcurrencyConfig) {
-    this.concurrencyConfig = { ...{ contracts: CONTRACTS }, ...config };
+    this._concurrencyConfig = { ...{ contracts: CONTRACTS }, ...config };
   }
 
-  private readonly concurrencyConfig: ConcurrencyConfig;
+  private readonly _concurrencyConfig: ConcurrencyConfig;
 }

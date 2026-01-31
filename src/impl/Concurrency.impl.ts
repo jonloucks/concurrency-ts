@@ -42,15 +42,15 @@ class ConcurrencyImpl implements Concurrency {
   }
 
   createWaitable<T>(config: WaitableConfig<T>): RequiredType<Waitable<T>> {
-    return this.contracts.enforce(WAITABLE_FACTORY).createWaitable<T>(config);
+    return this._contracts.enforce(WAITABLE_FACTORY).createWaitable<T>(config);
   }
 
   createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>> {
-    return this.contracts.enforce(STATE_MACHINE_FACTORY).createStateMachine<T>(config);
+    return this._contracts.enforce(STATE_MACHINE_FACTORY).createStateMachine<T>(config);
   }
 
   createCompletable<T>(config: CompletableConfig<T>): RequiredType<Completable<T>> {
-    return this.contracts.enforce(COMPLETABLE_FACTORY).createCompletable<T>(config);
+    return this._contracts.enforce(COMPLETABLE_FACTORY).createCompletable<T>(config);
   }
 
   completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<ConsumerType<OnCompletion<T>>>): void {
@@ -66,10 +66,10 @@ class ConcurrencyImpl implements Concurrency {
   }
 
   private constructor(config: ConcurrencyConfig) {
-    this.concurrencyConfig = { ...{ contracts: CONTRACTS }, ...config };
-    this.contracts = this.concurrencyConfig.contracts!;
+    this._concurrencyConfig = { ...{ contracts: CONTRACTS }, ...config };
+    this._contracts = this._concurrencyConfig.contracts!;
   }
 
-  private readonly contracts: Contracts;
-  private readonly concurrencyConfig: ConcurrencyConfig;
+  private readonly _contracts: Contracts;
+  private readonly _concurrencyConfig: ConcurrencyConfig;
 }
