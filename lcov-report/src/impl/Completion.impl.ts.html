@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/impl/StateMachineFactory.impl.ts</title>
+    <title>Code coverage report for src/impl/Completion.impl.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/impl</a> StateMachineFactory.impl.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/impl</a> Completion.impl.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -96,73 +96,88 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">75x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
-import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
-import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Completion, CompletionState, Config } from '@jonloucks/concurrency-ts/api/Completion';
+import { RequiredType, OptionalType } from '@jonloucks/contracts-ts/api/Types';
+import { Throwable } from '@jonloucks/concurrency-ts/api/Types';
+import { isTerminalState } from '@jonloucks/concurrency-ts/api/CompletionState';
 &nbsp;
-import { create as createStateMachineImpl } from "./StateMachine.impl";
-&nbsp;
-/**
- * Create a new StateMachineFactory
- *
- * @return the new StateMachineFactory
- */
-export function create(config: ConcurrencyConfig): StateMachineFactory {
-  return StateMachineFactoryImpl.internalCreate(config);
+export function create&lt;T&gt;(config: Config&lt;T&gt;): Completion&lt;T&gt; {
+  return CompletionImpl.createInternal(config);
 }
 &nbsp;
 // ---- Implementation details below ----
 &nbsp;
-class StateMachineFactoryImpl implements StateMachineFactory {
-  createStateMachine&lt;T&gt;(config: StateMachineConfig&lt;T&gt;): RequiredType&lt;StateMachine&lt;T&gt;&gt; {
-    // const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
-    return createStateMachineImpl(config);
+class CompletionImpl&lt;T&gt; implements Completion&lt;T&gt; {
+  isCompleted(): boolean {
+    return isTerminalState(this.getState());
   }
 &nbsp;
-  static internalCreate(config: ConcurrencyConfig): StateMachineFactory {
-    return new StateMachineFactoryImpl(config);
+  getValue(): OptionalType&lt;T&gt; {
+    return this.config.value;
   }
 &nbsp;
-  private constructor(config: ConcurrencyConfig) {
-    this.concurrencyConfig = config;
+  getState(): RequiredType&lt;CompletionState&gt; {
+    return this.config.state;
   }
 &nbsp;
-  private readonly concurrencyConfig: ConcurrencyConfig;
-};</pre></td></tr></table></pre>
+  getThrown(): OptionalType&lt;Throwable&lt;unknown&gt;&gt; {
+    return this.config.thrown;
+  }
+&nbsp;
+  getPromise(): OptionalType&lt;Promise&lt;T&gt;&gt; {
+    return this.config.promise;
+  }
+&nbsp;
+  static createInternal&lt;T&gt;(config: Config&lt;T&gt;): Completion&lt;T&gt; {
+    return new CompletionImpl&lt;T&gt;(config);
+  }
+&nbsp;
+  private constructor(private readonly config: Config&lt;T&gt;) {
+  }  
+}</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

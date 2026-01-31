@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/impl/StateMachineFactory.impl.ts</title>
+    <title>Code coverage report for src/impl/CompletableFactory.impl.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/impl</a> StateMachineFactory.impl.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/impl</a> CompletableFactory.impl.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -95,9 +95,7 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,7 +107,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">35x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,50 +115,49 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">35x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">35x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
-import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CompletableFactory } from "@jonloucks/concurrency-ts/api/CompletableFactory";
+import { Completable, Config as CompletableConfig} from "@jonloucks/concurrency-ts/api/Completable";
 import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
 &nbsp;
-import { create as createStateMachineImpl } from "./StateMachine.impl";
+import { create as createCompletableImpl } from "./Completable.impl";
 &nbsp;
-/**
- * Create a new StateMachineFactory
+/** 
+ * Create a new CompletableFactory
  *
- * @return the new StateMachineFactory
+ * @return the new CompletableFactory
  */
-export function create(config: ConcurrencyConfig): StateMachineFactory {
-  return StateMachineFactoryImpl.internalCreate(config);
+export function create(config: ConcurrencyConfig): CompletableFactory {
+  return CompletableFactoryImpl.internalCreate(config);
 }
 &nbsp;
 // ---- Implementation details below ----
 &nbsp;
-class StateMachineFactoryImpl implements StateMachineFactory {
-  createStateMachine&lt;T&gt;(config: StateMachineConfig&lt;T&gt;): RequiredType&lt;StateMachine&lt;T&gt;&gt; {
+class CompletableFactoryImpl implements CompletableFactory {
+  createCompletable&lt;T&gt;(config: CompletableConfig&lt;T&gt;): Completable&lt;T&gt; {
     // const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
-    return createStateMachineImpl(config);
+&nbsp;
+    return createCompletableImpl&lt;T&gt;(config)
   }
 &nbsp;
-  static internalCreate(config: ConcurrencyConfig): StateMachineFactory {
-    return new StateMachineFactoryImpl(config);
+  static internalCreate(config: ConcurrencyConfig): CompletableFactory {
+    return new CompletableFactoryImpl(config);
   }
 &nbsp;
   private constructor(config: ConcurrencyConfig) {
-    this.concurrencyConfig = config;
+    this.concurrencyConfig = config;  
   }
-&nbsp;
   private readonly concurrencyConfig: ConcurrencyConfig;
 };</pre></td></tr></table></pre>
 

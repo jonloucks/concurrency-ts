@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/api/WaitableSupplier.ts</title>
+    <title>Code coverage report for src/impl/Idempotent.impl.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/api</a> WaitableSupplier.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/impl</a> Idempotent.impl.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>39/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">93.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>14/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>39/42</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -128,8 +128,128 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">127x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">126x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">124x</span>
+<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-yes">101x</span>
+<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">57x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">127x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">127x</span>
+<span class="cline-any cline-yes">126x</span>
+<span class="cline-any cline-yes">126x</span>
+<span class="cline-any cline-yes">126x</span>
+<span class="cline-any cline-yes">124x</span>
+<span class="cline-any cline-yes">124x</span>
+<span class="cline-any cline-yes">124x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,126 +259,105 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">30x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
-import { Duration, OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { isFunction } from "@jonloucks/contracts-ts/api/Types";
+import { Idempotent, Config, OpenType } from "@jonloucks/concurrency-ts/api/Idempotent";
+import { IdempotentState, getStateMachineConfig } from "@jonloucks/concurrency-ts/api/IdempotenState";
+import { AUTO_CLOSE_NONE, AutoClose, AutoCloseMany, inlineAutoClose, typeToAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { Open, guard as guardOpen } from "@jonloucks/contracts-ts/api/Open";
+import { guard as guardAutoOpen } from "@jonloucks/contracts-ts/api/AutoOpen";
+import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
+import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 &nbsp;
-import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
-import { Supplier } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
+import { create as createStateMachine } from "./StateMachine.impl";
+import { AutoCloseFactory, CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
+import { Contracts } from "@jonloucks/contracts-ts";
+import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 &nbsp;
-export { RequiredType, OptionalType, Duration, PredicateType, Supplier }
-&nbsp;
-/**
- * Waitable supplier
- * @param &lt;T&gt; the type of value supplied
+/** 
+ * Create a new Idempotent
+ *
+ * @param config the idempotent configuration
+ * @return the new Idempotent
  */
-export interface WaitableSupplier&lt;T&gt; extends Supplier&lt;T&gt; {
-&nbsp;
-  /**
-   * @return Get current value
-   */
-  supply(): T;
-&nbsp;
-  /**
-   * Gets the current value if it satisfies a condition
-   * 
-   * In languages that support synchronization this method would lock before checking the predicate. In JavaScript/TypeScript this is not possible so
-   * this method creates a one-time promise that evaluates the predicate against the current value.
-   * If the predicate is satisfied the promise resolves with the current value.
-   *
-   * @param predicate the predicate
-   * @return the current value if and only if the condition is satisfied
-   * @throws IllegalArgumentException if predicate is null or if value is null
-   */
-  supplyIf(predicate: PredicateType&lt;T&gt;): OptionalType&lt;T&gt;;
-&nbsp;
-  /**
-   * Waits until the current value if it satisfies a condition or a timeout is reached
-   * 
-   * In languages that support synchronization this method would lock before checking the predicate. In JavaScript/TypeScript this is not possible so
-   * this method creates a one-time promise that evaluates the predicate against the current value.
-   * If the predicate is satisfied the promise resolves with the current value.
-   * 
-   * if the predicate is not satisfied the promise remains pending until either:
-   * - another thread updates the value and the predicate is satisfied, or
-   * - the optional timeout elapses
-   * 
-   * In languages that support synchronization this method would lock
-   *
-   * @param predicate the predicate to test if the value satisfies the stop waiting condition
-   * @param timeout the time to wait for the value to satisfy the predicate
-   * @return the current value if and only if the condition is satisfied
-   * @throws IllegalArgumentException if predicate is null, duration is null, or duration is negative
-   */
-  supplyWhen(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, timeout?: Duration): Promise&lt;T&gt;;
+export function create(config: Config): Idempotent {
+  return IdempotentImpl.internalCreate(config);
 }
 &nbsp;
-/**
- * Determine if the given instance is a WaitableSupplier
- *
- * @param instance the instance to check
- * @return true if the instance is a WaitableSupplier
- */
-export function guard&lt;T&gt;(instance: unknown): instance is RequiredType&lt;WaitableSupplier&lt;T&gt;&gt; {
-  return guardFunctions(instance,
-    'supply',
-    'supplyIf',
-    'supplyWhen',
-  );
-}</pre></td></tr></table></pre>
+// candidate for contracts-ts 
+export function typeToOpen(type: OpenType): Open {
+  if (guardAutoOpen(type)) {
+    return {
+      open: () =&gt; type.autoOpen()
+    }
+  } else if (guardOpen(type)) {
+    return type;
+  } else if (isFunction(type)) {
+    return {
+      open: () =&gt; typeToAutoClose(type())
+    };
+  } else {
+    throw new Error("Invalid Open type.");
+  }
+}
+&nbsp;
+// ---- Implementation details below ----
+&nbsp;
+class IdempotentImpl implements Idempotent {
+&nbsp;
+  // Idempotent.getState
+  getState(): IdempotentState {
+    return this.stateMachine.getState();
+  }
+&nbsp;
+  // Idempotent.open
+  open(): AutoClose {
+    return this.stateMachine.transition&lt;AutoClose&gt;({
+      event: "open",
+      successState: "OPENED",
+      getSuccessValue: (): AutoClose =&gt; this.firstOpen(),
+      getFailedValue: (): AutoClose =&gt; AUTO_CLOSE_NONE // no-op close for already opened
+    }
+    )!;
+  }
+&nbsp;
+  private firstOpen(): AutoClose {
+    this.closeMany.add(presentCheck(this.delegate.open(), "Close must be present."))
+    try {
+      return this.firstClose;
+    } catch (thrown) {
+<span class="cstat-no" title="statement not covered" >      this.closeMany.close();</span>
+<span class="cstat-no" title="statement not covered" >      throw thrown;</span>
+    }
+  }
+&nbsp;
+  static internalCreate(config: Config): Idempotent {
+    return new IdempotentImpl(config);
+  }
+&nbsp;
+  private constructor(config: Config) {
+    const validContracts: Contracts = contractsCheck(config.contracts);
+    const closeFactory: AutoCloseFactory = validContracts.enforce(AUTO_CLOSE_FACTORY);
+    this.closeMany = closeFactory.createAutoCloseMany();
+    this.delegate = typeToOpen(config.open);
+    const stateMachineConfig = getStateMachineConfig();
+    this.stateMachine = createStateMachine({ contracts: validContracts, ...stateMachineConfig });
+    this.firstClose = inlineAutoClose(() =&gt; {
+      this.stateMachine.transition&lt;void&gt;({
+        event: "close",
+        successState: "CLOSED",
+        getSuccessValue: (): void =&gt; this.closeMany.close(),
+        getFailedValue: (): boolean =&gt; { return true },
+        getErrorValue: <span class="fstat-no" title="function not covered" >(): boolean =</span>&gt; { <span class="cstat-no" title="statement not covered" >return true; </span>} // review this, should not error on close?
+      });
+    });
+  }
+&nbsp;
+  private readonly delegate: Open;
+  private readonly closeMany: AutoCloseMany;
+  private readonly stateMachine: StateMachine&lt;IdempotentState&gt;;
+  private readonly firstClose: AutoClose;
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
