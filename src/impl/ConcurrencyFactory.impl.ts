@@ -18,7 +18,7 @@ import { create as createCompletionFactoryImpl } from "./CompletionFactory.impl"
 
 /** 
  * Create a new ConcurrencyFactory
- * @param config the Concurency Config
+ * @param config the Concurrency Config
  *
  * @return the new ConcurrencyFactory
  */
