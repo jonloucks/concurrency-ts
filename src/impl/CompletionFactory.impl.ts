@@ -7,6 +7,7 @@ import { create as createCompletionImpl } from './Completion.impl';
 /** 
  * Create a new CompletionFactory
  *
+ * @param config The concurrency configuration used to create the factory.
  * @return the new CompletionFactory
  */
 export function create(config: CurrencyConfig): CompletionFactory {
