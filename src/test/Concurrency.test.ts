@@ -1,7 +1,8 @@
 import { ok, strictEqual } from "node:assert";
 
 import {
-  Completable, Completion,
+  Completable, 
+  Completion,
   Concurrency,
   Config as ConcurrencyConfig,
   Consumer,
@@ -21,7 +22,6 @@ const FUNCTION_NAMES : (string|symbol)[] = [
   'createWaitable',
   'createStateMachine',
   'createCompletable',
-  'createCompletion',
   'completeLater',
   'completeNow',
   'open'
@@ -88,11 +88,6 @@ describe('Concurrency Implementation Tests', () => {
   it('should have createCompletable method', () => {
     ok(isPresent(concurrency.createCompletable), 'Should have createCompletable method');
     ok(typeof concurrency.createCompletable === 'function', 'createCompletable should be a function');
-  });
-
-  it('should have createCompletion method', () => {
-    ok(isPresent(concurrency.createCompletion), 'Should have createCompletion method');
-    ok(typeof concurrency.createCompletion === 'function', 'createCompletion should be a function');
   });
 
   it('should have completeLater method', () => {
@@ -197,7 +192,6 @@ describe('Concurrency Integration Tests', () => {
     ok(typeof concurrency.createWaitable === 'function', 'createWaitable is function');
     ok(typeof concurrency.createStateMachine === 'function', 'createStateMachine is function');
     ok(typeof concurrency.createCompletable === 'function', 'createCompletable is function');
-    ok(typeof concurrency.createCompletion === 'function', 'createCompletion is function');
     ok(typeof concurrency.completeLater === 'function', 'completeLater is function');
     ok(typeof concurrency.completeNow === 'function', 'completeNow is function');
   });
@@ -289,7 +283,6 @@ describe('Concurrency Method Accessibility Tests', () => {
     ok(typeof concurrency.createWaitable === 'function', 'createWaitable callable');
     ok(typeof concurrency.createStateMachine === 'function', 'createStateMachine callable');
     ok(typeof concurrency.createCompletable === 'function', 'createCompletable callable');
-    ok(typeof concurrency.createCompletion === 'function', 'createCompletion callable');
     ok(typeof concurrency.completeLater === 'function', 'completeLater callable');
     ok(typeof concurrency.completeNow === 'function', 'completeNow callable');
   });

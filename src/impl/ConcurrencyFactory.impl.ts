@@ -4,7 +4,6 @@ import { Concurrency, Config as ConcurrencyConfig } from "@jonloucks/concurrency
 import { CONTRACT as WAITABLE_FACTORY } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-import { CONTRACT as COMPLETION_FACTORY } from "@jonloucks/concurrency-ts/api/CompletionFactory";
 
 import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { CONTRACTS, Repository } from "@jonloucks/contracts-ts";
@@ -14,7 +13,6 @@ import { create as createConcurrencyImpl } from "./Concurrency.impl";
 import { create as createWaitableFactoryImpl } from "./WaitableFactory.impl";
 import { create as createStateMachineFactoryImpl } from "./StateMachineFactory.impl";
 import { create as createCompletableFactoryImpl } from "./CompletableFactory.impl";
-import { create as createCompletionFactoryImpl } from "./CompletionFactory.impl";
 
 /** 
  * Create a new ConcurrencyFactory
@@ -42,7 +40,6 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
     validRepository.keep(WAITABLE_FACTORY, createWaitableFactoryImpl(validConfig));
     validRepository.keep(STATE_MACHINE_FACTORY, createStateMachineFactoryImpl(validConfig));
     validRepository.keep(COMPLETABLE_FACTORY, createCompletableFactoryImpl(validConfig));
-    validRepository.keep(COMPLETION_FACTORY, createCompletionFactoryImpl(validConfig));
   }
 
   static internalCreate(config: ConcurrencyConfig): ConcurrencyFactory {

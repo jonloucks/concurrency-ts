@@ -1,13 +1,19 @@
 import {
-  Completable, CompletableConfig, Completion, CompletionConfig, Concurrency,
-  ConcurrencyConfig, OnCompletion, StateMachine, StateMachineConfig, Waitable, WaitableConfig
+  Completable, 
+  CompletableConfig, 
+  Concurrency,
+  ConcurrencyConfig, 
+  OnCompletion, 
+  StateMachine, 
+  StateMachineConfig, 
+  Waitable, 
+  WaitableConfig
 }
   from "@jonloucks/concurrency-ts/api/Concurrency";
 
 import { CONTRACT as WAITABLE_FACTORY } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-import { CONTRACT as COMPLETION_FACTORY } from "@jonloucks/concurrency-ts/api/CompletionFactory";
 
 import { ConsumerType, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
 import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
@@ -45,10 +51,6 @@ class ConcurrencyImpl implements Concurrency {
 
   createCompletable<T>(config: CompletableConfig<T>): RequiredType<Completable<T>> {
     return this.contracts.enforce(COMPLETABLE_FACTORY).createCompletable<T>(config);
-  }
-
-  createCompletion<T>(config: CompletionConfig<T>): RequiredType<Completion<T>> {
-    return this.contracts.enforce(COMPLETION_FACTORY).createCompletion<T>(config);
   }
 
   completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<ConsumerType<OnCompletion<T>>>): void {

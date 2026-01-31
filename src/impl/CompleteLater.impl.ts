@@ -4,8 +4,6 @@ import { RequiredType, OptionalType, Throwable } from "@jonloucks/concurrency-ts
 import { onCompletionCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { CompletionState } from "@jonloucks/concurrency-ts/api/Completion";
 
-import { create as createCompletionImpl } from "./Completion.impl";
-
 /**
  * Completes the given OnCompletion later by delegating to the provided delegate.
  * If the delegate throws, the OnCompletion is completed with FAILED state.
@@ -29,7 +27,7 @@ export function completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, de
     throw thrown;
   } finally {
     if (!delegated) {
-      validOnCompletion.onCompletion(createCompletionImpl<T>({ state, thrown }));
+      validOnCompletion.onCompletion({ state, thrown });
     }
   }
 }

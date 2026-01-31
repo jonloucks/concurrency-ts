@@ -140,7 +140,7 @@ describe('ConcurrencyFactory Install Tests', () => {
     });
 
     factory.install(config, mockRepository);
-    ok(callCount >= 4, 'Repository.keep should be called for each factory');
+    ok(callCount >= 3, 'Repository.keep should be called for each factory');
   });
 
   it('should install multiple times', () => {
@@ -191,7 +191,6 @@ describe('ConcurrencyFactory Concurrency Methods Tests', () => {
     ok(isPresent(concurrency.createWaitable), 'Should have createWaitable');
     ok(isPresent(concurrency.createCompletable), 'Should have createCompletable');
     ok(isPresent(concurrency.createStateMachine), 'Should have createStateMachine');
-    ok(isPresent(concurrency.createCompletion), 'Should have createCompletion');
   });
 
   it('created Concurrency should be Open', () => {

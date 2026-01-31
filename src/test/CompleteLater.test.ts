@@ -119,8 +119,8 @@ describe('CompleteLater Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<string>).getThrown(), testError, 'Should have thrown error');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).thrown, testError, 'Should have thrown error');
     });
 
     it('should complete with FAILED state when consumer throws', () => {
@@ -143,8 +143,8 @@ describe('CompleteLater Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<number>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<number>).getThrown(), testError, 'Should have thrown error');
+      strictEqual((receivedCompletion as Completion<number>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<number>).thrown, testError, 'Should have thrown error');
     });
 
     it('should complete with FAILED state when throwing string', () => {
@@ -162,8 +162,8 @@ describe('CompleteLater Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<string>).getThrown(), 'string error', 'Should have thrown string');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).thrown, 'string error', 'Should have thrown string');
     });
 
     it('should complete with FAILED state when throwing custom object', () => {
@@ -183,8 +183,8 @@ describe('CompleteLater Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<string>).getThrown(), customError, 'Should have thrown custom error');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).thrown, customError, 'Should have thrown custom error');
     });
   });
 
@@ -210,7 +210,7 @@ describe('CompleteLater Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion even on validation failure');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
     });
 
     it('should validate delegate as object without consume method', () => {
@@ -226,7 +226,7 @@ describe('CompleteLater Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion even on validation failure');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
     });
   });
 
@@ -275,11 +275,10 @@ describe('CompleteLater Tests', () => {
         // Delegate successfully receives ownership
         // Even if delegate completes it here, completeLater shouldn't double-complete
         oc.onCompletion({ 
-          getState: () => 'SUCCEEDED',
-          getValue: () => 'test',
-          getThrown: () => undefined,
-          getPromise: () => undefined,
-          isCompleted: () => true
+          state: 'SUCCEEDED',
+          value: 'test',
+          thrown: undefined,
+          promise: undefined
         } as Completion<string>);
       });
 

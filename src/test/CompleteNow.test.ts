@@ -19,8 +19,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, 'test-value', 'Should return the value from success block');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<string>).getValue(), 'test-value', 'Value should match');
+      strictEqual((receivedCompletion as Completion<string>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<string>).value, 'test-value', 'Value should match');
     });
 
     it('should complete with SUCCEEDED state for number type', () => {
@@ -35,8 +35,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, 42, 'Should return the number value');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<number>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<number>).getValue(), 42, 'Value should be 42');
+      strictEqual((receivedCompletion as Completion<number>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<number>).value, 42, 'Value should be 42');
     });
 
     it('should complete with SUCCEEDED state for object type', () => {
@@ -52,8 +52,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, testObj, 'Should return the object');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<typeof testObj>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<typeof testObj>).getValue(), testObj, 'Value should match object');
+      strictEqual((receivedCompletion as Completion<typeof testObj>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<typeof testObj>).value, testObj, 'Value should match object');
     });
 
     it('should work with Supplier object with supply method', () => {
@@ -72,8 +72,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, 'supplied-value', 'Should return value from supplier');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<string>).getValue(), 'supplied-value', 'Value should match');
+      strictEqual((receivedCompletion as Completion<string>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<string>).value, 'supplied-value', 'Value should match');
     });
 
     it('should complete with SUCCEEDED when returning undefined', () => {
@@ -88,7 +88,7 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, undefined, 'Should return undefined');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<undefined>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<undefined>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
     });
 
     it('should complete with SUCCEEDED when returning null', () => {
@@ -103,8 +103,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, null, 'Should return null');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<null>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<null>).getValue(), null, 'Value should be null');
+      strictEqual((receivedCompletion as Completion<null>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<null>).value, null, 'Value should be null');
     });
   });
 
@@ -126,8 +126,8 @@ describe('CompleteNow Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<string>).getThrown(), testError, 'Should have thrown error');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).thrown, testError, 'Should have thrown error');
     });
 
     it('should complete with FAILED state when supplier throws', () => {
@@ -150,8 +150,8 @@ describe('CompleteNow Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<string>).getThrown(), testError, 'Should have thrown error');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).thrown, testError, 'Should have thrown error');
     });
 
     it('should complete with FAILED state when throwing string', () => {
@@ -169,8 +169,8 @@ describe('CompleteNow Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<string>).getThrown(), 'string error', 'Should have thrown string');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).thrown, 'string error', 'Should have thrown string');
     });
 
     it('should complete with FAILED state when throwing custom object', () => {
@@ -190,8 +190,8 @@ describe('CompleteNow Tests', () => {
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'FAILED', 'State should be FAILED');
-      strictEqual((receivedCompletion as Completion<string>).getThrown(), customError, 'Should have thrown custom error');
+      strictEqual((receivedCompletion as Completion<string>).state, 'FAILED', 'State should be FAILED');
+      strictEqual((receivedCompletion as Completion<string>).thrown, customError, 'Should have thrown custom error');
     });
   });
 
@@ -229,8 +229,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, '', 'Should return empty string');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<string>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<string>).getValue(), '', 'Value should be empty string');
+      strictEqual((receivedCompletion as Completion<string>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<string>).value, '', 'Value should be empty string');
     });
 
     it('should work with zero value', () => {
@@ -245,8 +245,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, 0, 'Should return zero');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<number>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<number>).getValue(), 0, 'Value should be zero');
+      strictEqual((receivedCompletion as Completion<number>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<number>).value, 0, 'Value should be zero');
     });
 
     it('should work with false value', () => {
@@ -261,8 +261,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, false, 'Should return false');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<boolean>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<boolean>).getValue(), false, 'Value should be false');
+      strictEqual((receivedCompletion as Completion<boolean>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<boolean>).value, false, 'Value should be false');
     });
 
     it('should work with array value', () => {
@@ -278,8 +278,8 @@ describe('CompleteNow Tests', () => {
 
       strictEqual(result, testArray, 'Should return array');
       ok(receivedCompletion !== null, 'Should have received completion');
-      strictEqual((receivedCompletion as Completion<number[]>).getState(), 'SUCCEEDED', 'State should be SUCCEEDED');
-      strictEqual((receivedCompletion as Completion<number[]>).getValue(), testArray, 'Value should be array');
+      strictEqual((receivedCompletion as Completion<number[]>).state, 'SUCCEEDED', 'State should be SUCCEEDED');
+      strictEqual((receivedCompletion as Completion<number[]>).value, testArray, 'Value should be array');
     });
   });
 
