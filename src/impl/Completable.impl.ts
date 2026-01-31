@@ -75,7 +75,12 @@ class CompletableImpl<T> implements Completable<T> {
     this.observers.add(observer);
 
     if (isPresent(this.completion)) {
-      observer.onCompletion(this.completion!);
+      try {
+        observer.onCompletion(this.completion!);
+      } catch (e) {
+        removeObserver(observer);
+        throw e;
+      }
     }
 
     return inlineAutoClose((): void => {
