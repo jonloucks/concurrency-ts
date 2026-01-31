@@ -1,4 +1,4 @@
-import { ok, strictEqual, throws } from "node:assert";
+import { ok, strictEqual } from "node:assert";
 
 import {
   Completable, Completion,
@@ -141,36 +141,6 @@ describe('Concurrency Open Method Tests', () => {
     autoClose.close();
     autoClose.close();
     ok(true, 'Multiple close calls should succeed');
-  });
-});
-
-describe('Concurrency Not Implemented Methods Tests', () => {
-  let concurrency: Concurrency;
-
-  beforeEach(() => {
-    concurrency = createConcurrency({ contracts: CONTRACTS });
-  });
-
-  it('completeLater should throw not implemented error', () => {
-    const onCompletion = mockDuck<OnCompletion<unknown>>("onCompletion");
-    const consumer = mockDuck<Consumer<OnCompletion<unknown>>>("consume");
-    
-    throws(() => {
-      concurrency.completeLater(onCompletion, consumer);
-    }, {
-      message: /not implemented/i
-    });
-  });
-
-  it('completeNow should throw not implemented error', () => {
-    const onCompletion = mockDuck<OnCompletion<unknown>>("onCompletion");
-    const supplier = mockDuck<Supplier<unknown>>("supply");
-    
-    throws(() => {
-      concurrency.completeNow(onCompletion, supplier);
-    }, {
-      message: /not implemented/i
-    });
   });
 });
 
