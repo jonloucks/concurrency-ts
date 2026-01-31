@@ -1,15 +1,30 @@
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config } from "@jonloucks/concurrency-ts/api/StateMachine";
 
+/**
+ * The possible states of an Idempotent
+ */
 export const STATES: string[] = ['OPENABLE', 'OPENING', 'OPENED', 'CLOSING', 'CLOSED', 'DESTROYED'] as const;
 
+/** The possible states of an Idempotent
+ */
 export type State = typeof STATES[number];
 
+
+/** The IdempotentState type
+ */
 export {State as IdempotentState };
 
+/** The starting state for an Idempotent
+ */
 export const START_STATE: State = 'OPENABLE';
 
-// review if this should be exported
+/**
+ * Get the state transition rules for a given Idempotent state
+ *
+ * @param state the state to get rules for
+ * @return the array of rules for the given state
+ */
 export function getStateRules(state: State): Array<Rule<State>> {
   switch (state) {
     case 'OPENABLE':
@@ -66,6 +81,11 @@ export function getStateRules(state: State): Array<Rule<State>> {
   }
 };
 
+/**
+ * Get the default StateMachine configuration for an Idempotent
+ *
+ * @return the default StateMachine configuration
+ */
 export function getStateMachineConfig(): Config<State> {
   return {
     initialValue: START_STATE,

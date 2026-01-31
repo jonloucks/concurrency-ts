@@ -13,6 +13,7 @@ import {
   Waitable
 } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { CONTRACTS, isPresent, OptionalType } from "@jonloucks/contracts-ts";
+
 import { create as createConcurrency } from "../impl/Concurrency.impl";
 import { assertContract, assertGuard, mockDuck } from "./helper.test";
 

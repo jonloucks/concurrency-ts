@@ -10,11 +10,18 @@ import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/C
 import { CONTRACT as COMPLETION_FACTORY } from "@jonloucks/concurrency-ts/api/CompletionFactory";
 
 import { ConsumerType, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
-import { AutoClose, Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
-import { AUTO_CLOSE_NONE } from "@jonloucks/contracts-ts/api/AutoClose";
+import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
+import { AutoClose, AUTO_CLOSE_NONE } from "@jonloucks/contracts-ts/api/AutoClose";
+
 import { completeLater as completeLaterImpl } from "./CompleteLater.impl";
 import { completeNow as completeNowImpl } from "./CompleteNow.impl";
 
+/** 
+ * Create a new Concurrency
+ *
+ * @param config the concurrency configuration
+ * @return the new Concurrency
+ */
 export function create(config: ConcurrencyConfig): Concurrency {
   return ConcurrencyImpl.internalCreate(config);
 }

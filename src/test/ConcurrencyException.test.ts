@@ -21,7 +21,6 @@ describe('ConcurrencyException Tests', () => {
     });
   });
 
-
   it('rethrow with Error caught with message, has correct name and message', () => {
     throws(() => {
       ConcurrencyException.rethrow(new Error("Inner problem."), "Outer Problem.");

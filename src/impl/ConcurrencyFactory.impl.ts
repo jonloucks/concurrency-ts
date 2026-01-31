@@ -16,6 +16,12 @@ import { create as createStateMachineFactoryImpl } from "./StateMachineFactory.i
 import { create as createCompletableFactoryImpl } from "./CompletableFactory.impl";
 import { create as createCompletionFactoryImpl } from "./CompletionFactory.impl";
 
+/** 
+ * Create a new ConcurrencyFactory
+ * @param config the Concurency Config
+ *
+ * @return the new ConcurrencyFactory
+ */
 export function create(config: ConcurrencyConfig): ConcurrencyFactory {
   return ConcurrencyFactoryImpl.internalCreate(config);
 }

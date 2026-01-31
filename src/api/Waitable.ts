@@ -20,6 +20,9 @@ export interface Config<T> {
   initialValue?: OptionalType<T>;
 }
 
+/**
+ * Export Waitable Config type
+ */
 export { Config as WaitableConfig } ;
 
 /**

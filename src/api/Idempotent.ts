@@ -5,18 +5,38 @@ import { State } from "@jonloucks/concurrency-ts/api/IdempotenState";
 import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
 import { guardFunctions, RequiredType } from "@jonloucks/contracts-ts/api/Types";
 
+/**
+ * The type returned when opening an Idempotent
+ */
 export type CloseType = AutoCloseType;
+
+/**
+ * The type used to open an Idempotent
+ */
 export type OpenType = AutoOpen | Open | (() => CloseType);
 
+/** 
+ * The configuration used to create a new Idempotent instance
+ */
 export interface Config {
 
+  /** The Contracts instance to use */
   contracts: Contracts;
 
+  /** The Open type to use when opening the Idempotent */
   open: OpenType;
 }
 
+/**
+ * The Idempotent API
+ */
 export interface Idempotent extends Open {
 
+  /**
+   * Get the current state of the Idempotent
+   *
+   * @return the current state
+   */
   getState(): State;
 
 }

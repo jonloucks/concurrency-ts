@@ -6,11 +6,11 @@ import { Open, guard as guardOpen } from "@jonloucks/contracts-ts/api/Open";
 import { guard as guardAutoOpen } from "@jonloucks/contracts-ts/api/AutoOpen";
 import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { AutoCloseFactory, CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
+import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
+import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 import { create as createStateMachine } from "./StateMachine.impl";
-import { AutoCloseFactory, CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
-import { Contracts } from "@jonloucks/contracts-ts";
-import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 /** 
  * Create a new Idempotent

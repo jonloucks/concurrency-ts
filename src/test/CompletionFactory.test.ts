@@ -2,10 +2,10 @@ import { ok, strictEqual } from "node:assert";
 
 import { CompletionConfig } from "@jonloucks/concurrency-ts/api/Completion";
 import { CompletionFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/CompletionFactory";
-import { isPresent } from "@jonloucks/contracts-ts";
+import { isPresent } from "@jonloucks/contracts-ts/api/Types";
+import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
-import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { create as createCompletionFactory } from "../impl/CompletionFactory.impl";
 
 const FUNCTION_NAMES : (string|symbol)[] = [

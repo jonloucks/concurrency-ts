@@ -4,7 +4,11 @@ import { RequiredType } from '@jonloucks/contracts-ts';
 
 import { create as createCompletionImpl } from './Completion.impl';
 
-
+/** 
+ * Create a new CompletionFactory
+ *
+ * @return the new CompletionFactory
+ */
 export function create(config: CurrencyConfig): CompletionFactory {
   return CompletionFactoryImpl.createInternal(config);
 }
@@ -21,6 +25,8 @@ class CompletionFactoryImpl implements CompletionFactory {
     return new CompletionFactoryImpl(config);
   }
 
-  private constructor(_: CurrencyConfig) {
+  private constructor(config: CurrencyConfig) {
+    this.concurrencyConfig = config;
   }
+  private readonly concurrencyConfig: CurrencyConfig;
 } 

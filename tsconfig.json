@@ -22,7 +22,6 @@
       "@jonloucks/concurrency-ts/auxiliary/*": ["auxiliary/*"],
       "@jonloucks/concurrency-ts/api/*": ["api/*"],
       "@jonloucks/concurrency-ts/test/*": ["test/*"],
-      "@jonloucks/concurrency-ts/impl/*": ["impl/*"],
       "@jonloucks/concurrency-ts/never-publish/*": ["never-publish/*"],
     },
   },

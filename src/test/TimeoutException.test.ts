@@ -1,7 +1,7 @@
 import { ok, throws } from "node:assert";
 
 import { TimeoutException, guard } from "@jonloucks/concurrency-ts/api/TimeoutException";
-import { ConcurrencyException } from "../api/ConcurrencyException";
+import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
 
 describe('TimeoutException Tests', () => {
   it('without message throws IllegalArgumentException', () => {
