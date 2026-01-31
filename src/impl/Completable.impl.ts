@@ -35,19 +35,19 @@ interface Observer<T> extends OnCompletion<T>, Close {
 
 class CompletableImpl<T> implements Completable<T> {
   open(): AutoClose {
-    return this.idempotent.open();
+    return this._idempotent.open();
   }
 
   notifyState(): WaitableNotify<CompletionState> {
-    return this.completionStateMachine;
+    return this._completionStateMachine;
   }
 
   notifyValue(): WaitableNotify<T> {
-    return this.waitableValue;
+    return this._waitableValue;
   }
 
   getCompletion(): OptionalType<Completion<T>> {
-    return this.completion;
+    return this._completion;
   }
 
   notify(onCompletion: OnCompletion<T>): AutoClose {
@@ -56,7 +56,7 @@ class CompletableImpl<T> implements Completable<T> {
     const isLive: AtomicBoolean = createAtomicBoolean(true);
 
     const removeObserver = (v: Observer<T>): void => {
-      this.observers.delete(v);
+      this._observers.delete(v);
     };
     const observer: Observer<T> = {
       onCompletion: function (completion: Completion<T>): void {
@@ -71,11 +71,11 @@ class CompletableImpl<T> implements Completable<T> {
         }
       }
     };
-    this.observers.add(observer);
+    this._observers.add(observer);
 
-    if (isPresent(this.completion)) {
+    if (isPresent(this._completion)) {
       try {
-        observer.onCompletion(this.completion!);
+        observer.onCompletion(this._completion!);
       } catch (e) {
         removeObserver(observer);
         throw e;
@@ -92,37 +92,37 @@ class CompletableImpl<T> implements Completable<T> {
 
     this.assertNotRejecting();
 
-    if (this.completionStateMachine.setState("onCompletion", validCompletion.state)) {
-      this.completion = validCompletion;
+    if (this._completionStateMachine.setState("onCompletion", validCompletion.state)) {
+      this._completion = validCompletion;
 
       const value = validCompletion.value;
       if (this.isCompleted() && isPresent(value)) {
-        this.waitableValue.consume(value!);
+        this._waitableValue.consume(value!);
       }
       this.notifyObservers(validCompletion);
     }
   }
 
   isCompleted(): boolean {
-    return this.completionStateMachine.isCompleted();
+    return this._completionStateMachine.isCompleted();
   }
 
   private realOpen(): AutoClose {
-    this.closeMany.add(this.waitableValue.open());
-    this.closeMany.add(this.completionStateMachine.open());
+    this._closeMany.add(this._waitableValue.open());
+    this._closeMany.add(this._completionStateMachine.open());
     return inlineAutoClose((): void => {
-      this.closeMany.close();
+      this._closeMany.close();
     });
   }
 
   private notifyObservers(newValue: Completion<T>): void {
-    for (const observer of this.observers) {
+    for (const observer of this._observers) {
       observer.onCompletion(newValue);
     }
   }
 
   private assertNotRejecting(): void {
-    switch (this.idempotent.getState()) {
+    switch (this._idempotent.getState()) {
       case 'OPENABLE':
       case 'DESTROYED':
       case 'CLOSED':
@@ -137,16 +137,16 @@ class CompletableImpl<T> implements Completable<T> {
   private constructor(config: Config<T>) {
     const contracts: Contracts = contractsCheck(config.contracts);
     const closeFactory: AutoCloseFactory = contracts.enforce(AUTO_CLOSE_FACTORY);
-    this.closeMany = closeFactory.createAutoCloseMany();
-    this.waitableValue = createWaitable<T>({ contracts: contracts, initialValue: config.initialValue });
-    this.idempotent = createIdempotent({ contracts: contracts, open: () => this.realOpen() });
-    this.completionStateMachine = createStateMachine(getCompletionStateConfig());
+    this._closeMany = closeFactory.createAutoCloseMany();
+    this._waitableValue = createWaitable<T>({ contracts: contracts, initialValue: config.initialValue });
+    this._idempotent = createIdempotent({ contracts: contracts, open: () => this.realOpen() });
+    this._completionStateMachine = createStateMachine(getCompletionStateConfig());
   }
 
-  private readonly completionStateMachine: StateMachine<CompletionState>;
-  private readonly idempotent: Idempotent;
-  private completion: OptionalType<Completion<T>> = null;
-  private readonly waitableValue: Waitable<T>;
-  private readonly closeMany: AutoCloseMany;
-  private readonly observers: Set<Observer<T>> = new Set<Observer<T>>();
+  private readonly _completionStateMachine: StateMachine<CompletionState>;
+  private readonly _idempotent: Idempotent;
+  private _completion: OptionalType<Completion<T>> = null;
+  private readonly _waitableValue: Waitable<T>;
+  private readonly _closeMany: AutoCloseMany;
+  private readonly _observers: Set<Observer<T>> = new Set<Observer<T>>();
 };

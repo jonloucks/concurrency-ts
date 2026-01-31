@@ -27,8 +27,8 @@ class StateMachineFactoryImpl implements StateMachineFactory {
   }
 
   private constructor(config: ConcurrencyConfig) {
-    this.concurrencyConfig = config;
+    this._concurrencyConfig = config;
   }
 
-  private readonly concurrencyConfig: ConcurrencyConfig;
+  private readonly _concurrencyConfig: ConcurrencyConfig;
 };

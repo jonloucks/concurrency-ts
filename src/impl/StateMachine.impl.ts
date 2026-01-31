@@ -26,7 +26,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
 
   // Statemachine.open
   open(): AutoClose {
-    return this.currentState.open();
+    return this._currentState.open();
   }
 
   // IsCompleted.
@@ -37,7 +37,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
   // StateMachine.setState implementation
   setState(event: string, state: S): boolean {
     if (this.isTransitionAllowed(event, stateCheck(state))) {
-      this.currentState.consume(state);
+      this._currentState.consume(state);
       this.updateIsCompleted(state);
       return true;
     }
@@ -51,7 +51,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
 
   // StateMachine.hasState implementation
   hasState(state: S): boolean {
-    return this.stateToRulesLookup.has(stateCheck(state));
+    return this._stateToRulesLookup.has(stateCheck(state));
   }
 
   // StateMachine.isTransitionAllowed implementation
@@ -60,7 +60,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
     const toState: S = stateCheck(state);
     const fromState: S = this.getState();
     if (this.hasState(toState) && fromState !== toState) {
-      const rules: Set<Rule<S>> | undefined = this.stateToRulesLookup.get(fromState);
+      const rules: Set<Rule<S>> | undefined = this._stateToRulesLookup.get(fromState);
       if (isPresent(rules) && rules.size > 0) {
         return Array.from(rules).every((r) => r.canTransition(validEvent, toState));
       }
@@ -85,22 +85,22 @@ class StateMachineImpl<S> implements StateMachine<S> {
 
   // StateMachine.supply implementations
   supply(): S {
-    return this.currentState.supply();
+    return this._currentState.supply();
   }
 
   // StateMachine.supplyIf implementation
   supplyIf(predicate: PredicateType<S>): OptionalType<S> {
-    return this.currentState.supplyIf(predicate);
+    return this._currentState.supplyIf(predicate);
   }
 
   // StateMachine.supplyWhen implementation
   async supplyWhen(predicate: RequiredType<PredicateType<S>>, timeout?: Duration): Promise<S> {
-    return this.currentState.supplyWhen(predicate, timeout);
+    return this._currentState.supplyWhen(predicate, timeout);
   }
 
   // StateMachine.notifyWhile implementation
   notifyWhile(predicate: RequiredType<PredicateType<S>>, listener: RequiredType<ConsumerType<S>>): RequiredType<AutoClose> {
-    return this.currentState.notifyWhile(predicate, listener);
+    return this._currentState.notifyWhile(predicate, listener);
   }
 
   static internalCreate<T>(config: Config<T>): StateMachine<T> {
@@ -115,10 +115,10 @@ class StateMachineImpl<S> implements StateMachine<S> {
   }
 
   private getStateRules(state: S): Set<Rule<S>> {
-    if (!this.stateToRulesLookup.has(state)) {
-      this.stateToRulesLookup.set(state, new Set<Rule<S>>());
+    if (!this._stateToRulesLookup.has(state)) {
+      this._stateToRulesLookup.set(state, new Set<Rule<S>>());
     }
-    return this.stateToRulesLookup.get(state)!;
+    return this._stateToRulesLookup.get(state)!;
   }
 
   private transitionCheck<R>(transition: Transition<S, R>): Transition<S, R> {
@@ -173,7 +173,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
   }
 
   private updateIsCompleted(state: S): void {
-    const rules: Set<Rule<S>> | undefined = this.stateToRulesLookup.get(state);
+    const rules: Set<Rule<S>> | undefined = this._stateToRulesLookup.get(state);
     if (isPresent(rules) && rules.size > 0) {
       for (const rule of rules) {
         if (rule.isTerminal) {
@@ -188,7 +188,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
     const validConfig: Config<S> = configCheck(config);
     const initialState: S = initialValueCheck(validConfig.initialValue);
 
-    this.currentState = createWaitable<S>({ initialValue: initialState });
+    this._currentState = createWaitable<S>({ initialValue: initialState });
     this.addStateAndRules(initialState, []);
     if (isPresent(validConfig.states) && validConfig.states.length > 0) {
       validConfig.states.forEach(state => {
@@ -197,7 +197,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
     }
   }
 
-  private readonly stateToRulesLookup: Map<S, Set<Rule<S>>> = new Map<S, Set<Rule<S>>>();
-  private readonly currentState: Waitable<S>;
+  private readonly _stateToRulesLookup: Map<S, Set<Rule<S>>> = new Map<S, Set<Rule<S>>>();
+  private readonly _currentState: Waitable<S>;
   private _isCompleted: boolean = false;
 };

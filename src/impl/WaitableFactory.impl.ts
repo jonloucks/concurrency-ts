@@ -18,7 +18,7 @@ export function create(config: ConcurrencyConfig): WaitableFactory {
 
 class WaitableFactoryImpl implements WaitableFactory {
   createWaitable<T>(config?: Config<T>): RequiredType<Waitable<T>> {
-    const combinedConfig : Config<T> = { contracts: this.concurrencyConfig.contracts!, ...(config ?? {}) };
+    const combinedConfig : Config<T> = { contracts: this._concurrencyConfig.contracts!, ...(config ?? {}) };
     return createWaitableImpl(combinedConfig);
   }
 
@@ -27,8 +27,8 @@ class WaitableFactoryImpl implements WaitableFactory {
   }
 
   private constructor(config: ConcurrencyConfig) {
-    this.concurrencyConfig = config;
+    this._concurrencyConfig = config;
   }
   
-  private readonly concurrencyConfig: ConcurrencyConfig;
+  private readonly _concurrencyConfig: ConcurrencyConfig;
 };
