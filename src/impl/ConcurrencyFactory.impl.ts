@@ -1,5 +1,5 @@
 import { ConcurrencyFactory } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
-import { Concurrency, Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { Concurrency, Config as ConcurrencyConfig, CONTRACT as CONCURRENCY_CONTRACT } from "@jonloucks/concurrency-ts/api/Concurrency";
 
 import { CONTRACT as WAITABLE_FACTORY } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
@@ -7,7 +7,8 @@ import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/C
 import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/concurrency-ts/api/IdempotentFactory";
 
 import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
-import { Contracts, Repository } from "@jonloucks/contracts-ts";
+import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
+import { Repository } from "@jonloucks/contracts-ts/api/Repository";
 import { presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 import { create as createConcurrencyImpl } from "./Concurrency.impl";
@@ -16,7 +17,9 @@ import { create as createStateMachineFactoryImpl } from "./StateMachineFactory.i
 import { create as createCompletableFactoryImpl } from "./CompletableFactory.impl";
 import { create as createIdempotentFactoryImpl } from "./IdempotentFactory.impl";
 import { Internal } from "./Internal.impl";
-
+import { PromisorFactory, CONTRACT as PROMISOR_FACTORY_CONTRACT } from "@jonloucks/contracts-ts/api/PromisorFactory";
+import { RepositoryFactory, CONTRACT as REPOSITORY_FACTORY_CONTRACT } from "@jonloucks/contracts-ts/api/RepositoryFactory";
+import { wrap as wrapConcurrency } from "./ConcurrencyWrapper.impl";
 /** 
  * Create a new ConcurrencyFactory
  * @param config the Concurrency Config
@@ -35,14 +38,12 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
     const validConfig = config ?? {};
     const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
     const finalConfig: ConcurrencyConfig = { ...this._concurrencyConfig, ...validConfig, contracts: contracts };
+    const repositoryFactory: RepositoryFactory = contracts.enforce(REPOSITORY_FACTORY_CONTRACT);
+    const repository: Repository = repositoryFactory.createRepository();
 
-    // temporary installation of factories to create Concurrency
-    contracts.bind(WAITABLE_FACTORY, createWaitableFactoryImpl(finalConfig), "IF_NOT_BOUND");
-    contracts.bind(STATE_MACHINE_FACTORY, createStateMachineFactoryImpl(finalConfig), "IF_NOT_BOUND");
-    contracts.bind(COMPLETABLE_FACTORY, createCompletableFactoryImpl(finalConfig), "IF_NOT_BOUND");
-    contracts.bind(IDEMPOTENT_FACTORY, createIdempotentFactoryImpl(finalConfig), "IF_NOT_BOUND");
+    this.installKernel(repository, finalConfig);
 
-    return createConcurrencyImpl(finalConfig);
+    return wrapConcurrency(createConcurrencyImpl(finalConfig), repository);
   }
 
   install(repository: RequiredType<Repository>, config?: ConcurrencyConfig): void {
@@ -51,11 +52,11 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
     const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
     const finalConfig: ConcurrencyConfig = { ...this._concurrencyConfig, ...validConfig, contracts: contracts };
     const validRepository: RequiredType<Repository> = presentCheck(repository, "Repository must be present.");
+    const promisorFactory: PromisorFactory = contracts.enforce(PROMISOR_FACTORY_CONTRACT);
 
-    validRepository.keep(WAITABLE_FACTORY, createWaitableFactoryImpl(finalConfig));
-    validRepository.keep(STATE_MACHINE_FACTORY, createStateMachineFactoryImpl(finalConfig));
-    validRepository.keep(COMPLETABLE_FACTORY, createCompletableFactoryImpl(finalConfig));
-    validRepository.keep(IDEMPOTENT_FACTORY, createIdempotentFactoryImpl(finalConfig));
+    this.installKernel(validRepository, finalConfig);
+
+    validRepository.keep(CONCURRENCY_CONTRACT, promisorFactory.createLifeCycle(() => createConcurrencyImpl(finalConfig)));
   }
 
   static internalCreate(config: ConcurrencyConfig): ConcurrencyFactory {
@@ -67,5 +68,13 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
     this._concurrencyConfig = { ...config, contracts: contracts };
   }
 
+  private installKernel(repository: RequiredType<Repository>, config: ConcurrencyConfig): void {
+    repository.keep(WAITABLE_FACTORY, createWaitableFactoryImpl(config));
+    repository.keep(STATE_MACHINE_FACTORY, createStateMachineFactoryImpl(config));
+    repository.keep(COMPLETABLE_FACTORY, createCompletableFactoryImpl(config));
+    repository.keep(IDEMPOTENT_FACTORY, createIdempotentFactoryImpl(config));
+  }
+
   private readonly _concurrencyConfig: ConcurrencyConfig;
 }
+
