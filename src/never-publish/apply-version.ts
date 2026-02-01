@@ -80,5 +80,3 @@ export const VERSION: string = ${JSON.stringify(version)};`, 'utf8');
 }
 
 applyVersion();
-
-
