@@ -1,31 +1,42 @@
 import { ok } from "node:assert";
 
 import { CONTRACT, WaitableFactory, guard } from "@jonloucks/concurrency-ts/api/WaitableFactory";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
-//TODO: Replace with real import when available
-import { create as createWaitableFactory } from "@jonloucks/concurrency-ts/impl/WaitableFactory.impl";
 import { isPresent } from "@jonloucks/concurrency-ts/api/Types";
-import { CONTRACTS } from "@jonloucks/contracts-ts";
+import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'createWaitable'
 ];
 
-describe('WaitableFactory Tests', () => {
+assertGuard(guard, ...FUNCTION_NAMES);
+assertContract(CONTRACT, 'WaitableFactory');
+
+describe('WaitableFactory Suite', () => {
+  let contracts: Contracts = CONTRACTS;
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
+  let factory: WaitableFactory;
+
+  beforeEach(() => {
+    concurrency = createConcurrency({ contracts: contracts });
+    closeConcurrency = concurrency.open();
+    factory = contracts.enforce(CONTRACT);
+
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
+  });
+
   it('isWaitableFactory should return true for WaitableFactory', () => {
     const factory: WaitableFactory = mockDuck<WaitableFactory>(...FUNCTION_NAMES);
     ok(guard(factory), 'WaitableFactory should return true');
   });
-});
-
-assertGuard(guard, ...FUNCTION_NAMES);
-
-assertContract(CONTRACT, 'WaitableFactory');
-
-describe('WaitableFactory createWaitable Tests', () => {
-  const factory: WaitableFactory = createWaitableFactory({ contracts: CONTRACTS });
-
+ 
   it('createWaitable with empty config should create a Waitable', () => {
     const waitable = factory.createWaitable<string>();
     ok(isPresent(waitable), 'createWaitable with config should create a Waitable');

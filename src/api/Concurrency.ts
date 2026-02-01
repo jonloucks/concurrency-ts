@@ -30,7 +30,7 @@ export interface Config {
   /**
    * @return the contracts, some use case have their own Contracts instance.
    */
-  contracts?: OptionalType<Contracts>;
+  contracts?: Contracts;
 }
 
 export { Config as ConcurrencyConfig };

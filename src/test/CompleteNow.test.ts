@@ -2,10 +2,22 @@ import { ok, strictEqual, throws } from "node:assert";
 
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
-
-import { completeNow } from "../impl/CompleteNow.impl";
+import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 
 describe('CompleteNow Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
+
+  beforeEach(() => {
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
+  });
+
   describe('completeNow with success', () => {
     it('should complete with SUCCEEDED state when block succeeds', () => {
       let receivedCompletion: Completion<string> | null = null;
@@ -15,7 +27,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => 'test-value');
+      const result = concurrency.completeNow(onCompletion, () => 'test-value');
 
       strictEqual(result, 'test-value', 'Should return the value from success block');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -31,7 +43,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => 42);
+      const result = concurrency.completeNow(onCompletion, () => 42);
 
       strictEqual(result, 42, 'Should return the number value');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -48,7 +60,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => testObj);
+      const result = concurrency.completeNow(onCompletion, () => testObj);
 
       strictEqual(result, testObj, 'Should return the object');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -68,7 +80,7 @@ describe('CompleteNow Tests', () => {
         supply: (): string => 'supplied-value'
       };
 
-      const result = completeNow(onCompletion, supplier);
+      const result = concurrency.completeNow(onCompletion, supplier);
 
       strictEqual(result, 'supplied-value', 'Should return value from supplier');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -84,7 +96,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => undefined);
+      const result = concurrency.completeNow(onCompletion, () => undefined);
 
       strictEqual(result, undefined, 'Should return undefined');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -99,7 +111,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => null);
+      const result = concurrency.completeNow(onCompletion, () => null);
 
       strictEqual(result, null, 'Should return null');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -120,7 +132,7 @@ describe('CompleteNow Tests', () => {
       const testError = new Error('test error');
 
       throws(() => {
-        completeNow(onCompletion, () => {
+        concurrency.completeNow(onCompletion, () => {
           throw testError;
         });
       });
@@ -146,7 +158,7 @@ describe('CompleteNow Tests', () => {
       };
 
       throws(() => {
-        completeNow(onCompletion, supplier);
+        concurrency.completeNow(onCompletion, supplier);
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -163,7 +175,7 @@ describe('CompleteNow Tests', () => {
       };
 
       throws(() => {
-        completeNow(onCompletion, () => {
+        concurrency.completeNow(onCompletion, () => {
           throw 'string error';
         });
       });
@@ -184,7 +196,7 @@ describe('CompleteNow Tests', () => {
       const customError = { code: 500, message: 'custom error' };
 
       throws(() => {
-        completeNow(onCompletion, () => {
+        concurrency.completeNow(onCompletion, () => {
           throw customError;
         });
       });
@@ -198,7 +210,7 @@ describe('CompleteNow Tests', () => {
   describe('completeNow validation', () => {
     it('should validate onCompletion parameter', () => {
       throws(() => {
-        completeNow(null as unknown as OnCompletion<string>, () => 'value');
+        concurrency.completeNow(null as unknown as OnCompletion<string>, () => 'value');
       }, 'Should throw when onCompletion is null');
     });
   });
@@ -213,7 +225,7 @@ describe('CompleteNow Tests', () => {
       };
 
       throws(() => {
-        completeNow(onCompletion, () => 'value');
+        concurrency.completeNow(onCompletion, () => 'value');
       });
     });
 
@@ -225,7 +237,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => '');
+      const result = concurrency.completeNow(onCompletion, () => '');
 
       strictEqual(result, '', 'Should return empty string');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -241,7 +253,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => 0);
+      const result = concurrency.completeNow(onCompletion, () => 0);
 
       strictEqual(result, 0, 'Should return zero');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -257,7 +269,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      const result = completeNow(onCompletion, () => false);
+      const result = concurrency.completeNow(onCompletion, () => false);
 
       strictEqual(result, false, 'Should return false');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -274,7 +286,7 @@ describe('CompleteNow Tests', () => {
       };
 
       const testArray = [1, 2, 3];
-      const result = completeNow(onCompletion, () => testArray);
+      const result = concurrency.completeNow(onCompletion, () => testArray);
 
       strictEqual(result, testArray, 'Should return array');
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -292,7 +304,7 @@ describe('CompleteNow Tests', () => {
         }
       };
 
-      completeNow(onCompletion, () => 'value');
+      concurrency.completeNow(onCompletion, () => 'value');
 
       strictEqual(callCount, 1, 'onCompletion should be called exactly once');
     });
@@ -306,7 +318,7 @@ describe('CompleteNow Tests', () => {
       };
 
       throws(() => {
-        completeNow(onCompletion, () => {
+        concurrency.completeNow(onCompletion, () => {
           throw new Error('test');
         });
       });

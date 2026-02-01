@@ -1,7 +1,7 @@
 import { Duration, MAX_TIMEOUT, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { illegalCheck, presentCheck, configCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
-export { presentCheck, illegalCheck, configCheck };
+export { presentCheck, illegalCheck, configCheck};
 
 /**
  * Check that a state is present

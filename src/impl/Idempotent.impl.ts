@@ -8,9 +8,9 @@ import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { AutoCloseFactory, CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
 import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
-import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 import { create as createStateMachine } from "./StateMachine.impl";
+import { Internal } from "./Internal.impl";
 
 /** 
  * Create a new Idempotent
@@ -48,6 +48,11 @@ class IdempotentImpl implements Idempotent {
     return this._stateMachine.getState();
   }
 
+  // Idempotent.getStateMachine
+  getStateMachine(): StateMachine<IdempotentState> {
+    return this._stateMachine;
+  }
+
   // Idempotent.open
   open(): AutoClose {
     return this._stateMachine.transition<AutoClose>({
@@ -74,12 +79,12 @@ class IdempotentImpl implements Idempotent {
   }
 
   private constructor(config: Config) {
-    const validContracts: Contracts = contractsCheck(config.contracts);
-    const closeFactory: AutoCloseFactory = validContracts.enforce(AUTO_CLOSE_FACTORY);
+    const contracts: Contracts = Internal.resolveContracts(config);
+    const closeFactory: AutoCloseFactory = contracts.enforce(AUTO_CLOSE_FACTORY);
     this._closeMany = closeFactory.createAutoCloseMany();
     this._delegate = typeToOpen(config.open);
     const stateMachineConfig = getStateMachineConfig();
-    this._stateMachine = createStateMachine({ contracts: validContracts, ...stateMachineConfig });
+    this._stateMachine = createStateMachine({ ...stateMachineConfig, contracts: contracts });
     this._firstClose = inlineAutoClose(() => {
       this._stateMachine.transition<void>({
         event: "close",

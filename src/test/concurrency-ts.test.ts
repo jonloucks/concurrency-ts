@@ -2,7 +2,11 @@ import { ok, strictEqual } from "node:assert";
 
 import {
   VERSION,
-  ConcurrencyException
+  ConcurrencyException,
+  Concurrency,
+  createConcurrency,
+  ConcurrencyConfig,
+  createConcurrencyFactory  
 } from "@jonloucks/concurrency-ts";
 
 /** 
@@ -22,10 +26,16 @@ describe('VERSION constant', () => {
 });
 
 describe('Index exports', () => {
+  const concurrency : Concurrency | null = null;
+  const concurrencyConfig : ConcurrencyConfig | null = null;
   it('should export all expected members', () => {
     // Just checking a few key exports to ensure they are accessible  
     ok(VERSION, 'VERSION should be exported');
     ok(ConcurrencyException, 'ConcurrencyException should be exported');
+    ok(createConcurrency, 'createConcurrency should be exported');
+    ok(createConcurrencyFactory, 'createConcurrencyFactory should be exported');
+    ok(concurrency == null, 'Does Concurrency export exist');
+    ok(concurrencyConfig == null, 'Does ConcurrencyConfig export exist');
     // Add more exports to check as needed
   });
 });

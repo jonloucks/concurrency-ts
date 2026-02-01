@@ -1,12 +1,28 @@
 import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
 import { TimeoutException } from "@jonloucks/concurrency-ts/api/TimeoutException";
-import { Duration, MAX_TIMEOUT } from "@jonloucks/concurrency-ts/api/Types";
+import { Duration, isPresent, MAX_TIMEOUT, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
+import { CONTRACTS, Contracts } from "@jonloucks/contracts-ts";
 import { illegalCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 /**
  * Helper functions for internal implementations.
  */
 export const Internal = {
+
+  /**
+   * Resolves the contracts to use from the provided configurations.
+   * Returns the first config with present contracts, or CONTRACTS as default.
+   * @param configs the configurations to resolve from (in priority order)
+   * @return the resolved contracts
+   */
+  resolveContracts(...configs: Array<{ contracts?: Contracts }| undefined>): RequiredType<Contracts> {
+    for (const config of configs) {
+      if (isPresent(config) && isPresent(config?.contracts)) {
+        return config.contracts;
+      }
+    }
+    return CONTRACTS;
+  },
 
   /**
    * Throws an AggregateError with the provided message and list of errors.
@@ -59,7 +75,7 @@ export const Internal = {
 
     if (validMilliSeconds === MAX_TIMEOUT.milliSeconds || validMilliSeconds === Infinity) {
       return promise;
-    }   
+    }
 
     const timeoutPromise = new Promise<T>((_, reject) => {
       const delay = Math.max(10, validMilliSeconds);

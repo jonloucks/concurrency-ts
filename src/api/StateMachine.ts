@@ -80,7 +80,7 @@ export interface Config<T> {
    *
    * @return the optional initial state
    */
-  initialValue?: OptionalType<T>;
+  initialValue: RequiredType<T>;
 
   /**
    * @return the list of states in the state machine

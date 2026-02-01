@@ -4,6 +4,7 @@ import { AutoOpen } from "@jonloucks/contracts-ts/api/AutoOpen";
 import { State } from "@jonloucks/concurrency-ts/api/IdempotenState";
 import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
 import { guardFunctions, RequiredType } from "@jonloucks/contracts-ts/api/Types";
+import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 
 /**
  * The type returned when opening an Idempotent
@@ -21,7 +22,7 @@ export type OpenType = AutoOpen | Open | (() => CloseType);
 export interface Config {
 
   /** The Contracts instance to use */
-  contracts: Contracts;
+  contracts?: Contracts;
 
   /** The Open type to use when opening the Idempotent */
   open: OpenType;
@@ -39,17 +40,24 @@ export interface Idempotent extends Open {
    */
   getState(): State;
 
+  /**
+   * Get the underlying state machine
+   *
+   * @return the state machine
+   */
+  getStateMachine(): StateMachine<State>;
 }
 
 /**
- * Determine if an instance implements Completion
+ * Determine if an instance implements Idempotent
  * 
  * @param instance the instance to check
- * @returns true if the instance implements Completion
+ * @returns true if the instance implements Idempotent
  */
 export function guard(instance: unknown): instance is RequiredType<Idempotent> {
   return guardFunctions(instance,
     'getState',
+    'getStateMachine',
     'open',
   );
 } 

@@ -4,7 +4,7 @@ import { Config, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
 import { Duration, isPresent, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
-import { configCheck, eventCheck, illegalCheck, initialValueCheck, presentCheck, ruleCheck, rulesCheck, stateCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { eventCheck, illegalCheck, initialValueCheck, presentCheck, ruleCheck, rulesCheck, stateCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
 import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
@@ -185,7 +185,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
   }
 
   private constructor(config: Config<S>) {
-    const validConfig: Config<S> = configCheck(config);
+    const validConfig: Config<S> = config ?? {};
     const initialState: S = initialValueCheck(validConfig.initialValue);
 
     this._currentState = createWaitable<S>({ initialValue: initialState });
