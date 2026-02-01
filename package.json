@@ -1,7 +1,7 @@
 {
   "name": "@jonloucks/concurrencys-ts",
   "version": "0.1.0",
-  "description": "Typescript asychronous concurrency",
+  "description": "TypeScript asynchronous concurrency library with Waitables, Completables, and State Machines",
   "private": true,
   "main": "index.js",
   "types": "index.d.ts",
