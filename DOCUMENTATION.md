@@ -779,16 +779,18 @@ import {
   Completable, 
   StateMachine 
 } from '@jonloucks/concurrency-ts';
+import { AutoClose } from '@jonloucks/contracts-ts';
 
 type WorkflowStep = 'INIT' | 'STEP1' | 'STEP2' | 'STEP3' | 'DONE';
 
 class Workflow {
   private concurrency = createConcurrency({});
+  private closeConcurrency: AutoClose;
   private stateMachine: StateMachine<WorkflowStep>;
   private stepCompletables: Map<WorkflowStep, Completable<any>>;
 
   constructor() {
-    using closeConcurrency = this.concurrency.open();
+    this.closeConcurrency = this.concurrency.open();
     
     this.stateMachine = this.concurrency.createStateMachine({
       initialValue: 'INIT',
@@ -846,6 +848,10 @@ class Workflow {
     this.stateMachine.setState('complete', 'DONE');
     console.log('Workflow completed!');
   }
+
+  close() {
+    this.closeConcurrency.close();
+  }
 }
 
 function delay(ms: number): Promise<void> {
@@ -854,7 +860,11 @@ function delay(ms: number): Promise<void> {
 
 // Usage
 const workflow = new Workflow();
-await workflow.run();
+try {
+  await workflow.run();
+} finally {
+  workflow.close();
+}
 ```
 
 ## Additional Resources
