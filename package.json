@@ -34,8 +34,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "test:verbose": "jest --verbose",
-    "test:watch": "jest --watch --watchAll",
+    "test:watch": "jest --watch --watchAll --verbose",
     "test:coverage": "jest --coverage",
     "test:diagnostics": "jest --detectOpenHandles",
     "lint": "eslint . --ext .ts",
@@ -49,12 +48,17 @@
     "smoke": "npx tsx ./src/never-publish/smoke-test.ts",
     "clean": "rm -rf dist",
     "compile": "tsc",
+    "postversion": "npm run applyversion",
+    "applyversion": "npx tsx ./src/never-publish/apply-version.ts",
     "pack-package": "npm run before:publish && cd dist && npm pack && npm run after:publish"
   },
   "keywords": [
     "typescript",
     "concurrency",
     "statemachine",
+    "asynchronous",
+    "waitable",
+    "completable",
     "notify"
   ],
   "author": "Jon Loucks",

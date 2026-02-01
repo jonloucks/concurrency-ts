@@ -18,11 +18,10 @@
     "baseUrl": "./src",
     "paths": {
       "@jonloucks/concurrency-ts": ["index.ts"],
-      "@jonloucks/concurrency-ts/*": ["*"],
+      "@jonloucks/concurrency-ts/version": ["version.ts"],
       "@jonloucks/concurrency-ts/auxiliary/*": ["auxiliary/*"],
       "@jonloucks/concurrency-ts/api/*": ["api/*"],
-      "@jonloucks/concurrency-ts/test/*": ["test/*"],
-      "@jonloucks/concurrency-ts/never-publish/*": ["never-publish/*"],
+      "@jonloucks/concurrency-ts/test/*": ["test/*"]
     },
   },
   "include": ["src/**/*"],

@@ -1,4 +1,4 @@
-import { generateCoverageSummaryBadge, generateTypedocBadge, generateNpmBadge } from "@jonloucks/concurrency-ts/never-publish/generate-badges";
+import { generateCoverageSummaryBadge, generateTypedocBadge, generateNpmBadge } from "./generate-badges";
 
 test('generateCoverageSummaryBadge test', async () => {
   const result = await generateCoverageSummaryBadge();
