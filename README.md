@@ -7,7 +7,16 @@
 [![Typedoc Badge](https://raw.githubusercontent.com/jonloucks/concurrency-ts/refs/heads/badges/main-typedoc.svg)](https://jonloucks.github.io/concurrency-ts/typedoc/)
 
 
-Typescript Dependency Contracts for dependency inversion
+A TypeScript library that provides powerful abstractions for managing asynchronous concurrency, state machines, and completion patterns. It offers type-safe primitives for building concurrent applications with guaranteed completion semantics.
+
+## Key Features
+
+- **Type-safe concurrency primitives** - Fully typed interfaces for concurrent operations
+- **Waitable references** - Thread-safe mutable references that allow waiting for condition changes
+- **Completables** - Observe activities from start to finish with guaranteed completion
+- **State machines** - User-defined states with transition rules and validation
+- **Guaranteed execution** - Patterns ensuring completion callbacks are always invoked
+- **Resource management** - Automatic cleanup via the `Open` interface
 
 ## Documentation
 * [Complete Documentation](DOCUMENTATION.md) - **Comprehensive guide with examples**
