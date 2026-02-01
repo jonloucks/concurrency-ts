@@ -49,7 +49,7 @@ describe('Idempotent Suite', () => {
   const createIdempotent = (config: IdempotentConfig): Idempotent => {
     const factory : IdempotentFactory = contracts.enforce(IDEMPOTENT_FACTORY);
     return factory.createIdempotent(config);
-  }
+  };
 
   beforeAll(() => {
     concurrency = createConcurrency({ contracts: contracts });
