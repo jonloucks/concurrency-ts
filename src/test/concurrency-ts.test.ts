@@ -34,8 +34,8 @@ describe('Index exports', () => {
     ok(ConcurrencyException, 'ConcurrencyException should be exported');
     ok(createConcurrency, 'createConcurrency should be exported');
     ok(createConcurrencyFactory, 'createConcurrencyFactory should be exported');
-    ok(concurrency == null, 'Concurrency should be exported');
-    ok(concurrencyConfig == null, 'ConcurrencyConfig should be exported');
+    ok(concurrency == null, 'Does Concurrency export exist');
+    ok(concurrencyConfig == null, 'Does ConcurrencyConfig export exist');
     // Add more exports to check as needed
   });
 });
