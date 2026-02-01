@@ -10,6 +10,7 @@
 Typescript Dependency Contracts for dependency inversion
 
 ## Documentation
+* [Complete Documentation](DOCUMENTATION.md) - **Comprehensive guide with examples**
 * [License](LICENSE.md)
 * [Contributing](CONTRIBUTING.md)
 * [Code of conduct](CODE_OF_CONDUCT.md)
@@ -25,15 +26,62 @@ Typescript Dependency Contracts for dependency inversion
 npm install @jonloucks/concurrency-ts
 ```
 
-## Usage - code fragments from Example.test.ts
+## Usage
 
-<details markdown="1"><summary>Place holder</summary>
+For comprehensive examples and detailed API documentation, see [DOCUMENTATION.md](DOCUMENTATION.md).
+
+### Quick Start
 
 ```typescript
-import { createWaitable, Waitable, CONCURRENCY } from '@jonloucks/concurrency-ts';
+import { createConcurrency, Waitable, Completable, StateMachine } from '@jonloucks/concurrency-ts';
 
+// Create a Concurrency instance
+const concurrency = createConcurrency({});
+using closeConcurrency = concurrency.open();
+
+// Create a Waitable for thread-safe value storage
+const waitable: Waitable<number> = concurrency.createWaitable({ initialValue: 0 });
+using closeWaitable = waitable.open();
+
+waitable.consume(42);
+console.log(waitable.supply()); // 42
+
+// Create a Completable to track async operations
+const completable: Completable<string> = concurrency.createCompletable({});
+using closeCompletable = completable.open();
+
+completable.onCompletion((completion) => {
+  console.log('Task completed:', completion.state, completion.value);
+});
+
+completable.notify({ state: 'SUCCEEDED', value: 'Done!' });
+
+// Create a StateMachine for state management
+type AppState = 'IDLE' | 'RUNNING' | 'STOPPED';
+
+const stateMachine: StateMachine<AppState> = concurrency.createStateMachine({
+  initialValue: 'IDLE',
+  states: ['IDLE', 'RUNNING', 'STOPPED'],
+  getStateRules: (state) => {
+    switch (state) {
+      case 'IDLE':
+        return [{ event: 'start', allowedStates: ['RUNNING'] }];
+      case 'RUNNING':
+        return [{ event: 'stop', allowedStates: ['STOPPED'] }];
+      default:
+        return [];
+    }
+  }
+});
+
+using closeStateMachine = stateMachine.open();
+
+console.log(stateMachine.getState()); // 'IDLE'
+stateMachine.setState('start', 'RUNNING');
+console.log(stateMachine.getState()); // 'RUNNING'
 ```
-</details>
+
+See [DOCUMENTATION.md](DOCUMENTATION.md) for more examples and advanced usage patterns.
 
 ## Development
 
