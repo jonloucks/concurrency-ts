@@ -11,7 +11,7 @@ interface PackageJson {
 export function applyVersion(): void {
   console.log("Applying version from package.json...");
   try {
-    const parsedJson: unknown = JSON.parse(readFileSync('package.json', 'utf8'));
+    const parsedJson: unknown = JSON.parse(readFileSync(resolve('package.json'), 'utf8'));
     const packageJson: PackageJson = parsedJson as PackageJson;
     if (isNonEmptyString(packageJson.name) && isNonEmptyString(packageJson.version)) {
       const name: string = packageJson.name.trim();
