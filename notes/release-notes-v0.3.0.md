@@ -3,7 +3,7 @@
 npm install @jonloucks/concurrencys-ts@0.3.0
 ```
 
-First official publishing using Github CI/CD
+First official publishing using GitHub CI/CD
 
 ## Customer impact
 *  None
