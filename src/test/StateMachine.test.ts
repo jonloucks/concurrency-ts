@@ -267,8 +267,8 @@ describe('StateMachine Suite', () => {
       states: [0, 1, 2],
       getStateRules: (_state: number) => []
     };
-    let simpleMachine : StateMachine<number> | null;
-    let closeStateMachine : AutoClose;
+    let simpleMachine: StateMachine<number> | null;
+    let closeStateMachine: AutoClose;
 
     beforeAll(() => {
       simpleMachine = createStateMachine(simpleConfig);
