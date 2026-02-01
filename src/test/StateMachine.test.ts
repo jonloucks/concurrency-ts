@@ -365,7 +365,7 @@ describe('StateMachine Suite', () => {
       }
     };
 
-    let machine : StateMachine<string> | null;
+    let machine: StateMachine<string> | null;
     let closeStateMachine : AutoClose;
 
     beforeAll(() => {
