@@ -271,7 +271,7 @@ describe("Concurrency Suite", () => {
   let contracts: Contracts;
   let closeContracts: AutoClose;  
   let concurrency: Concurrency;
-  let closeConcurrency: AutoClose
+  let closeConcurrency: AutoClose;
 
   beforeEach(() => {
     contracts = createContracts();
