@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -95,68 +95,80 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">35x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">43x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">258x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">111x</span>
+<span class="cline-any cline-yes">111x</span>
+<span class="cline-any cline-yes">111x</span>
+<span class="cline-any cline-yes">111x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">258x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">258x</span>
+<span class="cline-any cline-yes">258x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CompletableFactory } from "@jonloucks/concurrency-ts/api/CompletableFactory";
 import { Completable, Config as CompletableConfig} from "@jonloucks/concurrency-ts/api/Completable";
-import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { Config as ConcurrencyConfig, Contracts } from "@jonloucks/concurrency-ts/api/Concurrency";
 &nbsp;
 import { create as createCompletableImpl } from "./Completable.impl";
+import { Internal } from "./Internal.impl";
 &nbsp;
 /** 
  * Create a new CompletableFactory
  *
  * @return the new CompletableFactory
  */
-export function create(config: ConcurrencyConfig): CompletableFactory {
+export function create(config?: ConcurrencyConfig): CompletableFactory {
   return CompletableFactoryImpl.internalCreate(config);
 }
 &nbsp;
 // ---- Implementation details below ----
 &nbsp;
 class CompletableFactoryImpl implements CompletableFactory {
-  createCompletable&lt;T&gt;(config: CompletableConfig&lt;T&gt;): Completable&lt;T&gt; {
-    // const combinedConfig = { ...{ contracts: this.concurrencyConfig.contracts }, ...config };
-&nbsp;
-    return createCompletableImpl&lt;T&gt;(config)
+  
+  createCompletable&lt;T&gt;(config?: CompletableConfig&lt;T&gt;): Completable&lt;T&gt; {
+    const validConfig = config ?? {};
+    const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
+    const finalConfig: ConcurrencyConfig = { ...this._concurrencyConfig, ...validConfig, contracts: contracts };
+    return createCompletableImpl&lt;T&gt;(finalConfig)
   }
 &nbsp;
-  static internalCreate(config: ConcurrencyConfig): CompletableFactory {
+  static internalCreate(config?: ConcurrencyConfig): CompletableFactory {
     return new CompletableFactoryImpl(config);
   }
 &nbsp;
-  private constructor(config: ConcurrencyConfig) {
-    this._concurrencyConfig = config;  
+  private constructor(config?: ConcurrencyConfig) {
+    const contracts: Contracts = Internal.resolveContracts(config);
+    this._concurrencyConfig = { ...config, contracts: contracts };
   }
   private readonly _concurrencyConfig: ConcurrencyConfig;
 };</pre></td></tr></table></pre>
@@ -166,7 +178,7 @@ class CompletableFactoryImpl implements CompletableFactory {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-31T23:21:50.851Z
+                at 2026-02-01T14:54:12.944Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
