@@ -2,10 +2,22 @@ import { ok, strictEqual, throws } from "node:assert";
 
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
-
-import { completeLater } from "../impl/CompleteLater.impl";
+import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 
 describe('CompleteLater Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
+
+  beforeEach(() => {
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
+  });
+
   describe('completeLater with success', () => {
     it('should delegate to consumer when delegate succeeds', () => {
       let receivedOnCompletion: OnCompletion<string> | null = null;
@@ -19,7 +31,7 @@ describe('CompleteLater Tests', () => {
         receivedOnCompletion = oc;
       };
 
-      completeLater(onCompletion, delegate);
+      concurrency.completeLater(onCompletion, delegate);
 
       ok(receivedOnCompletion !== null, 'Delegate should receive onCompletion');
       strictEqual(receivedOnCompletion, onCompletion, 'Delegate should receive the original onCompletion');
@@ -39,7 +51,7 @@ describe('CompleteLater Tests', () => {
         }
       };
 
-      completeLater(onCompletion, consumer);
+      concurrency.completeLater(onCompletion, consumer);
 
       ok(receivedOnCompletion !== null, 'Consumer should receive onCompletion');
       strictEqual(receivedOnCompletion, onCompletion, 'Consumer should receive the original onCompletion');
@@ -60,7 +72,7 @@ describe('CompleteLater Tests', () => {
         // Delegate receives ownership and should complete it later
       };
 
-      completeLater(onCompletion, delegate);
+      concurrency.completeLater(onCompletion, delegate);
 
       ok(delegateCalled, 'Delegate should be called');
       strictEqual(completionCalled, false, 'onCompletion should not be completed by completeLater');
@@ -74,7 +86,7 @@ describe('CompleteLater Tests', () => {
         }
       };
 
-      completeLater(onCompletion, (oc) => {
+      concurrency.completeLater(onCompletion, (oc) => {
         receivedOnCompletion = oc;
       });
 
@@ -91,7 +103,7 @@ describe('CompleteLater Tests', () => {
         }
       };
 
-      completeLater(onCompletion, (oc) => {
+      concurrency.completeLater(onCompletion, (oc) => {
         receivedOnCompletion = oc;
       });
 
@@ -115,7 +127,7 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        completeLater(onCompletion, delegate);
+        concurrency.completeLater(onCompletion, delegate);
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -139,7 +151,7 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        completeLater(onCompletion, consumer);
+        concurrency.completeLater(onCompletion, consumer);
       });
 
       ok(receivedCompletion !== null, 'Should have received completion');
@@ -156,7 +168,7 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        completeLater(onCompletion, (_oc) => {
+        concurrency.completeLater(onCompletion, (_oc) => {
           throw 'string error';
         });
       });
@@ -177,7 +189,7 @@ describe('CompleteLater Tests', () => {
       const customError = { code: 404, message: 'not found' };
 
       throws(() => {
-        completeLater(onCompletion, (_oc) => {
+        concurrency.completeLater(onCompletion, (_oc) => {
           throw customError;
         });
       });
@@ -191,7 +203,7 @@ describe('CompleteLater Tests', () => {
   describe('completeLater validation', () => {
     it('should validate onCompletion parameter', () => {
       throws(() => {
-        completeLater(null as unknown as OnCompletion<string>, (_oc) => {
+        concurrency.completeLater(null as unknown as OnCompletion<string>, (_oc) => {
           // Should not reach here
         });
       }, 'Should throw when onCompletion is null');
@@ -206,7 +218,7 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        completeLater(onCompletion, null as unknown as (oc: OnCompletion<string>) => void);
+        concurrency.completeLater(onCompletion, null as unknown as (oc: OnCompletion<string>) => void);
       });
 
       ok(receivedCompletion !== null, 'Should have received completion even on validation failure');
@@ -222,7 +234,7 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        completeLater(onCompletion, {} as unknown as (oc: OnCompletion<string>) => void);
+        concurrency.completeLater(onCompletion, {} as unknown as (oc: OnCompletion<string>) => void);
       });
 
       ok(receivedCompletion !== null, 'Should have received completion even on validation failure');
@@ -234,7 +246,7 @@ describe('CompleteLater Tests', () => {
     it('should complete with FAILED even if onCompletion callback throws', () => {
       const callbackError = new Error('callback error');
       const delegateError = new Error('delegate error');
-      
+
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
           throw callbackError;
@@ -242,7 +254,7 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        completeLater(onCompletion, (_oc) => {
+        concurrency.completeLater(onCompletion, (_oc) => {
           throw delegateError;
         });
       }); // The callback error is thrown after delegate error
@@ -256,7 +268,7 @@ describe('CompleteLater Tests', () => {
         }
       };
 
-      completeLater(onCompletion, (_oc) => {
+      concurrency.completeLater(onCompletion, (_oc) => {
         // Successful delegation
       });
 
@@ -271,10 +283,10 @@ describe('CompleteLater Tests', () => {
         }
       };
 
-      completeLater(onCompletion, (oc) => {
+      concurrency.completeLater(onCompletion, (oc) => {
         // Delegate successfully receives ownership
         // Even if delegate completes it here, completeLater shouldn't double-complete
-        oc.onCompletion({ 
+        oc.onCompletion({
           state: 'SUCCEEDED',
           value: 'test',
           thrown: undefined,
@@ -295,7 +307,7 @@ describe('CompleteLater Tests', () => {
         }
       };
 
-      completeLater(onCompletion, (oc) => {
+      concurrency.completeLater(onCompletion, (oc) => {
         // Store for later use
         storedOnCompletion = oc;
       });
@@ -314,7 +326,7 @@ describe('CompleteLater Tests', () => {
 
       let delegateCompleter: OnCompletion<string> | null = null;
 
-      completeLater(onCompletion, (oc) => {
+      concurrency.completeLater(onCompletion, (oc) => {
         delegateCompleter = oc;
       });
 
@@ -333,7 +345,7 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        completeLater(onCompletion, (_oc) => {
+        concurrency.completeLater(onCompletion, (_oc) => {
           throw new Error('test');
         });
       });
@@ -349,7 +361,7 @@ describe('CompleteLater Tests', () => {
         }
       };
 
-      completeLater(onCompletion, (_oc) => {
+      concurrency.completeLater(onCompletion, (_oc) => {
         // Success - no throw
       });
 

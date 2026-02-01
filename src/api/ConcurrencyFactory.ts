@@ -17,17 +17,17 @@ export interface ConcurrencyFactory {
    * @return the new Concurrency instance
    * @throws IllegalArgumentException if config is null or when configuration is invalid
    */
-  createConcurrency(config: ConcurrencyConfig): Concurrency;
+  createConcurrency(config?: ConcurrencyConfig): Concurrency;
 
   /**
    * Install all the requirements and promises to the given Contracts Repository.
    * Include Concurrency#CONTRACT which will provide a unique
    *
-   * @param config the Concurrency config
    * @param repository the repository to add requirements and promises to
+   * @param config the Concurrency config
    * @throws IllegalArgumentException if config is null, config is invalid, or repository is null
    */
-  install(config: ConcurrencyConfig, repository: RequiredType<Repository>): void;
+  install(repository: RequiredType<Repository>, config?: ConcurrencyConfig): void;
 }
 
 /**

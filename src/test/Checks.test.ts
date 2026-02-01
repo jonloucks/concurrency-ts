@@ -3,7 +3,6 @@ import { ok, throws } from "node:assert";
 import { Duration } from "@jonloucks/concurrency-ts/api/Types";
 import {
   completionCheck,
-  configCheck,
   eventCheck,
   finallyBlockCheck,
   failureBlockCheck,
@@ -30,7 +29,6 @@ describe('Index exports', () => {
     ok(completionCheck, 'completionCheck should be exported');
     ok(presentCheck, 'presentCheck should be exported');
     ok(illegalCheck, 'illegalCheck should be exported');
-    ok(configCheck, 'configCheck should be exported');
     ok(finallyBlockCheck, 'finallyBlockCheck should be exported');
     ok(failureBlockCheck, 'failureBlockCheck should be exported');
     ok(initialValueCheck, 'initialValueCheck should be exported');
@@ -374,11 +372,5 @@ describe('illegalCheck re-export', () => {
       name: 'IllegalArgumentException',
       message: 'Condition violated'
     });
-  });
-});
-
-describe('configCheck re-export', () => {
-  it('should be exported from contracts-ts', () => {
-    ok(configCheck, 'configCheck should be exported');
   });
 });

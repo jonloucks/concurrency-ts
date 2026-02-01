@@ -1,12 +1,11 @@
 import { ok, strictEqual } from "node:assert";
 
 import { Completable, CompletableFactory, Config, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-import { CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
+import { AutoClose, CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
-import { create as createCompletableFactory } from "../impl/CompletableFactory.impl";
-
-const FUNCTION_NAMES : (string|symbol)[] = [
+const FUNCTION_NAMES: (string | symbol)[] = [
   'createCompletable'
 ];
 
@@ -31,10 +30,18 @@ assertGuard(guard, ...FUNCTION_NAMES);
 assertContract(CONTRACT, 'CompletableFactory');
 
 describe('CompletableFactory Implementation Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
   let factory: CompletableFactory;
 
   beforeEach(() => {
-    factory = createCompletableFactory({ contracts: CONTRACTS });
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+    factory = CONTRACTS.enforce(CONTRACT);
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
   });
 
   it('should create factory with valid config', () => {
@@ -44,6 +51,13 @@ describe('CompletableFactory Implementation Tests', () => {
   it('should have createCompletable method', () => {
     ok(isPresent(factory.createCompletable), 'Factory should have createCompletable method');
     ok(typeof factory.createCompletable === 'function', 'createCompletable should be a function');
+  });
+
+    it('should create completable no config', () => {
+    const completable = factory.createCompletable();
+    ok(isPresent(completable), 'Completable should be created');
+    ok(isPresent(completable.open), 'Completable should have open method');
+    ok(isPresent(completable.isCompleted), 'Completable should have isCompleted method');
   });
 
   it('should create completable without additional config', () => {
@@ -81,10 +95,18 @@ describe('CompletableFactory Implementation Tests', () => {
 });
 
 describe('CompletableFactory Generic Type Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
   let factory: CompletableFactory;
 
   beforeEach(() => {
-    factory = createCompletableFactory({ contracts: CONTRACTS });
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+    factory = CONTRACTS.enforce(CONTRACT);
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
   });
 
   it('should create completable for string type', () => {
@@ -114,10 +136,18 @@ describe('CompletableFactory Generic Type Tests', () => {
 });
 
 describe('CompletableFactory Multiple Creation Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
   let factory: CompletableFactory;
 
   beforeEach(() => {
-    factory = createCompletableFactory({ contracts: CONTRACTS });
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+    factory = CONTRACTS.enforce(CONTRACT);
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
   });
 
   it('should create multiple independent completables', () => {
@@ -154,10 +184,18 @@ describe('CompletableFactory Multiple Creation Tests', () => {
 });
 
 describe('CompletableFactory Config Combination Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
   let factory: CompletableFactory;
 
   beforeEach(() => {
-    factory = createCompletableFactory({ contracts: CONTRACTS });
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+    factory = CONTRACTS.enforce(CONTRACT);
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
   });
 
   it('should combine factory config with completable config', () => {
@@ -167,7 +205,7 @@ describe('CompletableFactory Config Combination Tests', () => {
   });
 
   it('completable config should override factory config', () => {
-    const completable = factory.createCompletable<string>({ 
+    const completable = factory.createCompletable<string>({
       contracts: CONTRACTS,
       initialValue: 'override'
     });
@@ -181,10 +219,18 @@ describe('CompletableFactory Config Combination Tests', () => {
 });
 
 describe('CompletableFactory Edge Cases Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
   let factory: CompletableFactory;
 
   beforeEach(() => {
-    factory = createCompletableFactory({ contracts: CONTRACTS });
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+    factory = CONTRACTS.enforce(CONTRACT);
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
   });
 
   it('should handle empty string as initial value', () => {
@@ -214,40 +260,41 @@ describe('CompletableFactory Edge Cases Tests', () => {
 });
 
 describe('CompletableFactory Integration Tests', () => {
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
+  let factory: CompletableFactory;
+
+  beforeEach(() => {
+    concurrency = createConcurrency({ contracts: CONTRACTS });
+    closeConcurrency = concurrency.open();
+    factory = CONTRACTS.enforce(CONTRACT);
+  });
+
+  afterEach(() => {
+    closeConcurrency.close();
+  });
+
   it('should create factory and completables in one flow', () => {
-    const factory = createCompletableFactory({ contracts: CONTRACTS });
     const completable = factory.createCompletable<string>({ contracts: CONTRACTS, initialValue: 'flow-test' });
-    
+
     ok(isPresent(factory), 'Factory created');
     ok(isPresent(completable), 'Completable created');
-    
+
     const autoClose = completable.open();
     ok(isPresent(autoClose), 'AutoClose created');
-    
+
     ok(!completable.isCompleted(), 'Should be incomplete');
-    
+
     autoClose.close();
   });
 
-  it('should support multiple factories with different configs', () => {
-    const factory1 = createCompletableFactory({ contracts: CONTRACTS });
-    const factory2 = createCompletableFactory({ contracts: CONTRACTS });
-    
-    const completable1 = factory1.createCompletable<number>({ contracts: CONTRACTS, initialValue: 1 });
-    const completable2 = factory2.createCompletable<number>({ contracts: CONTRACTS, initialValue: 2 });
-    
-    ok(isPresent(completable1), 'Completable from factory1 created');
-    ok(isPresent(completable2), 'Completable from factory2 created');
-  });
-
   it('should handle complex creation patterns', () => {
-    const factory = createCompletableFactory({ contracts: CONTRACTS });
     const completables: Completable<number>[] = [];
-    
+
     for (let i = 0; i < 5; i++) {
       completables.push(factory.createCompletable<number>({ contracts: CONTRACTS, initialValue: i }));
     }
-    
+
     strictEqual(completables.length, 5, 'Should have 5 completables');
     completables.forEach((c, i) => {
       ok(isPresent(c), `Completable ${i} should be present`);

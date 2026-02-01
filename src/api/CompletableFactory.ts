@@ -16,7 +16,7 @@ export interface CompletableFactory {
    * @return the new Completable
    * @param <T> the type of completion value
    */
-  createCompletable<T>(config: Config<T>): Completable<T>
+  createCompletable<T>(config?: Config<T>): Completable<T>
 }
 
 /**
