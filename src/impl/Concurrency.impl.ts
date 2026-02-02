@@ -1,12 +1,12 @@
 import {
-  Completable, 
-  CompletableConfig, 
+  Completable,
+  CompletableConfig,
   Concurrency,
-  ConcurrencyConfig, 
-  OnCompletion, 
-  StateMachine, 
-  StateMachineConfig, 
-  Waitable, 
+  ConcurrencyConfig,
+  OnCompletion,
+  StateMachine,
+  StateMachineConfig,
+  Waitable,
   WaitableConfig
 }
   from "@jonloucks/concurrency-ts/api/Concurrency";
@@ -14,13 +14,17 @@ import {
 import { CONTRACT as WAITABLE_FACTORY } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-
-import { ConsumerType, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
-import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
-import { AutoClose, AUTO_CLOSE_NONE } from "@jonloucks/contracts-ts/api/AutoClose";
+import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/concurrency-ts/api/IdempotentFactory";
+import { ConsumerType, isNotPresent, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
+import { Contracts } from "@jonloucks/contracts-ts";
+import { Idempotent } from "@jonloucks/concurrency-ts/api/Idempotent";
+import { AutoClose, AutoCloseMany } from "@jonloucks/contracts-ts/api/AutoClose";
+import { CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
 
 import { completeLater as completeLaterImpl } from "./CompleteLater.impl";
 import { completeNow as completeNowImpl } from "./CompleteNow.impl";
+import { Events, create as createEvents } from "./Events.impl";
+import { Internal } from "./Internal.impl";
 
 /** 
  * Create a new Concurrency
@@ -37,8 +41,7 @@ export function create(config: ConcurrencyConfig): Concurrency {
 class ConcurrencyImpl implements Concurrency {
 
   open(): AutoClose {
-    // need to initialize factories here if they have not been initialized yet
-    return AUTO_CLOSE_NONE;
+    return this.getIdempotent().open();
   }
 
   createWaitable<T>(config: WaitableConfig<T>): RequiredType<Waitable<T>> {
@@ -65,11 +68,44 @@ class ConcurrencyImpl implements Concurrency {
     return new ConcurrencyImpl(config);
   }
 
+  private firstOpen(): AutoClose {
+    // register shutdown events last to avoid potential for events firing before everything is ready
+    this._closeMany.add(this.registerEvents());
+    return this._closeMany;
+  }
+
+  private firstClose(): void {
+    this._closeMany.close();
+  }
+
+  private getIdempotent(): Idempotent {
+    if (isNotPresent(this._lazy_idempotent)) {
+      this._lazy_idempotent = this._contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
+        open: () => this.firstOpen()
+      });
+    }
+    return this._lazy_idempotent;
+  }
+
+  private registerEvents(): AutoClose {
+    const events: Events = createEvents({
+      contracts: this._contracts,
+      names: this._config.shutdownEvents ?? [],
+      callback: () => this.firstClose()
+    });
+    return events.open();
+  }
+
   private constructor(config: ConcurrencyConfig) {
-    this._concurrencyConfig = { ...{ contracts: CONTRACTS }, ...config };
-    this._contracts = this._concurrencyConfig.contracts!;
+    this._contracts = Internal.resolveContracts(config);
+    this._config = { ...config, contracts: this._contracts };
+    this._closeMany = this._contracts.enforce(AUTO_CLOSE_FACTORY).createAutoCloseMany();
   }
 
   private readonly _contracts: Contracts;
-  private readonly _concurrencyConfig: ConcurrencyConfig;
+  private readonly _config: ConcurrencyConfig;
+  private readonly _closeMany: AutoCloseMany;
+
+  // lazy initialized members
+  private _lazy_idempotent: Idempotent | undefined;
 }
