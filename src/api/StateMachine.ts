@@ -85,7 +85,7 @@ export interface Config<T> {
   /**
    * @return the list of states in the state machine
    */
-  states: Array<T>;
+  states: readonly T[];
 
   /**
    * Get all the rules for a specified state
@@ -93,7 +93,7 @@ export interface Config<T> {
    * @param state the state
    * @return the rules of the state
    */
-  getStateRules?(state: T): Array<Rule<T>>;
+  getStateRules?(state: T): ReadonlyArray<Rule<T>>;
 }
 
 export { Config as StateMachineConfig } ;
