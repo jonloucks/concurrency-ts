@@ -50,7 +50,7 @@ describe("Events", () => {
     expect(callbackInvoked).toBe(false); // should not be invoked after close
   });
 
-  test("should handle multiple open calls idempotently", () => {
+  test("should handle multiple open calls safely", () => {
     let callbackCount = 0;
     const eventName = "test-event-multiple";
 

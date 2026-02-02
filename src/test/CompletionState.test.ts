@@ -5,7 +5,7 @@ import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { isPresent } from "@jonloucks/contracts-ts/api/Types";
 
-describe('Idempotent Tests', () => {
+describe('CompletionState Tests', () => {
   it('should have correct start state', () => {
     ok(START_STATE === 'PENDING', 'Start state should be PENDING');
   });
@@ -45,7 +45,7 @@ describe('Idempotent Tests', () => {
   });
 });
 
-describe('Idempotent PENDING State Rules', () => {
+describe('PENDING State Rules', () => {
   let rules: Array<Rule<CompletionState>>;
 
   beforeEach(() => {
@@ -69,7 +69,7 @@ describe('Idempotent PENDING State Rules', () => {
   });
 });
 
-describe('Idempotent FAILED State Rules', () => {
+describe('FAILED State Rules', () => {
   let rules: Array<Rule<CompletionState>>;
 
   beforeEach(() => {
@@ -91,7 +91,7 @@ describe('Idempotent FAILED State Rules', () => {
 
 });
 
-describe('Idempotent State Machine Config', () => {
+describe('State Machine Config', () => {
   let config: StateMachineConfig<CompletionState>;
 
   beforeEach(() => {
@@ -141,7 +141,7 @@ describe('Idempotent State Machine Config', () => {
 
 });
 
-describe('Idempotent Unknown State Rules', () => {
+describe('Unknown State Rules', () => {
   it('should return empty array for unknown state', () => {
     const rules = getStateRules('UNKNOWN' as CompletionState);
     strictEqual(rules.length, 0, 'Should return empty array for unknown state');
