@@ -2,7 +2,6 @@ import { Completable, CompletableConfig, Concurrency, OnCompletion, StateMachine
 import { AutoClose, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { Repository } from "@jonloucks/contracts-ts/api/Repository";
 import { ConsumerType, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
-import { Open } from "@jonloucks/contracts-ts/api/Open";
 
 /**
  * Wrapper method to create a Concurrency wrapper which is responsible for managing
@@ -30,63 +29,57 @@ class ConcurrencyWrapper implements Concurrency {
   }
 
   autoOpen(): AutoClose {
+    // what if referrent also has autoOpen?
+    // maybe we detect that and chain them?
     return this.open();
   }
 
   open(): AutoClose {
-    const closeConcurrency: AutoClose = this.concurrency.open();
-    const thisRepository = this.repository;
-
-    let opener: Open = {
-      open() {
+    const closeRepository: AutoClose = this._repository.open();
+    try {
+      const closeConcurrency: AutoClose = this._concurrency.open();
+      return inlineAutoClose(() => {
         try {
-          return thisRepository.open();
-        } catch (error) {
-          closeConcurrency.close(); // if the repository fails to open, close the concurrency
-          throw error;
+          closeConcurrency.close(); 
+        } finally {
+          closeRepository.close(); // ensure repository is closed
         }
-      }
-    };
-
-    const closeRepository: AutoClose = opener.open();
-    return inlineAutoClose(() => {
-      try {
-        closeRepository.close();
-      } finally {
-        closeConcurrency.close(); // ensure concurrency are closed even if repository close fails
-      }
-    });
+      });
+    } catch (thrown) {
+      closeRepository.close();
+      throw thrown
+    }
   }
 
   createWaitable<T>(config: WaitableConfig<T>): RequiredType<Waitable<T>> {
-    return this.concurrency.createWaitable(config);
+    return this._concurrency.createWaitable(config);
   }
 
   createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>> {
-    return this.concurrency.createStateMachine(config);
+    return this._concurrency.createStateMachine(config);
   }
 
   createCompletable<T>(config: CompletableConfig<T>): RequiredType<Completable<T>> {
-    return this.concurrency.createCompletable(config);
+    return this._concurrency.createCompletable(config);
   }
 
   completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<ConsumerType<OnCompletion<T>>>): void {
-    return this.concurrency.completeLater(onCompletion, delegate);
+    return this._concurrency.completeLater(onCompletion, delegate);
   }
-  
+
   completeNow<T>(onCompletion: RequiredType<OnCompletion<T>>, successBlock: RequiredType<SupplierType<T>>): OptionalType<T> {
-    return this.concurrency.completeNow(onCompletion, successBlock);
+    return this._concurrency.completeNow(onCompletion, successBlock);
   }
 
   toString(): string {
-    return this.concurrency.toString();
+    return this._concurrency.toString();
   }
 
   private constructor(concurrency: RequiredType<Concurrency>, repository: RequiredType<Repository>) {
-    this.concurrency = concurrency;
-    this.repository = repository;
+    this._concurrency = concurrency;
+    this._repository = repository;
   }
 
-  private readonly concurrency: RequiredType<Concurrency>;
-  private readonly repository: RequiredType<Repository>;
+  private readonly _concurrency: RequiredType<Concurrency>;
+  private readonly _repository: RequiredType<Repository>;
 };

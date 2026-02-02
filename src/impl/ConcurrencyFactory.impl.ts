@@ -43,6 +43,9 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
 
     this.installKernel(repository, finalConfig);
 
+    // how to bind promisors before creation?
+    // if we open the repository before creation, we risk unexpected behavior.
+    // for example, if open is never called, there will be residual bindings.
     return wrapConcurrency(createConcurrencyImpl(finalConfig), repository);
   }
 

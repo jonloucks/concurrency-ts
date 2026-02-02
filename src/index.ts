@@ -22,8 +22,18 @@ function createConcurrency(config?: ConcurrencyConfig): Concurrency {
 /**
  * A shared global Concurrency instance.
  */
-const CONCURRENCY : Concurrency = (() : Concurrency => { return createConcurrency();})();
+const CONCURRENCY : Concurrency = (() : Concurrency => { 
+    const globalConfig : ConcurrencyConfig = { 
+      shutdownEvents: ['exit']
+    };
+    const concurrency = createConcurrency(globalConfig);
+    concurrency.open(); // closed on exit
+    return concurrency;
+})();
 
+/**
+ * concurrency-ts main index exports
+ */
 export {
   VERSION,
   Concurrency,
