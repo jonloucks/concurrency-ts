@@ -20,8 +20,8 @@ class CompletableFactoryImpl implements CompletableFactory {
   
   createCompletable<T>(config?: CompletableConfig<T>): Completable<T> {
     const validConfig = config ?? {};
-    const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
-    const finalConfig: ConcurrencyConfig = { ...this._concurrencyConfig, ...validConfig, contracts: contracts };
+    const contracts: Contracts = Internal.resolveContracts(validConfig, this.#concurrencyConfig);
+    const finalConfig: ConcurrencyConfig = { ...this.#concurrencyConfig, ...validConfig, contracts: contracts };
     return createCompletableImpl<T>(finalConfig)
   }
 
@@ -31,7 +31,8 @@ class CompletableFactoryImpl implements CompletableFactory {
 
   private constructor(config?: ConcurrencyConfig) {
     const contracts: Contracts = Internal.resolveContracts(config);
-    this._concurrencyConfig = { ...config, contracts: contracts };
+    this.#concurrencyConfig = { ...config, contracts: contracts };
   }
-  private readonly _concurrencyConfig: ConcurrencyConfig;
+  
+  readonly #concurrencyConfig: ConcurrencyConfig;
 };

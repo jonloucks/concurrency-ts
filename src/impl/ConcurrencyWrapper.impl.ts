@@ -35,9 +35,9 @@ class ConcurrencyWrapper implements Concurrency {
   }
 
   open(): AutoClose {
-    const closeRepository: AutoClose = this._repository.open();
+    const closeRepository: AutoClose = this.#repository.open();
     try {
-      const closeConcurrency: AutoClose = this._concurrency.open();
+      const closeConcurrency: AutoClose = this.#concurrency.open();
       return inlineAutoClose(() => {
         try {
           closeConcurrency.close(); 
@@ -52,34 +52,34 @@ class ConcurrencyWrapper implements Concurrency {
   }
 
   createWaitable<T>(config: WaitableConfig<T>): RequiredType<Waitable<T>> {
-    return this._concurrency.createWaitable(config);
+    return this.#concurrency.createWaitable(config);
   }
 
   createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>> {
-    return this._concurrency.createStateMachine(config);
+    return this.#concurrency.createStateMachine(config);
   }
 
   createCompletable<T>(config: CompletableConfig<T>): RequiredType<Completable<T>> {
-    return this._concurrency.createCompletable(config);
+    return this.#concurrency.createCompletable(config);
   }
 
   completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<ConsumerType<OnCompletion<T>>>): void {
-    return this._concurrency.completeLater(onCompletion, delegate);
+    return this.#concurrency.completeLater(onCompletion, delegate);
   }
 
   completeNow<T>(onCompletion: RequiredType<OnCompletion<T>>, successBlock: RequiredType<SupplierType<T>>): OptionalType<T> {
-    return this._concurrency.completeNow(onCompletion, successBlock);
+    return this.#concurrency.completeNow(onCompletion, successBlock);
   }
 
   toString(): string {
-    return this._concurrency.toString();
+    return this.#concurrency.toString();
   }
 
   private constructor(concurrency: RequiredType<Concurrency>, repository: RequiredType<Repository>) {
-    this._concurrency = concurrency;
-    this._repository = repository;
+    this.#concurrency = concurrency;
+    this.#repository = repository;
   }
 
-  private readonly _concurrency: RequiredType<Concurrency>;
-  private readonly _repository: RequiredType<Repository>;
+  readonly #concurrency: RequiredType<Concurrency>;
+  readonly #repository: RequiredType<Repository>;
 };

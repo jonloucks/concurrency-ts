@@ -22,7 +22,7 @@ export function create(config?: ConcurrencyConfig): StateMachineFactory {
 class StateMachineFactoryImpl implements StateMachineFactory {
   createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>> {
     const validConfig: StateMachineConfig<T> = presentCheck(config, "Config must be present.");
-    const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
+    const contracts: Contracts = Internal.resolveContracts(validConfig, this.#concurrencyConfig);
     const finalConfig: StateMachineConfig<T> = { ...validConfig, contracts: contracts };
     return createStateMachineImpl(finalConfig);
   }
@@ -33,9 +33,9 @@ class StateMachineFactoryImpl implements StateMachineFactory {
 
   private constructor(config?: ConcurrencyConfig) {
     const contracts: Contracts = Internal.resolveContracts(config);
-    this._concurrencyConfig = { ...config, contracts: contracts };
+    this.#concurrencyConfig = { ...config, contracts: contracts };
   }
 
-  private readonly _concurrencyConfig?: ConcurrencyConfig;
+  readonly #concurrencyConfig?: ConcurrencyConfig;
 };
 

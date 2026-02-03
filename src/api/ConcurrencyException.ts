@@ -1,5 +1,6 @@
 import { messageCheck } from "@jonloucks/contracts-ts/auxiliary/Checks"
 import { isNotPresent } from "@jonloucks/contracts-ts/api/Types";
+import { used } from "../auxiliary/Checks";
 
 /**
  * Runtime exception thrown for Concurrency related problems.
@@ -12,9 +13,10 @@ export class ConcurrencyException extends Error {
    * @param message the message for this exception
    * @param thrown  the cause of this exception, null is allowed
    */
-  public constructor(message: string, _thrown: Error | null = null) {
+  public constructor(message: string, thrown: Error | null = null) {
     // super(messageCheck(message), thrown || undefined);
     super(messageCheck(message));
+    used(thrown);
     this.name = "ConcurrencyException";
     Object.setPrototypeOf(this, ConcurrencyException.prototype)
   }

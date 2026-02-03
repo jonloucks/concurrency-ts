@@ -25,6 +25,17 @@ import { VERSION } from "@jonloucks/concurrency-ts";
 import { isPresent } from "@jonloucks/contracts-ts/api/Types";
 
 /**
+ * explicity mark a value as used to avoid compiler warnings
+ * useful for "using" variable which are used for disposal or other side-effects
+ * but not directly referenced in code.
+ * 
+ * @param value the value which you wish to declare as used
+ */
+export const used: (value: unknown) 
+  => void 
+  = (value: unknown) => { void value; }
+
+/**
  * Interface for badge generator.
  */
 interface Generator {
@@ -63,7 +74,8 @@ async function createFolder(path: string): Promise<void> {
   });
 }
 
-createFolder(OUTPUT_FOLDER).catch((_: unknown) => {
+createFolder(OUTPUT_FOLDER).catch((thrown: unknown) => {
+  used(thrown);
   console.log("Unable to create output folder for badges");
 });
 
@@ -80,17 +92,20 @@ const generator: Generator = new class implements Generator {
 }();
 
 // generator NPM badge
-generateNpmBadge().catch((_: unknown) => {
+generateNpmBadge().catch((thrown: unknown) => {
+  used(thrown);
   console.log("Unable to generate npm badge");
 });
 
 // generator coverage summary badge
-generateCoverageSummaryBadge().catch((_: unknown) => {
+generateCoverageSummaryBadge().catch((thrown: unknown) => {
+  used(thrown);
   console.log("Unable to generate coverage summary badge");
 });
 
 // generator typedoc badge
-generateTypedocBadge().catch((_: unknown) => {
+generateTypedocBadge().catch((thrown: unknown) => {
+  used(thrown);
   console.log("Unable to generate typedoc badge");
 });
 
@@ -115,7 +130,8 @@ export async function generateNpmBadge(): Promise<void> {
  */
 export async function generateCoverageSummaryBadge(): Promise<void> {
   const inputPath: string = getCoverageSummaryFilePath();
-  await readFile(inputPath, async (_, data) => {
+  await readFile(inputPath, async (err, data) => {
+    used(err);
     if (isPresent(data)) {
       const percentage: number = readPercentageFromCoverageSummary(data);
       await generator.generate({

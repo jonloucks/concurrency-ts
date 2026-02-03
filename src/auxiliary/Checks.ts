@@ -148,3 +148,14 @@ export function predicateCheck<T>(predicate: OptionalType<T>): RequiredType<T> {
 export function initialValueCheck<T>(initialValue: OptionalType<T>): RequiredType<T> {
   return presentCheck(initialValue, "Initial value must be present.");
 }
+
+/**
+ * explicity mark a value as used to avoid compiler warnings
+ * useful for "using" variable which are used for disposal or other side-effects
+ * but not directly referenced in code.
+ * 
+ * @param value the value which you wish to declare as used
+ */
+export const used: (value: unknown) 
+  => void 
+  = (value: unknown) => { void value; }

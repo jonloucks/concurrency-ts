@@ -1,5 +1,6 @@
 import { Contract, createContract, createContracts, isString } from "@jonloucks/contracts-ts";
 import { validateContracts } from "@jonloucks/contracts-ts/auxiliary/Validate";
+import { assert } from "console";
 
 function smoke() : void {
   const contract: Contract<string> = createContract({
@@ -8,7 +9,8 @@ function smoke() : void {
   });
   const contracts = createContracts();
   validateContracts(contracts);
-  using _usingContracts = contracts.open();
+  using usingContracts = contracts.open();
+  assert(usingContracts);
   contracts.bind(contract, () => "test string");
   const value: string = contracts.enforce(contract);
   console.log(contract.name, value);

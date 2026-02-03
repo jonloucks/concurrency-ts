@@ -26,11 +26,11 @@ export function create(config?: Config): RequiredType<Events> {
 class EventsImpl implements Events {
 
   open(): AutoClose {
-    return this.idempotent.open();
+    return this.#idempotent.open();
   }
 
   isOpen(): boolean {
-    return this.idempotent.getState() === 'OPENED'
+    return this.#idempotent.getState() === 'OPENED'
   }
 
   static internalCreate(config?: Config): RequiredType<Events> {
@@ -38,29 +38,29 @@ class EventsImpl implements Events {
   }
 
   private firstOpen(): AutoClose {
-    this.names.forEach(name => {
-      process.on(name, this.callback);
+    this.#names.forEach(name => {
+      process.on(name, this.#callback);
     });
 
     return inlineAutoClose(() => {
-      this.names.forEach(name => {
-        process.off(name, this.callback);
+      this.#names.forEach(name => {
+        process.off(name, this.#callback);
       });
     });
   }
 
   private constructor(config?: Config) {
     const validConfig = configCheck(config);
-    this.callback = presentCheck(validConfig?.callback, "Callback must be present.");
-    this.names = validConfig?.names ?? [];
+    this.#callback = presentCheck(validConfig?.callback, "Callback must be present.");
+    this.#names = validConfig?.names ?? [];
     const contracts : Contracts = contractsCheck(validConfig.contracts);
-    this.idempotent = contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
+    this.#idempotent = contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
       open: () => this.firstOpen()
     });
   }
 
-  private readonly names: string[];
-  private readonly callback: (...args: unknown[]) => void;
-  private readonly idempotent: Idempotent;
+  readonly #names: string[];
+  readonly #callback: (...args: unknown[]) => void;
+  readonly #idempotent: Idempotent;
 }
 

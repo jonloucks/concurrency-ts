@@ -7,6 +7,7 @@
 
 import { guardFunctions, OptionalType, RequiredType } from "@jonloucks/contracts-ts/api/Types";
 import { presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
+import { used } from "./Checks";
 
 /** 
  * A method that tests a value of type T and returns a boolean
@@ -46,7 +47,10 @@ export function fromType<T>(type: Type<T>): Predicate<T> {
     return type;
   } else if (typeof type === 'boolean') {
     return {
-      test: (_: T) => type
+      test: (value: T) : boolean => {
+        used(value);
+        return type;
+      }
     };
   } else {
     return {
