@@ -1,6 +1,6 @@
-# concurrency-ts Contributing Guidance
+# Contributing Guidance
 
-Thank you for your interest in contributing to concurrency-ts! We welcome and value all contributions, from new features to bug fixes and documentation improvements. This guide will help you navigate the process.
+Thank you for your interest in contributing! We welcome and value all contributions, from new features to bug fixes and documentation improvements. This guide will help you navigate the process.
 
 Please note that this project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
@@ -38,16 +38,16 @@ To get started with local development:
     ```
 3.  **Install dependencies**:
     ```sh
-    # To build a JDK it is recommended ot use at least 17
-    javac --version
+    npm install
     ```
 4.  **Run tests** to ensure everything is working correctly:
     ```sh
-    ./gradlew test
+    npm run test
+    npm run lint
     ```
 5. **Code Coverage Verification** to ensure coverage:
     ```sh
-    ./gradlew jacocoTestCoverageVerification
+    npm run test:overage
     ```
 ## 4. Submitting a Pull Request
 Before submitting a pull request (PR), please follow these steps:
