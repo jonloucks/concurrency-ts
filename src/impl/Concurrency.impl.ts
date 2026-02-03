@@ -40,19 +40,19 @@ export function create(config: ConcurrencyConfig): Concurrency {
 class ConcurrencyImpl implements Concurrency {
 
   open(): AutoClose {
-    return this._idempotent.open();
+    return this.#idempotent.open();
   }
 
   createWaitable<T>(config: WaitableConfig<T>): RequiredType<Waitable<T>> {
-    return this._contracts.enforce(WAITABLE_FACTORY).createWaitable<T>(config);
+    return this.#contracts.enforce(WAITABLE_FACTORY).createWaitable<T>(config);
   }
 
   createStateMachine<T>(config: StateMachineConfig<T>): RequiredType<StateMachine<T>> {
-    return this._contracts.enforce(STATE_MACHINE_FACTORY).createStateMachine<T>(config);
+    return this.#contracts.enforce(STATE_MACHINE_FACTORY).createStateMachine<T>(config);
   }
 
   createCompletable<T>(config: CompletableConfig<T>): RequiredType<Completable<T>> {
-    return this._contracts.enforce(COMPLETABLE_FACTORY).createCompletable<T>(config);
+    return this.#contracts.enforce(COMPLETABLE_FACTORY).createCompletable<T>(config);
   }
 
   completeLater<T>(onCompletion: RequiredType<OnCompletion<T>>, delegate: RequiredType<ConsumerType<OnCompletion<T>>>): void {
@@ -69,34 +69,34 @@ class ConcurrencyImpl implements Concurrency {
 
   private firstOpen(): AutoClose {
     // register shutdown events last to avoid potential for events firing before everything is ready
-    this._closeMany.add(this.registerEvents());
-    return this._closeMany;
+    this.#closeMany.add(this.registerEvents());
+    return this.#closeMany;
   }
 
   private firstClose(): void {
-    this._closeMany.close();
+    this.#closeMany.close();
   }
 
   private registerEvents(): AutoClose {
     const events: Events = createEvents({
-      contracts: this._contracts,
-      names: this._config.shutdownEvents ?? [],
+      contracts: this.#contracts,
+      names: this.#config.shutdownEvents ?? [],
       callback: () => this.firstClose()
     });
     return events.open();
   }
 
   private constructor(config: ConcurrencyConfig) {
-    this._contracts = Internal.resolveContracts(config);
-    this._config = { ...config, contracts: this._contracts };
-    this._closeMany = this._contracts.enforce(AUTO_CLOSE_FACTORY).createAutoCloseMany();
-    this._idempotent = this._contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
+    this.#contracts = Internal.resolveContracts(config);
+    this.#config = { ...config, contracts: this.#contracts };
+    this.#closeMany = this.#contracts.enforce(AUTO_CLOSE_FACTORY).createAutoCloseMany();
+    this.#idempotent = this.#contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
       open: () => this.firstOpen()
     });
   }
 
-  private readonly _contracts: Contracts;
-  private readonly _config: ConcurrencyConfig;
-  private readonly _closeMany: AutoCloseMany;
-  private readonly _idempotent: Idempotent;
+  readonly #contracts: Contracts;
+  readonly #config: ConcurrencyConfig;
+  readonly #closeMany: AutoCloseMany;
+  readonly #idempotent: Idempotent;
 }

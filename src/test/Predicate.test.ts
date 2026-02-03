@@ -1,11 +1,12 @@
 import { ok } from "node:assert";
 
-import { Predicate, Type, guard, Method, fromType, check, toValue } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { Method, Predicate, Type, check, fromType, guard, toValue } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
 import { OptionalType } from "@jonloucks/contracts-ts/api/Types";
 
 import { assertGuard, mockDuck } from "./helper.test";
 
-const FUNCTION_NAMES : (string|symbol)[] = [
+const FUNCTION_NAMES: (string | symbol)[] = [
   'test'
 ];
 
@@ -18,7 +19,10 @@ describe('Predicate Tests', () => {
 
 describe('fromType Tests', () => {
   it('fromType should convert Method to Predicate', () => {
-    const method: Method<number> = (_value: number) => true;
+    const method: Method<number> = (_value: number) => {
+      used(_value);
+      return true;
+    };
     const predicate: Predicate<number> = fromType<number>(method);
     ok(guard(predicate), 'fromType should return a valid Predicate');
   });
@@ -29,7 +33,7 @@ describe('fromType Tests', () => {
     ok(predicate === originalPredicate, 'fromType should return the original Predicate');
   });
 
-  it ('fromType should convert boolean to Predicate', () => {
+  it('fromType should convert boolean to Predicate', () => {
     const predicateTrue: Predicate<number> = fromType<number>(true);
     const predicateFalse: Predicate<number> = fromType<number>(false);
     ok(guard(predicateTrue), 'fromType should return a valid Predicate for true');
@@ -79,6 +83,7 @@ describe('check Tests', () => {
     try {
       check<string>(null as unknown as OptionalType<Predicate<string>>);
     } catch (_) {
+      used(_);
       errorCaught = true;
     }
     ok(errorCaught, 'check should throw an error for null Predicate');

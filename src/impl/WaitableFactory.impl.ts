@@ -20,7 +20,7 @@ export function create(config: ConcurrencyConfig): WaitableFactory {
 class WaitableFactoryImpl implements WaitableFactory {
   createWaitable<T>(config?: WaitableConfig<T>): RequiredType<Waitable<T>> {
     const validConfig = config ?? {};
-    const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
+    const contracts: Contracts = Internal.resolveContracts(validConfig, this.#concurrencyConfig);
     const finalConfig: WaitableConfig<T> = { ...validConfig, contracts: contracts };
     return createWaitableImpl(finalConfig);
   }
@@ -31,8 +31,8 @@ class WaitableFactoryImpl implements WaitableFactory {
 
   private constructor(config: ConcurrencyConfig) {
     const contracts: Contracts = Internal.resolveContracts(config);
-    this._concurrencyConfig = { ...config, contracts: contracts };
+    this.#concurrencyConfig = { ...config, contracts: contracts };
   }
   
-  private readonly _concurrencyConfig: ConcurrencyConfig;
+  readonly #concurrencyConfig: ConcurrencyConfig;
 };

@@ -34,8 +34,8 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
 
   createConcurrency(config?: ConcurrencyConfig): Concurrency {
     const validConfig = config ?? {};
-    const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
-    const finalConfig: ConcurrencyConfig = { ...this._concurrencyConfig, ...validConfig, contracts: contracts };
+    const contracts: Contracts = Internal.resolveContracts(validConfig, this.#concurrencyConfig);
+    const finalConfig: ConcurrencyConfig = { ...this.#concurrencyConfig, ...validConfig, contracts: contracts };
     const repositoryFactory: RepositoryFactory = contracts.enforce(REPOSITORY_FACTORY_CONTRACT);
     const repository: Repository = repositoryFactory.createRepository();
 
@@ -50,8 +50,8 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
   install(repository: RequiredType<Repository>, config?: ConcurrencyConfig): void {
     // potential unexpected behavior might occur when merging configs
     const validConfig = config ?? {};
-    const contracts: Contracts = Internal.resolveContracts(validConfig, this._concurrencyConfig);
-    const finalConfig: ConcurrencyConfig = { ...this._concurrencyConfig, ...validConfig, contracts: contracts };
+    const contracts: Contracts = Internal.resolveContracts(validConfig, this.#concurrencyConfig);
+    const finalConfig: ConcurrencyConfig = { ...this.#concurrencyConfig, ...validConfig, contracts: contracts };
     const validRepository: RequiredType<Repository> = presentCheck(repository, "Repository must be present.");
     const promisorFactory: PromisorFactory = contracts.enforce(PROMISOR_FACTORY_CONTRACT);
 
@@ -66,7 +66,7 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
 
   private constructor(config: ConcurrencyConfig) {
     const contracts: Contracts = Internal.resolveContracts(config);
-    this._concurrencyConfig = { ...config, contracts: contracts };
+    this.#concurrencyConfig = { ...config, contracts: contracts };
   }
 
   private installKernel(repository: RequiredType<Repository>, config: ConcurrencyConfig): void {
@@ -75,6 +75,6 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
     repository.keep(COMPLETABLE_FACTORY, createCompletableFactoryImpl(config));
   }
 
-  private readonly _concurrencyConfig: ConcurrencyConfig;
+  readonly #concurrencyConfig: ConcurrencyConfig;
 }
 

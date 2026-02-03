@@ -1,9 +1,10 @@
 import { ok, strictEqual, throws } from "node:assert";
 
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Completable, guard } from "@jonloucks/concurrency-ts/api/Completable";
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { AutoClose, Contracts, createContracts, isPresent } from "@jonloucks/contracts-ts";
-import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { assertGuard, mockDuck } from "./helper.test";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
@@ -180,7 +181,7 @@ describe('Completable Suite', () => {
       const completable1 = concurrency.createCompletable<string>({ contracts: contracts });
       const completable2 = concurrency.createCompletable<number>({ contracts: contracts });
       const completable3 = concurrency.createCompletable<boolean>({ contracts: contracts });
-      
+
       ok(isPresent(completable1), 'First completable should be created');
       ok(isPresent(completable2), 'Second completable should be created');
       ok(isPresent(completable3), 'Third completable should be created');
@@ -589,6 +590,7 @@ describe('Completable Suite', () => {
       let callCount = 0;
       const observer = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           callCount++;
         }
       };
@@ -611,12 +613,14 @@ describe('Completable Suite', () => {
       let callCount1 = 0;
       let callCount2 = 0;
       const observer1 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           callCount1++;
         }
       };
       const observer2 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           callCount2++;
         }
       };
@@ -641,6 +645,7 @@ describe('Completable Suite', () => {
       let callCount = 0;
       const observer = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           callCount++;
         }
       };
@@ -660,7 +665,8 @@ describe('Completable Suite', () => {
 
       let callCount = 0;
       const observer = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           callCount++;
         }
       };
@@ -794,17 +800,20 @@ describe('Completable Suite', () => {
 
       const callOrder: number[] = [];
       const observer1 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           callOrder.push(1);
         }
       };
       const observer2 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           callOrder.push(2);
         }
       };
       const observer3 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           callOrder.push(3);
         }
       };
@@ -828,12 +837,14 @@ describe('Completable Suite', () => {
       const autoClose = completable.open();
 
       const observer1 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           throw new Error('Observer error');
         }
       };
       const observer2 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           // Observer 2 should still be notified
         }
       };
@@ -894,7 +905,8 @@ describe('Completable Suite', () => {
 
       let callCount = 0;
       const observer = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           callCount++;
         }
       };
@@ -918,12 +930,14 @@ describe('Completable Suite', () => {
 
       let calls: string[] = [];
       const observer1 = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           calls.push('observer1');
         }
       };
       const observer2 = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           calls.push('observer2');
         }
       };

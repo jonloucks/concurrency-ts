@@ -1,6 +1,7 @@
 import { ok } from "node:assert";
 
-import { Supplier, Type, guard, Method, fromType, toValue, check } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { Method, Supplier, Type, check, fromType, guard, toValue } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
 import { assertGuard, mockDuck } from "./helper.test";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
@@ -46,6 +47,7 @@ describe('check Tests', () => {
     try {
       check<string>(null as unknown as Type<string>);
     } catch (_) {
+      used(_);
       errorCaught = true;
     }
     ok(errorCaught, 'check should throw an error for null Supplier');

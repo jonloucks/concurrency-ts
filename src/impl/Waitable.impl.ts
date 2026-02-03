@@ -32,9 +32,9 @@ const CLOSED_EXCEPTION: ConcurrencyException = new ConcurrencyException("Waitabl
 class WaitableImpl<T> implements Waitable<T> {
 
   open(): AutoClose {
-    if (this._isOpen.compareAndSet(false, true)) {
+    if (this.#isOpen.compareAndSet(false, true)) {
       return inlineAutoClose((): void => {
-        if (this._isOpen.compareAndSet(true, false)) {
+        if (this.#isOpen.compareAndSet(true, false)) {
           this.closeAllListeners();
         }
       });
@@ -45,7 +45,7 @@ class WaitableImpl<T> implements Waitable<T> {
 
   // WaitableSupplier.supply implementations
   supply(): T {
-    const value = this._reference.get();
+    const value = this.#reference.get();
     // if (value === undefined || value === null) {
     //   throw new IllegalStateException("No value is currently available in Waitable.");
     // }
@@ -55,7 +55,7 @@ class WaitableImpl<T> implements Waitable<T> {
   // WaitableSupplier.supplyIf implementation
   supplyIf(predicate: PredicateType<T>): OptionalType<T> {
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
-    const currentValue: OptionalType<T> = this._reference.get();
+    const currentValue: OptionalType<T> = this.#reference.get();
     if (validPredicate.test(currentValue)) {
       return currentValue;
     } else {
@@ -73,7 +73,7 @@ class WaitableImpl<T> implements Waitable<T> {
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise<T> = createExposedPromise();
     const removeListener = (v: ValueObserver<T>): void => {
-      this._valueObservers.delete(v);
+      this.#valueObservers.delete(v);
     };
 
     const valueObserver: ValueObserver<T> = {
@@ -96,7 +96,7 @@ class WaitableImpl<T> implements Waitable<T> {
       timeout
     );
 
-    this._valueObservers.add(valueObserver);
+    this.#valueObservers.add(valueObserver);
     valueObserver.observeValue(this.supply());
     return returnPromise;
   }
@@ -110,7 +110,7 @@ class WaitableImpl<T> implements Waitable<T> {
   consumeIf(predicate: RequiredType<PredicateType<T>>, value: SupplierType<T>): OptionalType<T> {
     const validPredicate: Predicate<OptionalType<T>> = predicateFromType(predicate);
     const validValueSupplier: Supplier<T> = supplierFromType(value);
-    const currentValue: OptionalType<T> = this._reference.get();
+    const currentValue: OptionalType<T> = this.#reference.get();
     if (validPredicate.test(currentValue)) {
       const newValue: T = validValueSupplier.supply();
       this.setValue(newValue);
@@ -131,7 +131,7 @@ class WaitableImpl<T> implements Waitable<T> {
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise<OptionalType<T>> = createExposedPromise();
     const removeListener = (v: ValueObserver<T>): void => {
-      this._valueObservers.delete(v);
+      this.#valueObservers.delete(v);
     };
     const setTheValue: (T: OptionalType<T>) => void = (v: OptionalType<T>): void => {
       this.setValue(v);
@@ -157,7 +157,7 @@ class WaitableImpl<T> implements Waitable<T> {
       timeout
     );
 
-    this._valueObservers.add(valueObserver);
+    this.#valueObservers.add(valueObserver);
     valueObserver.observeValue(this.supply());
 
     return returnPromise;
@@ -172,7 +172,7 @@ class WaitableImpl<T> implements Waitable<T> {
     const firstClose: AtomicBoolean = createAtomicBoolean(true);
     const isLive: AtomicBoolean = createAtomicBoolean(true);
     const removeListener = (v: ValueObserver<T>): void => {
-      this._valueObservers.delete(v);
+      this.#valueObservers.delete(v);
     };
     const valueObserver: ValueObserver<T> = {
       observeValue: function (value: T): void {
@@ -189,7 +189,7 @@ class WaitableImpl<T> implements Waitable<T> {
       }
     };
 
-    this._valueObservers.add(valueObserver);
+    this.#valueObservers.add(valueObserver);
     valueObserver.observeValue(this.supply());
     return inlineAutoClose((): void => {
       valueObserver.close();
@@ -203,39 +203,39 @@ class WaitableImpl<T> implements Waitable<T> {
   private constructor(config?: Config<T>) {
     const actualConfig = config ? config : {};
 
-    this._reference = createAtomicReference<OptionalType<T>>(actualConfig.initialValue);
+    this.#reference = createAtomicReference<OptionalType<T>>(actualConfig.initialValue);
   }
 
   private isOpen(): boolean {
-    return this._isOpen.get();
+    return this.#isOpen.get();
   }
 
   private setValue(newValue: OptionalType<T>): void {
-    const oldValue: OptionalType<T> = this._reference.getAndSet(newValue);
+    const oldValue: OptionalType<T> = this.#reference.getAndSet(newValue);
     if (oldValue !== newValue) {
       this.notifyListeners(newValue);
     }
   }
 
   private notifyListeners(newValue: OptionalType<T>): void {
-    for (const valueObserver of this._valueObservers) {
+    for (const valueObserver of this.#valueObservers) {
       valueObserver.observeValue(newValue);
     }
   }
 
   private closeAllListeners(): void {
-    for (const valueObserver of this._valueObservers) {
+    for (const valueObserver of this.#valueObservers) {
       valueObserver.close();
     }
   }
 
   private assertOpen(): void {
-    if (!this._isOpen.get()) {
+    if (!this.#isOpen.get()) {
       throw new IllegalStateException("Waitable must be open.");
     }
   }
 
-  private readonly _isOpen: AtomicBoolean = createAtomicBoolean(false)
-  private readonly _reference: AtomicReference<OptionalType<T>>;
-  private readonly _valueObservers: Set<ValueObserver<unknown>> = new Set<ValueObserver<unknown>>();
+  readonly #isOpen: AtomicBoolean = createAtomicBoolean(false)
+  readonly #reference: AtomicReference<OptionalType<T>>;
+  readonly #valueObservers: Set<ValueObserver<unknown>> = new Set<ValueObserver<unknown>>();
 }

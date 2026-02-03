@@ -3,6 +3,7 @@ import { ok, throws } from "node:assert";
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Consumer } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { guard, Waitable, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
 import { assertGuard, mockDuck } from "./helper.test";
 
@@ -82,6 +83,7 @@ describe('Waitable Suite', () => {
       const waitable: Waitable<number> = createWaitable<number>({ initialValue: 50 });
 
       using _usingWaitable = waitable.open();
+      used(_usingWaitable);
 
       const promise1 = waitable.consumeWhen((val) => val === 50, () => 60);
       const result1 = await promise1;
@@ -131,6 +133,7 @@ describe('Waitable Suite', () => {
     it('notifyWhile should notify observers while predicate is satisfied', async () => {
       const waitable: Waitable<number> = createWaitable<number>({ initialValue: 5 });
       using _usingWaitable = waitable.open();
+      used(_usingWaitable);
 
       let notifications: number[] = [];
 
@@ -142,12 +145,16 @@ describe('Waitable Suite', () => {
 
       {
         using _notifyWhile = waitable.notifyWhile((val) => val < 15, observer);
+        used(_notifyWhile);
 
         // Simulate value changes
         for (let i = 6; i <= 20; i += 3) {
           waitable.consume(i);
         }
-        await new Promise((resolve, _) => setTimeout(resolve, 100));
+        await new Promise((resolve, _) => {
+          used(_);
+          setTimeout(resolve, 100);
+        });
       }
 
       ok(notifications.length > 0, 'Observer should have received notifications');
@@ -169,8 +176,10 @@ describe('Waitable Suite', () => {
       const waitable: Waitable<string> = createWaitable<string>({ initialValue: "hello" });
 
       using _using1 = waitable.open();
+      used(_using1);
       {
         using _using2 = waitable.open();
+        used(_using2);
       }
 
       ok(waitable.supply() === "hello", 'Value should remain unchanged after multiple opens');
@@ -199,6 +208,7 @@ describe('Waitable Suite', () => {
       };
 
       using _usingNotifyWhile = waitable.notifyWhile((val) => val < 5, observer);
+      used(_usingNotifyWhile);
 
       closeWaitable.close();
       notifications = []; // reset notifications  
@@ -207,7 +217,10 @@ describe('Waitable Suite', () => {
       for (let i = 1; i <= 10; i++) {
         waitable.consume(i);
       }
-      await new Promise((resolve, _) => setTimeout(resolve, 100));
+      await new Promise((resolve, _) => {
+        used(_);
+        setTimeout(resolve, 100);
+      });
 
       ok(notifications.length === 0, 'No notifications should be received after Waitable is closed');
     });
@@ -215,6 +228,7 @@ describe('Waitable Suite', () => {
     it('closing notifyWhile should stop notifications', async () => {
       const waitable: Waitable<number> = createWaitable<number>({ initialValue: 0 });
       using _usingWaitable = waitable.open();
+      used(_usingWaitable);
 
       let notifications: number[] = [];
 
@@ -230,7 +244,10 @@ describe('Waitable Suite', () => {
       for (let i = 1; i <= 10; i++) {
         waitable.consume(i);
       }
-      await new Promise((resolve, _) => setTimeout(resolve, 100));
+      await new Promise((resolve, _) => {
+        used(_);
+        setTimeout(resolve, 100);
+      });
 
       notifyWhileClose.close();
 
@@ -240,7 +257,10 @@ describe('Waitable Suite', () => {
       for (let i = 11; i <= 15; i++) {
         waitable.consume(i);
       }
-      await new Promise((resolve, _) => setTimeout(resolve, 100));
+      await new Promise((resolve, _) => {
+        used(_);
+        setTimeout(resolve, 100);
+      });
 
       ok(notifications.length === notificationCount, 'No new notifications should be received after notifyWhile is closed');
     });
@@ -259,6 +279,7 @@ describe('Waitable Suite', () => {
     it('supplyWhen should wait for predicate to be satisfied and return value', async () => {
       const waitable: Waitable<number> = createWaitable<number>({ initialValue: 0 });
       using _usingWaitable = waitable.open();
+      used(_usingWaitable);
 
       const promise = waitable.supplyWhen((val) => val === 10);
 
@@ -274,6 +295,7 @@ describe('Waitable Suite', () => {
     it('supplyWhen non changing values are skipped', async () => {
       const waitable: Waitable<number> = createWaitable<number>({ initialValue: 0 });
       using _usingWaitable = waitable.open();
+      used(_usingWaitable);
 
       const promise = waitable.supplyWhen((val) => val === 10);
 

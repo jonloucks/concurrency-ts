@@ -1,5 +1,6 @@
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config } from "@jonloucks/concurrency-ts/api/StateMachine";
+import { used } from "../auxiliary/Checks";
 
 /**
  * The possible states of a Completion
@@ -28,7 +29,8 @@ export function getStateRules(state: State): Array<Rule<State>> {
     case 'PENDING':
       return [
         {
-          canTransition: (_: string, goal: State): boolean => {
+          canTransition: (event: string, goal: State): boolean => {
+            used(event);
             return goal === 'FAILED' || goal === 'CANCELLED' || goal === 'SUCCEEDED';
           }
         }
@@ -38,7 +40,9 @@ export function getStateRules(state: State): Array<Rule<State>> {
     case 'SUCCEEDED':
       return [
         {
-          canTransition: (_: string, __: State): boolean => {
+          canTransition: (event: string, goal: State): boolean => {
+            used(event);
+            used(goal);
             return false;
           },
           isTerminal: true
