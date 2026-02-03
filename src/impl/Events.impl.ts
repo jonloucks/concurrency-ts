@@ -1,0 +1,66 @@
+import { Idempotent } from "@jonloucks/contracts-ts/auxiliary/Idempotent";
+import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/contracts-ts/auxiliary/IdempotentFactory";
+import { AutoClose, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { RequiredType } from "@jonloucks/contracts-ts/api/Types";
+import { configCheck, contractsCheck, presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
+import { Config, Events } from "./Events";
+import { Contracts } from "@jonloucks/contracts-ts";
+
+export { Config, Events };
+
+/**
+ *  Factory method to create Events instance.
+ * 
+ * @param config the configuration for the Events implementation
+ * @returns the new Events implementation
+ */
+export function create(config?: Config): RequiredType<Events> {
+  return EventsImpl.internalCreate(config);
+}
+
+// ---- Implementation details below ----
+
+/**
+ * The Events implementation
+ */
+class EventsImpl implements Events {
+
+  open(): AutoClose {
+    return this.idempotent.open();
+  }
+
+  isOpen(): boolean {
+    return this.idempotent.getState() === 'OPENED'
+  }
+
+  static internalCreate(config?: Config): RequiredType<Events> {
+    return new EventsImpl(config);
+  }
+
+  private firstOpen(): AutoClose {
+    this.names.forEach(name => {
+      process.on(name, this.callback);
+    });
+
+    return inlineAutoClose(() => {
+      this.names.forEach(name => {
+        process.off(name, this.callback);
+      });
+    });
+  }
+
+  private constructor(config?: Config) {
+    const validConfig = configCheck(config);
+    this.callback = presentCheck(validConfig?.callback, "Callback must be present.");
+    this.names = validConfig?.names ?? [];
+    const contracts : Contracts = contractsCheck(validConfig.contracts);
+    this.idempotent = contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
+      open: () => this.firstOpen()
+    });
+  }
+
+  private readonly names: string[];
+  private readonly callback: (...args: unknown[]) => void;
+  private readonly idempotent: Idempotent;
+}
+

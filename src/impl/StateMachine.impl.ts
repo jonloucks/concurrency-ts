@@ -107,7 +107,7 @@ class StateMachineImpl<S> implements StateMachine<S> {
     return new StateMachineImpl<T>(config);
   }
 
-  private addStateAndRules(state: S, rules: Rule<S>[]): void {
+  private addStateAndRules(state: S, rules: readonly Rule<S>[]): void {
     const validState = stateCheck(state);
     const validRules = rulesCheck(rules);
     const knownRules = this.getStateRules(validState);

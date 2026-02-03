@@ -1,9 +1,9 @@
 import { ok, throws } from "node:assert";
 
-import { Waitable, guard, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
-import { Consumer } from "@jonloucks/concurrency-ts/api/Concurrency";
-import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
+import { Consumer } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { guard, Waitable, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
+import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
 import { assertGuard, mockDuck } from "./helper.test";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
@@ -165,7 +165,7 @@ describe('Waitable Suite', () => {
       ok(result2 === undefined, 'supplyIf should return undefined when predicate is not satisfied');
     });
 
-    it('has idempotent open', () => {
+    it('supports multiple open calls', () => {
       const waitable: Waitable<string> = createWaitable<string>({ initialValue: "hello" });
 
       using _using1 = waitable.open();
@@ -176,7 +176,7 @@ describe('Waitable Suite', () => {
       ok(waitable.supply() === "hello", 'Value should remain unchanged after multiple opens');
     });
 
-    it('closing Waitable multiple times should be idempotent', () => {
+    it('closing Waitable multiple times should be safe', () => {
       const waitable: Waitable<string> = createWaitable<string>({ initialValue: "hello" });
 
       const close1: AutoClose = waitable.open();

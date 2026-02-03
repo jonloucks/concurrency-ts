@@ -1,18 +1,12 @@
-export { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
-
+import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
 import { create as createConcurrencyFactory } from "./impl/ConcurrencyFactory.impl";
-export { VERSION } from "./version";
-
-import { Concurrency, ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { VERSION } from "./version";
+import { Concurrency, ConcurrencyConfig, CONTRACT as CONCURRENCY_CONTRACT } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { ConcurrencyFactory } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
 
-export {
-  Concurrency,
-  ConcurrencyConfig,
-  ConcurrencyFactory,
-  createConcurrencyFactory
-};
-
+/**
+ * A shared global ConcurrencyFactory instance.
+ */
 const CONCURRENCY_FACTORY: ConcurrencyFactory = createConcurrencyFactory({});
 
 /** 
@@ -21,22 +15,36 @@ const CONCURRENCY_FACTORY: ConcurrencyFactory = createConcurrencyFactory({});
  *
  * @return the new Concurrency instance
  */
-export function createConcurrency(config: ConcurrencyConfig): Concurrency {
+function createConcurrency(config?: ConcurrencyConfig): Concurrency {
   return CONCURRENCY_FACTORY.createConcurrency(config);
 }
 
-// /**
-//  * A shared global Concurrency instance.
-//  */
-// export const CONCURRENCY : Concurrency = (() : Concurrency => {
-//     const globalConfig : ConcurrencyConfig = { 
-//       ratified: true,
-//       shutdownEvents: ['exit']
-//     };
-//     const concurrency = createConcurrency(globalConfig);
-//     concurrency.open(); // closed on exit
-//     validateConcurrency(concurrency);
-//     return concurrency;
-// })();
+/**
+ * A shared global Concurrency instance.
+ */
+const CONCURRENCY : Concurrency = (() : Concurrency => { 
+    const globalConfig : ConcurrencyConfig = { 
+      shutdownEvents: ['exit']
+    };
+    const concurrency = createConcurrency(globalConfig);
+    concurrency.open(); // closed on exit
+    return concurrency;
+})();
+
+/**
+ * concurrency-ts main index exports
+ */
+export {
+  VERSION,
+  Concurrency,
+  ConcurrencyConfig,
+  ConcurrencyFactory,
+  ConcurrencyException,
+  createConcurrencyFactory,
+  createConcurrency,
+  CONCURRENCY,
+  CONCURRENCY_CONTRACT,
+  CONCURRENCY_FACTORY
+};
 
 

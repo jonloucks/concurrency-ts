@@ -31,6 +31,14 @@ export interface Config {
    * @return the contracts, some use case have their own Contracts instance.
    */
   contracts?: Contracts;
+
+    /**
+   * an optional list of events that when fired will shutdown Contracts
+   * the default is no events.
+   * It can be a custom event or system events like 'beforeExit', 'SIGINT', 'SIGTERM'
+   * @return list of shutdown event names
+   */
+  shutdownEvents?: string[];
 }
 
 export { Config as ConcurrencyConfig };
