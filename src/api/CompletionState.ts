@@ -41,7 +41,7 @@ export function getStateRules(state: State): Array<Rule<State>> {
       return [
         {
           canTransition: (event: string, goal: State): boolean => {
-            used(event);  
+            used(event);
             used(goal);
             return false;
           },
