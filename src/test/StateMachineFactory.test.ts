@@ -1,7 +1,8 @@
 import { ok } from "node:assert";
 
-import { CONTRACT, StateMachineFactory, guard } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
+import { CONTRACT, guard, StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { AutoClose, Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 
 import { assertContract, assertGuard } from "./helper.test";
@@ -38,6 +39,7 @@ describe('StateMachineFactory Tests', () => {
       initialValue: 'INITIAL',
       states: ['INITIAL', 'STATE1', 'STATE2'],
       getStateRules(_) {
+        used(_);
         return [];
       },
     });

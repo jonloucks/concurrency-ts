@@ -1,6 +1,6 @@
 import { ok, strictEqual } from "node:assert";
 
-import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { presentCheck, used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
 import {
   Consumer,
@@ -77,13 +77,13 @@ describe('typeToValue function', () => {
   });
 
   it('should return the value from a SupplierFunction', () => {
-    const supplierFunc = () : number => 100;
+    const supplierFunc = (): number => 100;
     strictEqual(supplierToValue(supplierFunc), 100, 'Supplier function should return 100');
   });
 
   it('should return the value from a Supplier object', () => {
     const supplierObj: RequiredType<Supplier<number>> = {
-      supply: () : number => 200
+      supply: (): number => 200
     };
     strictEqual(supplierToValue(supplierObj), 200, 'Supplier object should return 200');
   });
@@ -113,7 +113,7 @@ describe('Constants', () => {
 
 describe('Consumer Type', () => {
   it('should accept a consumer function', () => {
-    const consumer: ConsumerType<number> = (value: number) => { 
+    const consumer: ConsumerType<number> = (value: number) => {
       strictEqual(value, 42);
     };
     consumer(42);
@@ -134,13 +134,17 @@ describe('Consumer Type', () => {
 describe('consumerGuard function', () => {
   it('should return true for Consumer objects', () => {
     const consumer: Consumer<number> = {
-      consume: (_value: number) => { }
+      consume: (_value: number) => {
+        used(_value);
+      }
     };
     strictEqual(consumerGuard(consumer), true, 'Should identify Consumer object');
   });
 
   it('should return false for consumer functions', () => {
-    const consumer : Method<number> = (_: number) => { };
+    const consumer: Method<number> = (_: number) => {
+      used(_);
+    };
     strictEqual(consumerGuard(consumer), false, 'Should not identify function as Consumer object');
   });
 
@@ -180,13 +184,19 @@ describe('Predicate Type', () => {
 describe('predicateGuard function', () => {
   it('should return true for Predicate objects', () => {
     const predicate: Predicate<number> = {
-      test: (_value: number) => true
+      test: (_value: number) => {
+        used(_value);
+        return true;
+      }
     };
     strictEqual(predicateGuard(predicate), true, 'Should identify Predicate object');
   });
 
   it('should return false for predicate functions', () => {
-    const predicate : Method<number> = (_value: number) => true;
+    const predicate: Method<number> = (_value: number) => {
+      used(_value);
+      return true;
+    };
     strictEqual(predicateGuard(predicate), false, 'Should not identify function as Predicate object');
   });
 
@@ -230,7 +240,7 @@ describe('supplierGuard function', () => {
   });
 
   it('should return false for supplier functions', () => {
-    const supplier : Method<number> = () => 42;
+    const supplier: Method<number> = () => 42;
     strictEqual(supplierGuard(supplier), false, 'Should not identify function as Supplier object');
   });
 
@@ -332,8 +342,8 @@ describe('Function Type Aliases', () => {
 describe('guardFunctions utility', () => {
   it('should return true when object has specified method names', () => {
     const obj = {
-      consume: () : void => {},
-      supply: () : number => 42
+      consume: (): void => { },
+      supply: (): number => 42
     };
     strictEqual(guardFunctions(obj, 'consume'), true, 'Object should have consume method');
     strictEqual(guardFunctions(obj, 'supply'), true, 'Object should have supply method');
@@ -341,15 +351,15 @@ describe('guardFunctions utility', () => {
 
   it('should return true when object has all specified method names', () => {
     const obj = {
-      consume: () : void => {},
-      supply: () : number => 42
+      consume: (): void => { },
+      supply: (): number => 42
     };
     strictEqual(guardFunctions(obj, 'consume', 'supply'), true, 'Object should have both methods');
   });
 
   it('should return false when object does not have specified method', () => {
     const obj = {
-      consume: () : void => {}
+      consume: (): void => { }
     };
     strictEqual(guardFunctions(obj, 'supply'), false, 'Object should not have supply method');
   });
@@ -376,5 +386,6 @@ describe('guardFunctions utility', () => {
 });
 
 function assertNothing(_value: OptionalType<unknown>): void {
+  used(_value);
   ok(true, 'This function is only for compile-time type checking and should never be called at runtime');
 }

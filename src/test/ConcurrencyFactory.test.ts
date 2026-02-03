@@ -1,10 +1,11 @@
 import { ok, strictEqual } from "node:assert";
 
-import { ConcurrencyFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
-import { CONTRACTS, isPresent, OptionalType, Repository } from "@jonloucks/contracts-ts";
-import { Config } from "@jonloucks/concurrency-ts/api/Concurrency";
-import { assertContract, assertGuard, mockDuck } from "./helper.test";
 import { createConcurrencyFactory } from "@jonloucks/concurrency-ts";
+import { Config } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { ConcurrencyFactory, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { CONTRACTS, isPresent, OptionalType, Repository } from "@jonloucks/contracts-ts";
+import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'createConcurrency',
@@ -37,6 +38,7 @@ describe('ConcurrencyFactory exports', () => {
 });
 
 function assertNothing(_value: OptionalType<unknown>): void {
+  used(_value);
   ok(true, 'This function is only for compile-time type checking and should never be called at runtime');
 }
 
@@ -224,8 +226,8 @@ describe('ConcurrencyFactory Integration Tests', () => {
     const factory = createConcurrencyFactory();
     const mockRepository = mockDuck<Repository>("keep", "store", "require", "check", "open");
 
-    factory.install(mockRepository, { });
-    const concurrency = factory.createConcurrency({ });
+    factory.install(mockRepository, {});
+    const concurrency = factory.createConcurrency({});
 
     ok(isPresent(concurrency), 'Concurrency created after install');
   });

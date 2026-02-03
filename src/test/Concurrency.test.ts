@@ -1,11 +1,12 @@
 import { ok, strictEqual } from "node:assert";
 
 import {
-  createConcurrency,
   Concurrency,
   ConcurrencyConfig,
+  createConcurrency,
 } from "@jonloucks/concurrency-ts";
 import { CONTRACT, guard } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { AutoClose, Contracts, createContracts, isPresent, OptionalType } from "@jonloucks/contracts-ts";
 import { assertContract, assertGuard, mockDuck } from "./helper.test";
 
@@ -276,7 +277,7 @@ describe("Concurrency Suite", () => {
   beforeEach(() => {
     contracts = createContracts();
     closeContracts = contracts.open();
-    concurrency = createConcurrency({ contracts: contracts});
+    concurrency = createConcurrency({ contracts: contracts });
     closeConcurrency = concurrency.open();
   });
 
@@ -287,5 +288,6 @@ describe("Concurrency Suite", () => {
 });
 
 function assertNothing(_value: OptionalType<unknown>): void {
+  used(_value);
   ok(true, 'This function is only for compile-time type checking and should never be called at runtime');
 }

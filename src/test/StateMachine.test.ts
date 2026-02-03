@@ -1,13 +1,14 @@
 import { ok, strictEqual, throws } from "node:assert";
 
-import { isPresent, OptionalType } from "@jonloucks/contracts-ts/api/Types";
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config, guard, StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
+import { CONTRACT as STATE_MACHINE_FACTORY, StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { Consumer } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
-import { StateMachineFactory, CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
-import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { AutoClose, Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
+import { isPresent, OptionalType } from "@jonloucks/contracts-ts/api/Types";
 
 import { assertGuard, mockDuck } from "./helper.test";
 
@@ -248,12 +249,16 @@ describe('StateMachine Suite', () => {
 
       {
         using _notifyWhile = stateMachine.notifyWhile((val) => val.startsWith('STATE'), observer);
+        used(_notifyWhile);
 
         // Simulate value changes
         for (let i = 6; i <= 20; i += 3) {
           stateMachine.setState(`EVENT${i}`, `STATE${i}`);
         }
-        await new Promise((resolve, _) => setTimeout(resolve, 100));
+        await new Promise((resolve, _) => {
+          used(_);
+          setTimeout(resolve, 100);
+        });
       }
 
       ok(notifications.length > 0, 'Observer should have received notifications');
@@ -265,7 +270,10 @@ describe('StateMachine Suite', () => {
     const simpleConfig: Config<number> = {
       initialValue: 0,
       states: [0, 1, 2],
-      getStateRules: (_state: number) => []
+      getStateRules: (_state: number) => {
+        used(_state);
+        return [];
+      }
     };
     let simpleMachine: StateMachine<number> | null;
     let closeStateMachine: AutoClose;
@@ -366,7 +374,7 @@ describe('StateMachine Suite', () => {
     };
 
     let machine: StateMachine<string> | null;
-    let closeStateMachine : AutoClose;
+    let closeStateMachine: AutoClose;
 
     beforeAll(() => {
       machine = createStateMachine(config);
@@ -397,6 +405,7 @@ describe('StateMachine Suite', () => {
 
     it('should allow transition to C from A since no rule restricts it', () => {
       const _allowed = machine!.isTransitionAllowed('any_event', stateC);
+      used(_allowed);
       // Note: This might not work if we're in state B, so let's first go back to A
     });
   });

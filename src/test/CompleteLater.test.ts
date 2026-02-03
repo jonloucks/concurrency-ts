@@ -1,9 +1,10 @@
 import { ok, strictEqual, throws } from "node:assert";
 
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
-import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 
 describe('CompleteLater Tests', () => {
   let concurrency: Concurrency;
@@ -22,7 +23,8 @@ describe('CompleteLater Tests', () => {
     it('should delegate to consumer when delegate succeeds', () => {
       let receivedOnCompletion: OnCompletion<string> | null = null;
       const onCompletion: OnCompletion<string> = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           // Should not be called by completeLater
         }
       };
@@ -40,7 +42,8 @@ describe('CompleteLater Tests', () => {
     it('should work with Consumer object with consume method', () => {
       let receivedOnCompletion: OnCompletion<number> | null = null;
       const onCompletion: OnCompletion<number> = {
-        onCompletion: (_completion: Completion<number>): void => {
+        onCompletion: (completion: Completion<number>): void => {
+          used(completion);
           // Should not be called by completeLater
         }
       };
@@ -62,12 +65,14 @@ describe('CompleteLater Tests', () => {
       let completionCalled = false;
 
       const onCompletion: OnCompletion<string> = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           completionCalled = true;
         }
       };
 
-      const delegate = (_oc: OnCompletion<string>): void => {
+      const delegate = (oc: OnCompletion<string>): void => {
+        used(oc);
         delegateCalled = true;
         // Delegate receives ownership and should complete it later
       };
@@ -81,7 +86,8 @@ describe('CompleteLater Tests', () => {
     it('should work with different types', () => {
       let receivedOnCompletion: OnCompletion<boolean> | null = null;
       const onCompletion: OnCompletion<boolean> = {
-        onCompletion: (_completion: Completion<boolean>): void => {
+        onCompletion: (completion: Completion<boolean>): void => {
+          used(completion);
           // Should not be called
         }
       };
@@ -98,7 +104,8 @@ describe('CompleteLater Tests', () => {
       type TestType = { name: string; value: number };
       let receivedOnCompletion: OnCompletion<TestType> | null = null;
       const onCompletion: OnCompletion<TestType> = {
-        onCompletion: (_completion: Completion<TestType>): void => {
+        onCompletion: (completion: Completion<TestType>): void => {
+          used(completion);
           // Should not be called
         }
       };
@@ -122,7 +129,8 @@ describe('CompleteLater Tests', () => {
       };
 
       const testError = new Error('delegate error');
-      const delegate = (_oc: OnCompletion<string>): void => {
+      const delegate = (oc: OnCompletion<string>): void => {
+        used(oc);
         throw testError;
       };
 
@@ -145,7 +153,8 @@ describe('CompleteLater Tests', () => {
 
       const testError = new Error('consumer error');
       const consumer = {
-        consume: (_oc: OnCompletion<number>): void => {
+        consume: (oc: OnCompletion<string>): void => {
+          used(oc);
           throw testError;
         }
       };
@@ -168,7 +177,8 @@ describe('CompleteLater Tests', () => {
       };
 
       throws(() => {
-        concurrency.completeLater(onCompletion, (_oc) => {
+        concurrency.completeLater(onCompletion, (oc) => {
+          used(oc);
           throw 'string error';
         });
       });
@@ -189,7 +199,8 @@ describe('CompleteLater Tests', () => {
       const customError = { code: 404, message: 'not found' };
 
       throws(() => {
-        concurrency.completeLater(onCompletion, (_oc) => {
+        concurrency.completeLater(onCompletion, (oc) => {
+          used(oc);
           throw customError;
         });
       });
@@ -204,6 +215,7 @@ describe('CompleteLater Tests', () => {
     it('should validate onCompletion parameter', () => {
       throws(() => {
         concurrency.completeLater(null as unknown as OnCompletion<string>, (_oc) => {
+          used(_oc);
           // Should not reach here
         });
       }, 'Should throw when onCompletion is null');
@@ -248,13 +260,15 @@ describe('CompleteLater Tests', () => {
       const delegateError = new Error('delegate error');
 
       const onCompletion: OnCompletion<string> = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           throw callbackError;
         }
       };
 
       throws(() => {
-        concurrency.completeLater(onCompletion, (_oc) => {
+        concurrency.completeLater(onCompletion, (oc) => {
+          used(oc);
           throw delegateError;
         });
       }); // The callback error is thrown after delegate error
@@ -264,11 +278,13 @@ describe('CompleteLater Tests', () => {
       let completionCallCount = 0;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           completionCallCount++;
         }
       };
 
-      concurrency.completeLater(onCompletion, (_oc) => {
+      concurrency.completeLater(onCompletion, (oc) => {
+        used(oc);
         // Successful delegation
       });
 
@@ -279,6 +295,7 @@ describe('CompleteLater Tests', () => {
       let completionCallCount = 0;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           completionCallCount++;
         }
       };
@@ -303,6 +320,7 @@ describe('CompleteLater Tests', () => {
       let storedOnCompletion: OnCompletion<string> | null = null;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           // Will be called by delegate later
         }
       };
@@ -320,6 +338,7 @@ describe('CompleteLater Tests', () => {
       let completionReceived = false;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           completionReceived = true;
         }
       };
@@ -340,12 +359,14 @@ describe('CompleteLater Tests', () => {
       let callCount = 0;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           callCount++;
         }
       };
 
       throws(() => {
         concurrency.completeLater(onCompletion, (_oc) => {
+          used(_oc);
           throw new Error('test');
         });
       });
@@ -357,11 +378,13 @@ describe('CompleteLater Tests', () => {
       let callCount = 0;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           callCount++;
         }
       };
 
       concurrency.completeLater(onCompletion, (_oc) => {
+        used(_oc);
         // Success - no throw
       });
 

@@ -1,9 +1,10 @@
 import { ok } from "node:assert";
 
-import { Consumer, Type, guard, Method, fromType, check } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
+import { Consumer, Method, Type, check, fromType, guard } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 import { assertGuard, mockDuck } from "./helper.test";
 
-const FUNCTION_NAMES : (string|symbol)[] = [
+const FUNCTION_NAMES: (string | symbol)[] = [
   'consume'
 ];
 
@@ -16,7 +17,10 @@ describe('Consumer Tests', () => {
 
 describe('fromType Tests', () => {
   it('fromType should convert Method to Consumer', () => {
-    const method: Method<number> = (_: number) => { /* do nothing */ };
+    const method: Method<number> = (_: number) => {
+      used(_);
+      /* do nothing */
+    };
     const consumer: Consumer<number> = fromType<number>(method);
     ok(guard(consumer), 'fromType should return a valid Consumer');
   });
@@ -40,6 +44,7 @@ describe('check Tests', () => {
     try {
       check<string>(null as unknown as Type<string>);
     } catch (_) {
+      used(_);
       errorCaught = true;
     }
     ok(errorCaught, 'check should throw an error for null Consumer');

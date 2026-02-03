@@ -1,9 +1,10 @@
 import { ok, strictEqual, throws } from "node:assert";
 
+import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
-import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 
 describe('CompleteNow Tests', () => {
   let concurrency: Concurrency;
@@ -219,7 +220,8 @@ describe('CompleteNow Tests', () => {
     it('should complete even if onCompletion callback throws', () => {
       const testError = new Error('callback error');
       const onCompletion: OnCompletion<string> = {
-        onCompletion: (_completion: Completion<string>): void => {
+        onCompletion: (completion: Completion<string>): void => {
+          used(completion);
           throw testError;
         }
       };
@@ -300,6 +302,7 @@ describe('CompleteNow Tests', () => {
       let callCount = 0;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           callCount++;
         }
       };
@@ -313,6 +316,7 @@ describe('CompleteNow Tests', () => {
       let callCount = 0;
       const onCompletion: OnCompletion<string> = {
         onCompletion: (_completion: Completion<string>): void => {
+          used(_completion);
           callCount++;
         }
       };
