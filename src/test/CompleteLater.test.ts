@@ -153,7 +153,7 @@ describe('CompleteLater Tests', () => {
 
       const testError = new Error('consumer error');
       const consumer = {
-        consume: (oc: OnCompletion<string>): void => {
+        consume: (oc: OnCompletion<number>): void => {
           used(oc);
           throw testError;
         }
