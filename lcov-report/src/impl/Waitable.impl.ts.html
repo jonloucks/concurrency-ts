@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>105/105</span>
+                <span class='fraction'>106/106</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>105/105</span>
+                <span class='fraction'>106/106</span>
             </div>
         
             
@@ -541,7 +541,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">266x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">266x</span>
 <span class="cline-any cline-yes">266x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
 import { Duration, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
@@ -577,9 +577,9 @@ const CLOSED_EXCEPTION: ConcurrencyException = new ConcurrencyException("Waitabl
 class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
 &nbsp;
   open(): AutoClose {
-    if (this._isOpen.compareAndSet(false, true)) {
+    if (this.#isOpen.compareAndSet(false, true)) {
       return inlineAutoClose((): void =&gt; {
-        if (this._isOpen.compareAndSet(true, false)) {
+        if (this.#isOpen.compareAndSet(true, false)) {
           this.closeAllListeners();
         }
       });
@@ -590,7 +590,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
 &nbsp;
   // WaitableSupplier.supply implementations
   supply(): T {
-    const value = this._reference.get();
+    const value = this.#reference.get();
     // if (value === undefined || value === null) {
     //   throw new IllegalStateException("No value is currently available in Waitable.");
     // }
@@ -600,7 +600,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
   // WaitableSupplier.supplyIf implementation
   supplyIf(predicate: PredicateType&lt;T&gt;): OptionalType&lt;T&gt; {
     const validPredicate: Predicate&lt;OptionalType&lt;T&gt;&gt; = predicateFromType(predicate);
-    const currentValue: OptionalType&lt;T&gt; = this._reference.get();
+    const currentValue: OptionalType&lt;T&gt; = this.#reference.get();
     if (validPredicate.test(currentValue)) {
       return currentValue;
     } else {
@@ -618,7 +618,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise&lt;T&gt; = createExposedPromise();
     const removeListener = (v: ValueObserver&lt;T&gt;): void =&gt; {
-      this._valueObservers.delete(v);
+      this.#valueObservers.delete(v);
     };
 &nbsp;
     const valueObserver: ValueObserver&lt;T&gt; = {
@@ -641,7 +641,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
       timeout
     );
 &nbsp;
-    this._valueObservers.add(valueObserver);
+    this.#valueObservers.add(valueObserver);
     valueObserver.observeValue(this.supply());
     return returnPromise;
   }
@@ -655,7 +655,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
   consumeIf(predicate: RequiredType&lt;PredicateType&lt;T&gt;&gt;, value: SupplierType&lt;T&gt;): OptionalType&lt;T&gt; {
     const validPredicate: Predicate&lt;OptionalType&lt;T&gt;&gt; = predicateFromType(predicate);
     const validValueSupplier: Supplier&lt;T&gt; = supplierFromType(value);
-    const currentValue: OptionalType&lt;T&gt; = this._reference.get();
+    const currentValue: OptionalType&lt;T&gt; = this.#reference.get();
     if (validPredicate.test(currentValue)) {
       const newValue: T = validValueSupplier.supply();
       this.setValue(newValue);
@@ -676,7 +676,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
     const firstNotify: AtomicBoolean = createAtomicBoolean(true);
     const exposedPromise: ExposedPromise&lt;OptionalType&lt;T&gt;&gt; = createExposedPromise();
     const removeListener = (v: ValueObserver&lt;T&gt;): void =&gt; {
-      this._valueObservers.delete(v);
+      this.#valueObservers.delete(v);
     };
     const setTheValue: (T: OptionalType&lt;T&gt;) =&gt; void = (v: OptionalType&lt;T&gt;): void =&gt; {
       this.setValue(v);
@@ -702,7 +702,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
       timeout
     );
 &nbsp;
-    this._valueObservers.add(valueObserver);
+    this.#valueObservers.add(valueObserver);
     valueObserver.observeValue(this.supply());
 &nbsp;
     return returnPromise;
@@ -717,7 +717,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
     const firstClose: AtomicBoolean = createAtomicBoolean(true);
     const isLive: AtomicBoolean = createAtomicBoolean(true);
     const removeListener = (v: ValueObserver&lt;T&gt;): void =&gt; {
-      this._valueObservers.delete(v);
+      this.#valueObservers.delete(v);
     };
     const valueObserver: ValueObserver&lt;T&gt; = {
       observeValue: function (value: T): void {
@@ -734,7 +734,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
       }
     };
 &nbsp;
-    this._valueObservers.add(valueObserver);
+    this.#valueObservers.add(valueObserver);
     valueObserver.observeValue(this.supply());
     return inlineAutoClose((): void =&gt; {
       valueObserver.close();
@@ -748,41 +748,41 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
   private constructor(config?: Config&lt;T&gt;) {
     const actualConfig = config ? config : <span class="branch-1 cbranch-no" title="branch not covered" >{};</span>
 &nbsp;
-    this._reference = createAtomicReference&lt;OptionalType&lt;T&gt;&gt;(actualConfig.initialValue);
+    this.#reference = createAtomicReference&lt;OptionalType&lt;T&gt;&gt;(actualConfig.initialValue);
   }
 &nbsp;
   private isOpen(): boolean {
-    return this._isOpen.get();
+    return this.#isOpen.get();
   }
 &nbsp;
   private setValue(newValue: OptionalType&lt;T&gt;): void {
-    const oldValue: OptionalType&lt;T&gt; = this._reference.getAndSet(newValue);
+    const oldValue: OptionalType&lt;T&gt; = this.#reference.getAndSet(newValue);
     if (oldValue !== newValue) {
       this.notifyListeners(newValue);
     }
   }
 &nbsp;
   private notifyListeners(newValue: OptionalType&lt;T&gt;): void {
-    for (const valueObserver of this._valueObservers) {
+    for (const valueObserver of this.#valueObservers) {
       valueObserver.observeValue(newValue);
     }
   }
 &nbsp;
   private closeAllListeners(): void {
-    for (const valueObserver of this._valueObservers) {
+    for (const valueObserver of this.#valueObservers) {
       valueObserver.close();
     }
   }
 &nbsp;
   private assertOpen(): void {
-    if (!this._isOpen.get()) {
+    if (!this.#isOpen.get()) {
       throw new IllegalStateException("Waitable must be open.");
     }
   }
 &nbsp;
-  private readonly _isOpen: AtomicBoolean = createAtomicBoolean(false)
-  private readonly _reference: AtomicReference&lt;OptionalType&lt;T&gt;&gt;;
-  private readonly _valueObservers: Set&lt;ValueObserver&lt;unknown&gt;&gt; = new Set&lt;ValueObserver&lt;unknown&gt;&gt;();
+  readonly #isOpen: AtomicBoolean = createAtomicBoolean(false)
+  readonly #reference: AtomicReference&lt;OptionalType&lt;T&gt;&gt;;
+  readonly #valueObservers: Set&lt;ValueObserver&lt;unknown&gt;&gt; = new Set&lt;ValueObserver&lt;unknown&gt;&gt;();
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -790,7 +790,7 @@ class WaitableImpl&lt;T&gt; implements Waitable&lt;T&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-03T09:13:37.439Z
+                at 2026-02-03T10:42:01.209Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

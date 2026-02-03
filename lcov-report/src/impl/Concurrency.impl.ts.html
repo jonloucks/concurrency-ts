@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.1% </span>
+                <span class="strong">93.93% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/29</span>
+                <span class='fraction'>31/33</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.1% </span>
+                <span class="strong">93.93% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/29</span>
+                <span class='fraction'>31/33</span>
             </div>
         
             
@@ -261,10 +261,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">260x</span>
+<span class="cline-any cline-yes">260x</span>
+<span class="cline-any cline-yes">260x</span>
+<span class="cline-any cline-yes">260x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
   Completable,
   CompletableConfig,
@@ -307,19 +307,19 @@ export function create(config: ConcurrencyConfig): Concurrency {
 class ConcurrencyImpl implements Concurrency {
 &nbsp;
   open(): AutoClose {
-    return this._idempotent.open();
+    return this.#idempotent.open();
   }
 &nbsp;
   createWaitable&lt;T&gt;(config: WaitableConfig&lt;T&gt;): RequiredType&lt;Waitable&lt;T&gt;&gt; {
-    return this._contracts.enforce(WAITABLE_FACTORY).createWaitable&lt;T&gt;(config);
+    return this.#contracts.enforce(WAITABLE_FACTORY).createWaitable&lt;T&gt;(config);
   }
 &nbsp;
   createStateMachine&lt;T&gt;(config: StateMachineConfig&lt;T&gt;): RequiredType&lt;StateMachine&lt;T&gt;&gt; {
-    return this._contracts.enforce(STATE_MACHINE_FACTORY).createStateMachine&lt;T&gt;(config);
+    return this.#contracts.enforce(STATE_MACHINE_FACTORY).createStateMachine&lt;T&gt;(config);
   }
 &nbsp;
   createCompletable&lt;T&gt;(config: CompletableConfig&lt;T&gt;): RequiredType&lt;Completable&lt;T&gt;&gt; {
-    return this._contracts.enforce(COMPLETABLE_FACTORY).createCompletable&lt;T&gt;(config);
+    return this.#contracts.enforce(COMPLETABLE_FACTORY).createCompletable&lt;T&gt;(config);
   }
 &nbsp;
   completeLater&lt;T&gt;(onCompletion: RequiredType&lt;OnCompletion&lt;T&gt;&gt;, delegate: RequiredType&lt;ConsumerType&lt;OnCompletion&lt;T&gt;&gt;&gt;): void {
@@ -336,36 +336,36 @@ class ConcurrencyImpl implements Concurrency {
 &nbsp;
   private firstOpen(): AutoClose {
     // register shutdown events last to avoid potential for events firing before everything is ready
-    this._closeMany.add(this.registerEvents());
-    return this._closeMany;
+    this.#closeMany.add(this.registerEvents());
+    return this.#closeMany;
   }
 &nbsp;
   private <span class="fstat-no" title="function not covered" >firstClose(</span>): void {
-<span class="cstat-no" title="statement not covered" >    this._closeMany.close();</span>
+<span class="cstat-no" title="statement not covered" >    this.#closeMany.close();</span>
   }
 &nbsp;
   private registerEvents(): AutoClose {
     const events: Events = createEvents({
-      contracts: this._contracts,
-      names: this._config.shutdownEvents ?? [],
+      contracts: this.#contracts,
+      names: this.#config.shutdownEvents ?? [],
       callback: <span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >this.firstClose()</span>
     });
     return events.open();
   }
 &nbsp;
   private constructor(config: ConcurrencyConfig) {
-    this._contracts = Internal.resolveContracts(config);
-    this._config = { ...config, contracts: this._contracts };
-    this._closeMany = this._contracts.enforce(AUTO_CLOSE_FACTORY).createAutoCloseMany();
-    this._idempotent = this._contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
+    this.#contracts = Internal.resolveContracts(config);
+    this.#config = { ...config, contracts: this.#contracts };
+    this.#closeMany = this.#contracts.enforce(AUTO_CLOSE_FACTORY).createAutoCloseMany();
+    this.#idempotent = this.#contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
       open: () =&gt; this.firstOpen()
     });
   }
 &nbsp;
-  private readonly _contracts: Contracts;
-  private readonly _config: ConcurrencyConfig;
-  private readonly _closeMany: AutoCloseMany;
-  private readonly _idempotent: Idempotent;
+  readonly #contracts: Contracts;
+  readonly #config: ConcurrencyConfig;
+  readonly #closeMany: AutoCloseMany;
+  readonly #idempotent: Idempotent;
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -373,7 +373,7 @@ class ConcurrencyImpl implements Concurrency {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-03T09:13:37.439Z
+                at 2026-02-03T10:42:01.209Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
