@@ -10,9 +10,8 @@ import { completionCheck, onCompletionCheck } from "@jonloucks/concurrency-ts/au
 import { AUTO_CLOSE_FACTORY, AutoClose, AutoCloseFactory, Contracts, isPresent, OptionalType } from "@jonloucks/contracts-ts";
 import { AutoCloseMany, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
-import { AtomicBoolean, createAtomicBoolean } from "@jonloucks/contracts-ts/auxiliary/Convenience";
+import { AtomicBoolean, createAtomicBoolean, createIdempotent } from "@jonloucks/contracts-ts/auxiliary/Convenience";
 import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/IllegalStateException";
-import { createIdempotent } from "@jonloucks/contracts-ts/auxiliary/Convenience"
 
 import { create as createStateMachine } from "./StateMachine.impl";
 import { create as createWaitable } from "./Waitable.impl";
