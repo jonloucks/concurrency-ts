@@ -1,6 +1,6 @@
 import { Contract, createContract, createContracts, isString } from "@jonloucks/contracts-ts";
 import { validateContracts } from "@jonloucks/contracts-ts/auxiliary/Validate";
-import { assert } from "console";
+import assert from "node:assert";
 
 function smoke() : void {
   const contract: Contract<string> = createContract({
