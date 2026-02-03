@@ -1,11 +1,12 @@
+import { Idempotent } from "@jonloucks/contracts-ts/auxiliary/Idempotent";
+import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/contracts-ts/auxiliary/IdempotentFactory";
 import { AutoClose, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { RequiredType } from "@jonloucks/contracts-ts/api/Types";
-import { configCheck, presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
+import { configCheck, contractsCheck, presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 import { Config, Events } from "./Events";
-import { Idempotent } from "@jonloucks/concurrency-ts/api/Idempotent";
-import { create as createIdempotent } from "./Idempotent.impl";
+import { Contracts } from "@jonloucks/contracts-ts";
 
-export { Config, Events } from "./Events";
+export { Config, Events };
 
 /**
  *  Factory method to create Events instance.
@@ -22,7 +23,7 @@ export function create(config?: Config): RequiredType<Events> {
 /**
  * The Events implementation
  */
-class EventsImpl implements Events  {
+class EventsImpl implements Events {
 
   open(): AutoClose {
     return this.idempotent.open();
@@ -50,12 +51,12 @@ class EventsImpl implements Events  {
 
   private constructor(config?: Config) {
     const validConfig = configCheck(config);
+    this.callback = presentCheck(validConfig?.callback, "Callback must be present.");
     this.names = validConfig?.names ?? [];
-    this.idempotent = createIdempotent( {
-      contracts: validConfig.contracts!,
+    const contracts : Contracts = contractsCheck(validConfig.contracts);
+    this.idempotent = contracts.enforce(IDEMPOTENT_FACTORY).createIdempotent({
       open: () => this.firstOpen()
     });
-    this.callback = presentCheck(validConfig?.callback, "Callback must be present.")
   }
 
   private readonly names: string[];
