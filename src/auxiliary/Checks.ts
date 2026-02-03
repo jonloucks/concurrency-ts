@@ -150,7 +150,7 @@ export function initialValueCheck<T>(initialValue: OptionalType<T>): RequiredTyp
 }
 
 /**
- * explicity mark a value as used to avoid compiler warnings
+ * explicitly mark a value as used to avoid compiler warnings
  * useful for "using" variable which are used for disposal or other side-effects
  * but not directly referenced in code.
  * 
