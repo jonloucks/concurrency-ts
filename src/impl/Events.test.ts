@@ -1,8 +1,10 @@
 import { throws } from "node:assert";
 
 import { create as createEvents, Events, Config as EventsConfig } from "./Events.impl";
+import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 
 describe("Events", () => {
+  let contracts: Contracts = CONTRACTS;
 
   test("with null config should throw error", () => {
     throws(() => {
@@ -27,6 +29,7 @@ describe("Events", () => {
     const eventName = "test-event";
 
     const events: Events = createEvents({
+      contracts: contracts,
       names: [eventName],
       callback: () => {
         callbackInvoked = true;
@@ -55,6 +58,7 @@ describe("Events", () => {
     const eventName = "test-event-multiple";
 
     const events: Events = createEvents({
+      contracts: contracts,
       names: [eventName],
       callback: () => {
         callbackCount++;
@@ -80,6 +84,7 @@ describe("Events", () => {
 
   test("should handle close without open gracefully", () => {
     const events: Events = createEvents({
+      contracts: contracts,
       names: ["non-existent-event"],
       callback: () => { }
     });
@@ -100,6 +105,7 @@ describe("Events", () => {
     const eventName = 'test-callback-invocation';
 
     const events: Events = createEvents({
+      contracts: contracts,
       names: [eventName],
       callback: () => {
         invoked = true;
