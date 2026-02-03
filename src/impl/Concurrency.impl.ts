@@ -10,20 +10,20 @@ import {
   WaitableConfig
 } from "@jonloucks/concurrency-ts/api/Concurrency";
 
-import { createIdempotent, Idempotent } from "@jonloucks/contracts-ts/auxiliary/Convenience"
 import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/contracts-ts/auxiliary/IdempotentFactory";
 import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { ConsumerType, OptionalType, RequiredType, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
 import { CONTRACT as WAITABLE_FACTORY } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { Contracts } from "@jonloucks/contracts-ts";
 import { AutoClose, AutoCloseMany } from "@jonloucks/contracts-ts/api/AutoClose";
 import { CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
+import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/contracts-ts/auxiliary/IdempotentFactory";
 
 import { completeLater as completeLaterImpl } from "./CompleteLater.impl";
 import { completeNow as completeNowImpl } from "./CompleteNow.impl";
 import { create as createEvents, Events } from "./Events.impl";
 import { Internal } from "./Internal.impl";
+import { Idempotent } from "@jonloucks/contracts-ts/auxiliary/Idempotent";
 
 /** 
  * Create a new Concurrency

@@ -43,7 +43,7 @@ export function ruleCheck<T>(rule: T): T {
  * @return the rules if present
  * @throws IllegalArgumentException if the rules are not present
  */
-export function rulesCheck<T>(rules: T[]): T[] {
+export function rulesCheck<T>(rules: readonly T[]): readonly T[] {
   return presentCheck(rules, "Rules must be present.");
 } 
 

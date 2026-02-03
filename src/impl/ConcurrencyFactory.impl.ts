@@ -2,7 +2,6 @@ import { Concurrency, CONTRACT as CONCURRENCY_CONTRACT, Config as ConcurrencyCon
 import { ConcurrencyFactory } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
 
 import { CONTRACT as COMPLETABLE_FACTORY } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/concurrency-ts/api/IdempotentMachineFactory";
 import { CONTRACT as STATE_MACHINE_FACTORY } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { CONTRACT as WAITABLE_FACTORY } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 
@@ -16,7 +15,6 @@ import { CONTRACT as REPOSITORY_FACTORY_CONTRACT, RepositoryFactory } from "@jon
 import { create as createCompletableFactoryImpl } from "./CompletableFactory.impl";
 import { create as createConcurrencyImpl } from "./Concurrency.impl";
 import { wrap as wrapConcurrency } from "./ConcurrencyWrapper.impl";
-import { create as createIdempotentFactoryImpl } from "./IdempotentMachineFactory.impl";
 import { Internal } from "./Internal.impl";
 import { create as createStateMachineFactoryImpl } from "./StateMachineFactory.impl";
 import { create as createWaitableFactoryImpl } from "./WaitableFactory.impl";
@@ -75,7 +73,6 @@ class ConcurrencyFactoryImpl implements ConcurrencyFactory {
     repository.keep(WAITABLE_FACTORY, createWaitableFactoryImpl(config));
     repository.keep(STATE_MACHINE_FACTORY, createStateMachineFactoryImpl(config));
     repository.keep(COMPLETABLE_FACTORY, createCompletableFactoryImpl(config));
-    repository.keep(IDEMPOTENT_FACTORY, createIdempotentFactoryImpl(config));
   }
 
   private readonly _concurrencyConfig: ConcurrencyConfig;
