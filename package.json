@@ -44,12 +44,13 @@
     "after:publish": "npm run clean",
     "prepare": "npm run build",
     "docs": "typedoc --options typedoc.json",
-    "badges": "npx tsx ./src/never-publish/generate-badges.ts",
+    "badges": "npx badges-ts generate-badges",
+    "discover": "npx badges-ts discover",
     "smoke": "npx tsx ./src/never-publish/smoke-test.ts",
     "clean": "rm -rf dist",
     "compile": "tsc",
     "postversion": "npm run applyversion",
-    "applyversion": "npx tsx ./src/never-publish/apply-version.ts",
+    "applyversion": "npx badges-ts apply-version",
     "pack-package": "npm run before:publish && cd dist && npm pack && npm run after:publish"
   },
   "keywords": [
@@ -71,6 +72,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@jonloucks/badges-ts": "^0.1.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.2.2",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
