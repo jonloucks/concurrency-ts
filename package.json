@@ -72,7 +72,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@jonloucks/badges-ts": "^0.1.0",
+    "@jonloucks/badges-ts": "^0.1.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.2.3",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
