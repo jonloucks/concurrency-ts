@@ -7,14 +7,16 @@ import { StateMachine } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
 import { WaitableNotify } from "@jonloucks/concurrency-ts/api/WaitableNotify";
 import { completionCheck, onCompletionCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
-import { AUTO_CLOSE_FACTORY, AutoClose, AutoCloseFactory, Contracts, isPresent, OptionalType } from "@jonloucks/contracts-ts";
-import { AutoCloseMany, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { AutoClose, AutoCloseMany, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { contractsCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 import { AtomicBoolean, createAtomicBoolean, createIdempotent } from "@jonloucks/contracts-ts/auxiliary/Convenience";
 import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/IllegalStateException";
 
-import { create as createStateMachine } from "./StateMachine.impl";
-import { create as createWaitable } from "./Waitable.impl";
+import { create as createStateMachine } from "./StateMachine.impl.js";
+import { create as createWaitable } from "./Waitable.impl.js";
+import { isPresent, OptionalType } from "@jonloucks/contracts-ts/api/Types";
+import { Contracts } from "@jonloucks/contracts-ts/api/Contracts";
+import { AutoCloseFactory, CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
 
 /** 
  * Create a new Completable

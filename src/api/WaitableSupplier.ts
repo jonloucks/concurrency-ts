@@ -4,7 +4,7 @@ import { Duration, OptionalType, RequiredType, guardFunctions } from "@jonloucks
 import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
 import { Supplier } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
 
-export { RequiredType, OptionalType, Duration, PredicateType, Supplier }
+export { type RequiredType, type OptionalType, type Duration, type PredicateType, type Supplier }
 
 /**
  * Waitable supplier

@@ -2,7 +2,7 @@ import { ok } from "node:assert";
 import { describe, it } from "node:test";
 
 import { WaitableConsumer, guard } from "@jonloucks/concurrency-ts/api/WaitableConsumer";
-import { assertGuard, mockDuck } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test.js";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'consume',

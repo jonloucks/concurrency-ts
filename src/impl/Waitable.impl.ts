@@ -8,9 +8,9 @@ import { AtomicBoolean, AtomicReference, createAtomicBoolean, createAtomicRefere
 import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/IllegalStateException";
 import { AutoClose, AUTO_CLOSE_NONE, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
-import { ExposedPromise } from "./ExposedPromise";
-import { create as createExposedPromise } from "./ExposedPromise.impl";
-import { Internal } from "./Internal.impl";
+import { ExposedPromise } from "./ExposedPromise.js";
+import { create as createExposedPromise } from "./ExposedPromise.impl.js";
+import { Internal } from "./Internal.impl.js";
 
 /**
  * Create a new Waitable

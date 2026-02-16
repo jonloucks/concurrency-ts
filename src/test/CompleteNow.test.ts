@@ -5,7 +5,8 @@ import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
-import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
+import { CONTRACTS } from "@jonloucks/contracts-ts";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
 describe('CompleteNow Tests', () => {
   let concurrency: Concurrency;

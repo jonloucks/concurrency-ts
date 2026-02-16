@@ -3,24 +3,27 @@
   "version": "0.3.2",
   "description": "TypeScript asynchronous concurrency library with Waitables, Completables, and State Machines",
   "private": true,
+  "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "require": "./index.js",
       "import": "./index.js",
       "default": "./index.js"
     },
+    "./version": {
+      "types": "./version.d.ts",
+      "import": "./version.js",
+      "default": "./version.js"
+    },
     "./api/*": {
       "types": "./api/*.d.ts",
-      "require": "./api/*.js",
       "import": "./api/*.js",
       "default": "./api/*.js"
     },
     "./auxiliary/*": {
       "types": "./auxiliary/*.d.ts",
-      "require": "./auxiliary/*.js",
       "import": "./auxiliary/*.js",
       "default": "./auxiliary/*.js"
     }
@@ -35,7 +38,7 @@
     "build": "tsc",
     "test": "tsx --test $(find src -name '*.test.ts')",
     "test:watch": "tsx --test --watch $(find src -name '*.test.ts')",
-    "test:coverage": "npx c8 --check-coverage --lines 80 --functions 80 --branches 80 --statements 80--reporter=lcov npx tsx --test $(find src -name '*.test.ts')",
+    "test:coverage": "npx c8 --check-coverage --lines 95 --functions 95 --branches 95 --statements 95 --reporter=lcov npx tsx --test $(find src -name '*.test.ts')",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "prepublishOnly": "npm run build",
@@ -43,7 +46,7 @@
     "after:publish": "npm run clean",
     "prepare": "npm run build",
     "docs": "typedoc --options typedoc.json",
-    "badges": "npx badges-ts generate-badges",
+    "badges": "npx badges-ts generate",
     "discover": "npx badges-ts discover",
     "smoke": "npx tsx ./src/never-publish/smoke-test.ts",
     "clean": "rm -rf dist",
@@ -71,7 +74,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@jonloucks/badges-ts": "^0.1.0",
+    "@jonloucks/badges-ts": "^1.0.3",
     "@types/node": "^25.2.3",
     "@typescript-eslint/eslint-plugin": "^8.56.0",
     "@typescript-eslint/parser": "^8.54.0",
@@ -82,6 +85,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@jonloucks/contracts-ts": "^1.2.1"
+    "@jonloucks/contracts-ts": "^2.0.2"
   }
 }

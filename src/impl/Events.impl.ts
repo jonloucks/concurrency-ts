@@ -3,10 +3,10 @@ import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/contracts-ts/auxiliar
 import { AutoClose, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { RequiredType } from "@jonloucks/contracts-ts/api/Types";
 import { configCheck, contractsCheck, presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
-import { Config, Events } from "./Events";
+import { Config, Events } from "./Events.js";
 import { Contracts } from "@jonloucks/contracts-ts";
 
-export { Config, Events };
+export { type Config, type Events };
 
 /**
  *  Factory method to create Events instance.

@@ -2,7 +2,7 @@ import { Completable, Config } from "@jonloucks/concurrency-ts/api/Completable";
 import { Contract, createContract } from "@jonloucks/contracts-ts";
 import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
-export { Completable, Config } from "@jonloucks/concurrency-ts/api/Completable";
+export { type Completable, type Config } from "@jonloucks/concurrency-ts/api/Completable";
 
 /**
  * Responsibility: Creating a new Completable

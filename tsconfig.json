@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "node16",
     "lib": ["ES2020"],
     "declaration": true,
     "declarationMap": true,
@@ -13,17 +13,17 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
+    "isolatedModules": true,
     "resolveJsonModule": true,
     "baseUrl": "./src",
     "paths": {
-      "@jonloucks/concurrency-ts": ["index.ts"],
-      "@jonloucks/concurrency-ts/version": ["version.ts"],
-      "@jonloucks/concurrency-ts/auxiliary/*": ["auxiliary/*"],
-      "@jonloucks/concurrency-ts/api/*": ["api/*"],
-      "@jonloucks/concurrency-ts/test/*": ["test/*"]
+      "@jonloucks/concurrency-ts": ["index.js"],
+      "@jonloucks/concurrency-ts/version": ["version.js"],
+      "@jonloucks/concurrency-ts/auxiliary/*": ["auxiliary/*.js"],
+      "@jonloucks/concurrency-ts/api/*": ["api/*.js"]
     },
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "packs"]
 }

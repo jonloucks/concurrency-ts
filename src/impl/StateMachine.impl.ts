@@ -9,7 +9,7 @@ import { Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consum
 import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
 import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
-import { create as createWaitable } from "./Waitable.impl";
+import { create as createWaitable } from "./Waitable.impl.js";
 
 /** 
  * Create a new StateMachine

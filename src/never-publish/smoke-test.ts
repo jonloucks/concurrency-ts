@@ -1,4 +1,5 @@
-import { Contract, createContract, createContracts, isString } from "@jonloucks/contracts-ts";
+import { Contract, createContract, createContracts } from "@jonloucks/contracts-ts";
+import { isString } from "@jonloucks/contracts-ts/api/Types";
 import { validateContracts } from "@jonloucks/contracts-ts/auxiliary/Validate";
 import assert from "node:assert";
 

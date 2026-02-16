@@ -5,8 +5,10 @@ import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Completable, guard } from "@jonloucks/concurrency-ts/api/Completable";
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
-import { AutoClose, Contracts, createContracts, isPresent } from "@jonloucks/contracts-ts";
-import { assertGuard, mockDuck } from "./helper.test";
+import { Contracts, createContracts } from "@jonloucks/contracts-ts";
+import { assertGuard, mockDuck } from "./helper.test.js";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { isPresent } from "@jonloucks/contracts-ts/api/Types";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'open',

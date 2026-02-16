@@ -23,7 +23,7 @@ export interface Config<T> {
 /**
  * Export Waitable Config type
  */
-export { Config as WaitableConfig } ;
+export { type Config as WaitableConfig } ;
 
 /**
  * Provides mutable reference that allows other threads to wait until

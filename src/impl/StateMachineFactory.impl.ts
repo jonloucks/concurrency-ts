@@ -3,10 +3,10 @@ import { StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineF
 import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
 import { RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
+import { presentCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
-import { create as createStateMachineImpl } from "./StateMachine.impl";
-import { Internal } from "./Internal.impl";
-import { presentCheck } from "../auxiliary/Checks";
+import { create as createStateMachineImpl } from "./StateMachine.impl.js";
+import { Internal } from "./Internal.impl.js";
 
 /**
  * Create a new StateMachineFactory

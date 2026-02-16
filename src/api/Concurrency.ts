@@ -2,12 +2,12 @@ import { Completable, Config as CompletableConfig } from "@jonloucks/concurrency
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { StateMachine, Config as StateMachineConfig } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { Consumer, ConsumerType, guardFunctions, Supplier, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
+import { Consumer, ConsumerType, guardFunctions, OptionalType, RequiredType, Supplier, SupplierType } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
 import { Open } from "@jonloucks/contracts-ts/api/Open";
-import { Contract, Contracts, createContract, OptionalType, RequiredType } from "@jonloucks/contracts-ts";
+import { Contract, Contracts, createContract } from "@jonloucks/contracts-ts";
 
-export {
+export type {
   Completable, 
   CompletableConfig,
   Completion,
@@ -41,7 +41,7 @@ export interface Config {
   shutdownEvents?: string[];
 }
 
-export { Config as ConcurrencyConfig };
+export { type Config as ConcurrencyConfig };
 
 /**
  * The Concurrency API

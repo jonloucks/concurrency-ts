@@ -2,7 +2,7 @@ import { ok } from "node:assert";
 import { describe, it } from "node:test";
 
 import { Completion } from "@jonloucks/concurrency-ts/api/Completion";
-import { mockDuck } from "./helper.test";
+import { mockDuck } from "./helper.test.js";
 
 describe('Completion Exports', () => {
   it('should export Completion and Config', () => {

@@ -20,7 +20,6 @@ import {
  * These tests ensure that the index exports are correctly set up and accessible
  * Also tests the VERSION constant to ensure it matches the version in package.json
  * If this file fails to compile, it indicates a possible breaking for deployment consumers
- * @module @jonloucks/concurrency-ts/tests/concurrency-ts.test.ts
  */
 
 describe('VERSION constant', () => {

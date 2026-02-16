@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { Consumer, Method, Type, check, fromType, guard } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
-import { assertGuard, mockDuck } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test.js";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'consume'

@@ -6,8 +6,7 @@
  */
 
 import { guardFunctions, OptionalType, RequiredType } from "@jonloucks/contracts-ts/api/Types";
-import { presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
-import { used } from "./Checks";
+import { presentCheck, used } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 /** 
  * A method that tests a value of type T and returns a boolean

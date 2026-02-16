@@ -1,6 +1,6 @@
 import { messageCheck } from "@jonloucks/contracts-ts/auxiliary/Checks"
 import { isNotPresent } from "@jonloucks/contracts-ts/api/Types";
-import { used } from "../auxiliary/Checks";
+import { used } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 /**
  * Runtime exception thrown for Concurrency related problems.

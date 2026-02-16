@@ -2,9 +2,11 @@ import { ok, strictEqual } from "node:assert";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { Completable, CompletableFactory, Config, CONTRACT, guard } from "@jonloucks/concurrency-ts/api/CompletableFactory";
-import { AutoClose, CONTRACTS, isPresent } from "@jonloucks/contracts-ts";
+import { CONTRACTS } from "@jonloucks/contracts-ts";
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
-import { assertContract, assertGuard, mockDuck } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test.js";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { isPresent } from "@jonloucks/contracts-ts/api/Types";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'createCompletable'

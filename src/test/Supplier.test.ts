@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { Method, Supplier, Type, check, fromType, guard, toValue } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
-import { assertGuard, mockDuck } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test.js";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'supply'

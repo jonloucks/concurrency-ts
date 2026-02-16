@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
 import { TimeoutException } from "@jonloucks/concurrency-ts/api/TimeoutException";
 import { CONTRACTS } from "@jonloucks/contracts-ts";
-import { Internal } from "./Internal.impl";
+import { Internal } from "./Internal.impl.js";
 
 describe("Internal resolveContracts", () => {
 

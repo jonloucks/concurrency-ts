@@ -24,7 +24,7 @@ export interface Config<T> {
   initialValue?: OptionalType<T>;
 }
 
-export { Config as CompletableConfig };
+export { type Config as CompletableConfig };
 
 /**
  * Responsibility: Observe a single activity from start to finish

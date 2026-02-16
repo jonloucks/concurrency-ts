@@ -3,8 +3,8 @@ import { Config as WaitableConfig, Waitable } from "@jonloucks/concurrency-ts/ap
 import { WaitableFactory } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { Config as ConcurrencyConfig, Contracts } from "@jonloucks/concurrency-ts/api/Concurrency";
 
-import { create as createWaitableImpl } from "./Waitable.impl";
-import { Internal } from "./Internal.impl";
+import { create as createWaitableImpl } from "./Waitable.impl.js";
+import { Internal } from "./Internal.impl.js";
 
 /**
  * Create a new WaitableFactory
