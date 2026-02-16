@@ -1,4 +1,5 @@
 import { deepStrictEqual, fail, ok, strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 
 import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
 import { TimeoutException } from "@jonloucks/concurrency-ts/api/TimeoutException";

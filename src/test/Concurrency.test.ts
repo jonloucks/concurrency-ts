@@ -1,4 +1,5 @@
 import { ok, strictEqual } from "node:assert";
+import { before, after, describe, it } from "node:test";
 
 import {
   Concurrency,
@@ -24,6 +25,22 @@ assertGuard(guard, ...FUNCTION_NAMES);
 assertContract(CONTRACT, 'Concurrency');
 
 describe("Concurrency Suite", () => {
+  let contracts: Contracts;
+  let closeContracts: AutoClose;
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
+
+  before(() => {
+    contracts = createContracts();
+    closeContracts = contracts.open();
+    concurrency = createConcurrency({ contracts: contracts });
+    closeConcurrency = concurrency.open();
+  });
+
+  after(() => {
+    closeConcurrency?.close();
+    closeContracts?.close();
+  });
 
   describe("Concurrency exports", () => {
     it("isConcurrency() should identify Concurrency instances", () => {
@@ -267,23 +284,6 @@ describe("Concurrency Suite", () => {
       });
       ok(isPresent(stateMachine), 'State machine should be created');
     });
-  });
-
-  let contracts: Contracts;
-  let closeContracts: AutoClose;
-  let concurrency: Concurrency;
-  let closeConcurrency: AutoClose;
-
-  beforeEach(() => {
-    contracts = createContracts();
-    closeContracts = contracts.open();
-    concurrency = createConcurrency({ contracts: contracts });
-    closeConcurrency = concurrency.open();
-  });
-
-  afterEach(() => {
-    closeConcurrency?.close();
-    closeContracts?.close();
   });
 });
 

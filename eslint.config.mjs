@@ -13,7 +13,14 @@ export default [
       },
       globals: {
         console: 'readonly',
-        process: 'readonly'
+        process: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly'
       }
     },
     plugins: {

@@ -1,4 +1,5 @@
 import { ok } from "node:assert";
+import { describe, it } from "node:test";
 
 import { IsCompleted, guard } from "@jonloucks/concurrency-ts/api/IsCompleted";
 import { assertGuard, mockDuck } from "./helper.test";
