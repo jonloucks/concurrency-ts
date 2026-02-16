@@ -1,4 +1,5 @@
 import { ok, strictEqual, throws } from "node:assert";
+import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Completable, guard } from "@jonloucks/concurrency-ts/api/Completable";
@@ -20,6 +21,23 @@ const FUNCTION_NAMES: (string | symbol)[] = [
 assertGuard(guard, ...FUNCTION_NAMES);
 
 describe('Completable Suite', () => {
+
+  let contracts: Contracts;
+  let closeContracts: AutoClose;
+  let concurrency: Concurrency;
+  let closeConcurrency: AutoClose;
+
+  beforeEach(() => {
+    contracts = createContracts();
+    closeContracts = contracts.open();
+    concurrency = createConcurrency({ contracts: contracts });
+    closeConcurrency = concurrency.open();
+  });
+
+  afterEach(() => {
+    closeConcurrency?.close();
+    closeContracts?.close();
+  });
 
   describe('Completable Tests', () => {
     it('isCompletable should return true for Completable', () => {
@@ -960,20 +978,4 @@ describe('Completable Suite', () => {
     });
   });
 
-  let contracts: Contracts;
-  let closeContracts: AutoClose;
-  let concurrency: Concurrency;
-  let closeConcurrency: AutoClose;
-
-  beforeEach(() => {
-    contracts = createContracts();
-    closeContracts = contracts.open();
-    concurrency = createConcurrency({ contracts: contracts });
-    closeConcurrency = concurrency.open();
-  });
-
-  afterEach(() => {
-    closeConcurrency?.close();
-    closeContracts?.close();
-  });
 });

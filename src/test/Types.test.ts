@@ -1,4 +1,5 @@
 import { ok, strictEqual } from "node:assert";
+import { describe, it } from "node:test";
 
 import { presentCheck, used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
@@ -34,13 +35,13 @@ import { Method } from "../auxiliary/Consumer";
 describe("Types", () => {
   describe("isThrowable", () => {
     it("should return true for all values", () => {
-      expect(isThrowable(null)).toBe(true);
-      expect(isThrowable(undefined)).toBe(true);
-      expect(isThrowable(new Error("error"))).toBe(true);
-      expect(isThrowable("string")).toBe(true);
-      expect(isThrowable(42)).toBe(true);
-      expect(isThrowable({})).toBe(true);
-      expect(isThrowable([])).toBe(true);
+      strictEqual(isThrowable(null), true);
+      strictEqual(isThrowable(undefined), true);
+      strictEqual(isThrowable(new Error("error")), true);
+      strictEqual(isThrowable("string"), true);
+      strictEqual(isThrowable(42), true);
+      strictEqual(isThrowable({}), true);
+      strictEqual(isThrowable([]), true);
     });
   });
 });

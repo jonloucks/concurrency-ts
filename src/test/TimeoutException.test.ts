@@ -1,4 +1,5 @@
 import { ok, throws } from "node:assert";
+import { describe, it } from "node:test";
 
 import { TimeoutException, guard } from "@jonloucks/concurrency-ts/api/TimeoutException";
 import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";

@@ -1,4 +1,5 @@
 import { ok, strictEqual, throws } from "node:assert";
+import { after, afterEach, before, beforeEach, describe, it } from "node:test";
 
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
@@ -34,13 +35,13 @@ describe('StateMachine Suite', () => {
   let closeConcurrency: AutoClose;
   let stateMachineFactory: StateMachineFactory;
 
-  beforeAll(() => {
+  before(() => {
     concurrency = createConcurrency({ contracts: contracts });
     closeConcurrency = concurrency.open();
     stateMachineFactory = contracts.enforce(STATE_MACHINE_FACTORY);
   });
 
-  afterAll(() => {
+  after(() => {
     closeConcurrency.close();
   });
 
@@ -278,12 +279,12 @@ describe('StateMachine Suite', () => {
     let simpleMachine: StateMachine<number> | null;
     let closeStateMachine: AutoClose;
 
-    beforeAll(() => {
+    before(() => {
       simpleMachine = createStateMachine(simpleConfig);
       closeStateMachine = simpleMachine.open();
     });
 
-    afterAll(() => {
+    after(() => {
       closeStateMachine?.close();
     });
 
@@ -376,12 +377,12 @@ describe('StateMachine Suite', () => {
     let machine: StateMachine<string> | null;
     let closeStateMachine: AutoClose;
 
-    beforeAll(() => {
+    before(() => {
       machine = createStateMachine(config);
       closeStateMachine = machine.open();
     });
 
-    afterAll(() => {
+    after(() => {
       closeStateMachine?.close();
     });
 

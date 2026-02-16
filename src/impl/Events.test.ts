@@ -1,4 +1,5 @@
-import { throws } from "node:assert";
+import { strictEqual, throws } from "node:assert";
+import { describe, it, test } from "node:test";
 
 import { create as createEvents, Events, Config as EventsConfig } from "./Events.impl";
 import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
@@ -36,21 +37,21 @@ describe("Events", () => {
       }
     });
 
-    expect(events.isOpen()).toBe(false);
+    strictEqual(events.isOpen(), false);
 
     const autoClose = events.open();
-    expect(events.isOpen()).toBe(true);
+    strictEqual(events.isOpen(), true);
 
     process.emit(eventName);
-    expect(callbackInvoked).toBe(true);
+    strictEqual(callbackInvoked, true);
 
     callbackInvoked = false; // reset for next test
 
     autoClose.close();
-    expect(events.isOpen()).toBe(false);
+    strictEqual(events.isOpen(), false);
 
     process.emit(eventName);
-    expect(callbackInvoked).toBe(false); // should not be invoked after close
+    strictEqual(callbackInvoked, false); // should not be invoked after close
   });
 
   test("should handle multiple open calls safely", () => {
@@ -68,16 +69,16 @@ describe("Events", () => {
     const autoClose1 = events.open();
     const autoClose2 = events.open(); // should be no-op
 
-    expect(events.isOpen()).toBe(true);
+    strictEqual(events.isOpen(), true);
 
     process.emit(eventName);
-    expect(callbackCount).toBe(1);
+    strictEqual(callbackCount, 1);
 
     autoClose1.close();
-    expect(events.isOpen()).toBe(false);
+    strictEqual(events.isOpen(), false);
 
     process.emit(eventName);
-    expect(callbackCount).toBe(1); // should not increment after close
+    strictEqual(callbackCount, 1); // should not increment after close
 
     autoClose2.close(); // should be no-op
   });
@@ -89,14 +90,14 @@ describe("Events", () => {
       callback: () => { }
     });
 
-    expect(events.isOpen()).toBe(false);
+    strictEqual(events.isOpen(), false);
 
     // Closing without opening should be a no-op
     const autoClose = events.open();
     autoClose.close();
     autoClose.close(); // second close should be no-op
 
-    expect(events.isOpen()).toBe(false);
+    strictEqual(events.isOpen(), false);
   });
 
 
@@ -114,10 +115,10 @@ describe("Events", () => {
 
     const autoClose = events.open();
     process.emit(eventName);
-    expect(invoked).toBe(true);
-    expect(events.isOpen()).toBe(true);
+    strictEqual(invoked, true);
+    strictEqual(events.isOpen(), true);
 
     autoClose.close();
-    expect(events.isOpen()).toBe(false);
+    strictEqual(events.isOpen(), false);
   });
 });
