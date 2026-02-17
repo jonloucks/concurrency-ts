@@ -1,9 +1,9 @@
 import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
 import { Duration, OptionalType, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Config, Waitable } from "@jonloucks/concurrency-ts/api/Waitable";
-import { Consumer, fromType as consumerFromType, Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
-import { Predicate, fromType as predicateFromType, Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
-import { Supplier, fromType as supplierFromType, Type as SupplierType } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
+import { Consumer, fromType as consumerFromType, Type as ConsumerType } from "@jonloucks/contracts-ts/auxiliary/Consumer";
+import { Predicate, fromType as predicateFromType, Type as PredicateType } from "@jonloucks/contracts-ts/auxiliary/Predicate";
+import { Supplier, fromType as supplierFromType, Type as SupplierType } from "@jonloucks/contracts-ts/auxiliary/Supplier";
 import { AtomicBoolean, AtomicReference, createAtomicBoolean, createAtomicReference } from "@jonloucks/contracts-ts/auxiliary/Convenience";
 import { IllegalStateException } from "@jonloucks/contracts-ts/auxiliary/IllegalStateException";
 import { AutoClose, AUTO_CLOSE_NONE, Close, inlineAutoClose } from "@jonloucks/contracts-ts/api/AutoClose";

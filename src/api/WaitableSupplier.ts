@@ -1,8 +1,8 @@
 
 import { Duration, OptionalType, RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
 
-import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
-import { Supplier } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
+import { Type as PredicateType } from "@jonloucks/contracts-ts/auxiliary/Predicate";
+import { Supplier } from "@jonloucks/contracts-ts/auxiliary/Supplier";
 
 export { type RequiredType, type OptionalType, type Duration, type PredicateType, type Supplier }
 

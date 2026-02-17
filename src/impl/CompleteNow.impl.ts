@@ -1,4 +1,4 @@
-import { Supplier, Type as SupplierType, fromType as fromTypeToSupplier } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
+import { Supplier, Type as SupplierType, fromType as fromTypeToSupplier } from "@jonloucks/contracts-ts/auxiliary/Supplier";
 import { RequiredType, OptionalType, Throwable } from "@jonloucks/concurrency-ts/api/Types";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { onCompletionCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";

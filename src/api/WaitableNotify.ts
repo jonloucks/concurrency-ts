@@ -1,6 +1,6 @@
 import { guardFunctions, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
-import { Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
-import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
+import { Type as ConsumerType } from "@jonloucks/contracts-ts/auxiliary/Consumer";
+import { Type as PredicateType } from "@jonloucks/contracts-ts/auxiliary/Predicate";
 import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
 export { type AutoClose, type ConsumerType, type PredicateType, type RequiredType };
