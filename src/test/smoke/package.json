@@ -23,6 +23,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@jonloucks/concurrency-ts": "^0.5.0",
     "@jonloucks/contracts-ts": "^2.0.2"
   }
 }

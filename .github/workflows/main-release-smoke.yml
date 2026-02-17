@@ -85,7 +85,7 @@ jobs:
       - name: Install package from artifact
         run: |
           cd smoke-test
-          npm install ../packs/*.tgz
+          npm ci ../packs/*.tgz
 
       - name: Run smoke tests
         run: |
