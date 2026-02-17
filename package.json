@@ -48,12 +48,11 @@
     "docs": "typedoc --options typedoc.json",
     "badges": "npx badges-ts generate",
     "discover": "npx badges-ts discover",
-    "smoke": "npx tsx ./src/never-publish/smoke-test.ts",
     "clean": "rm -rf dist",
     "compile": "tsc",
     "postversion": "npm run applyversion",
     "applyversion": "npx badges-ts apply-version",
-    "pack-package": "npm run before:publish && cd dist && npm pack && npm run after:publish"
+    "pack-package": "npm run before:publish && mkdir -p packs && cd dist && npm pack && mv *.tgz ../packs/ && npm run after:publish"
   },
   "keywords": [
     "typescript",
