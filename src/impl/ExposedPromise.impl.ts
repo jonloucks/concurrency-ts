@@ -1,4 +1,4 @@
-import { ExposedPromise } from "./ExposedPromise";
+import { ExposedPromise } from "./ExposedPromise.js";
 
 /** 
  * Create a new ExposedPromise

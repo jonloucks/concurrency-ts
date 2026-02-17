@@ -1,7 +1,7 @@
 import { OptionalType, RequiredType, Throwable } from "@jonloucks/concurrency-ts/api/Types";
 import { CompletionState } from "@jonloucks/concurrency-ts/api/CompletionState";
 
-export { CompletionState };
+export { type CompletionState };
 
 /** Completion
  *

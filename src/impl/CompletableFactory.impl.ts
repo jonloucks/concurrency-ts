@@ -2,8 +2,8 @@ import { CompletableFactory } from "@jonloucks/concurrency-ts/api/CompletableFac
 import { Completable, Config as CompletableConfig} from "@jonloucks/concurrency-ts/api/Completable";
 import { Config as ConcurrencyConfig, Contracts } from "@jonloucks/concurrency-ts/api/Concurrency";
 
-import { create as createCompletableImpl } from "./Completable.impl";
-import { Internal } from "./Internal.impl";
+import { create as createCompletableImpl } from "./Completable.impl.js";
+import { Internal } from "./Internal.impl.js";
 
 /** 
  * Create a new CompletableFactory

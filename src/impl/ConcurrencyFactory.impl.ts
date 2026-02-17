@@ -12,12 +12,12 @@ import { presentCheck } from "@jonloucks/contracts-ts/auxiliary/Checks";
 
 import { CONTRACT as PROMISOR_FACTORY_CONTRACT, PromisorFactory } from "@jonloucks/contracts-ts/api/PromisorFactory";
 import { CONTRACT as REPOSITORY_FACTORY_CONTRACT, RepositoryFactory } from "@jonloucks/contracts-ts/api/RepositoryFactory";
-import { create as createCompletableFactoryImpl } from "./CompletableFactory.impl";
-import { create as createConcurrencyImpl } from "./Concurrency.impl";
-import { wrap as wrapConcurrency } from "./ConcurrencyWrapper.impl";
-import { Internal } from "./Internal.impl";
-import { create as createStateMachineFactoryImpl } from "./StateMachineFactory.impl";
-import { create as createWaitableFactoryImpl } from "./WaitableFactory.impl";
+import { create as createCompletableFactoryImpl } from "./CompletableFactory.impl.js";
+import { create as createConcurrencyImpl } from "./Concurrency.impl.js";
+import { wrap as wrapConcurrency } from "./ConcurrencyWrapper.impl.js";
+import { Internal } from "./Internal.impl.js";
+import { create as createStateMachineFactoryImpl } from "./StateMachineFactory.impl.js";
+import { create as createWaitableFactoryImpl } from "./WaitableFactory.impl.js";
 /** 
  * Create a new ConcurrencyFactory
  * @param config the Concurrency Config

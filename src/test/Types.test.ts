@@ -30,7 +30,7 @@ import {
   SupplierType,
   Throwable
 } from "@jonloucks/concurrency-ts/api/Types";
-import { Method } from "../auxiliary/Consumer";
+import { Method } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 
 describe("Types", () => {
   describe("isThrowable", () => {

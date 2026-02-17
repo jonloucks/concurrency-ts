@@ -8,8 +8,10 @@ import {
 } from "@jonloucks/concurrency-ts";
 import { CONTRACT, guard } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
-import { AutoClose, Contracts, createContracts, isPresent, OptionalType } from "@jonloucks/contracts-ts";
-import { assertContract, assertGuard, mockDuck } from "./helper.test";
+import { Contracts, createContracts } from "@jonloucks/contracts-ts";
+import { assertContract, assertGuard, mockDuck } from "./helper.test.js";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
+import { isPresent, OptionalType } from "@jonloucks/contracts-ts/api/Types";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'createWaitable',

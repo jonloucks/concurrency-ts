@@ -1,6 +1,6 @@
 import { Rule } from "@jonloucks/concurrency-ts/api/Rule";
 import { Config } from "@jonloucks/concurrency-ts/api/StateMachine";
-import { used } from "../auxiliary/Checks";
+import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 
 /**
  * The possible states of a Completion
@@ -13,7 +13,7 @@ export const STATES: string[] = ['PENDING', 'FAILED', 'CANCELLED', 'SUCCEEDED'] 
 export type State = typeof STATES[number];
 
 /** The CompletionState type */
-export { State as CompletionState };
+export { type State as CompletionState };
 
 /** The starting state for a Completion */
 export const START_STATE: State = 'PENDING';

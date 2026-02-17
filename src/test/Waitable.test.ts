@@ -5,8 +5,9 @@ import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { Consumer } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { guard, Waitable, Config as WaitableConfig } from "@jonloucks/concurrency-ts/api/Waitable";
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
-import { AutoClose, CONTRACTS } from "@jonloucks/contracts-ts";
-import { assertGuard, mockDuck } from "./helper.test";
+import { CONTRACTS } from "@jonloucks/contracts-ts";
+import { assertGuard, mockDuck } from "./helper.test.js";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'open',

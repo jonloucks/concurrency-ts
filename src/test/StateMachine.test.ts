@@ -8,10 +8,11 @@ import { CONTRACT as STATE_MACHINE_FACTORY, StateMachineFactory } from "@jonlouc
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
 import { Consumer } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
-import { AutoClose, Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
+import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 import { isPresent, OptionalType } from "@jonloucks/contracts-ts/api/Types";
 
-import { assertGuard, mockDuck } from "./helper.test";
+import { assertGuard, mockDuck } from "./helper.test.js";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'isTransitionAllowed',

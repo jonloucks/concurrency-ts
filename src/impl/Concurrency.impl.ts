@@ -19,10 +19,10 @@ import { AutoClose, AutoCloseMany } from "@jonloucks/contracts-ts/api/AutoClose"
 import { CONTRACT as AUTO_CLOSE_FACTORY } from "@jonloucks/contracts-ts/api/AutoCloseFactory";
 import { CONTRACT as IDEMPOTENT_FACTORY } from "@jonloucks/contracts-ts/auxiliary/IdempotentFactory";
 
-import { completeLater as completeLaterImpl } from "./CompleteLater.impl";
-import { completeNow as completeNowImpl } from "./CompleteNow.impl";
-import { create as createEvents, Events } from "./Events.impl";
-import { Internal } from "./Internal.impl";
+import { completeLater as completeLaterImpl } from "./CompleteLater.impl.js";
+import { completeNow as completeNowImpl } from "./CompleteNow.impl.js";
+import { create as createEvents, Events } from "./Events.impl.js";
+import { Internal } from "./Internal.impl.js";
 import { Idempotent } from "@jonloucks/contracts-ts/auxiliary/Idempotent";
 
 /** 

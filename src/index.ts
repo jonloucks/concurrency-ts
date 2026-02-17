@@ -1,6 +1,6 @@
 import { ConcurrencyException } from "@jonloucks/concurrency-ts/api/ConcurrencyException";
-import { create as createConcurrencyFactory } from "./impl/ConcurrencyFactory.impl";
-import { VERSION } from "./version";
+import { create as createConcurrencyFactory } from "./impl/ConcurrencyFactory.impl.js";
+import { VERSION } from "./version.js";
 import { Concurrency, ConcurrencyConfig, CONTRACT as CONCURRENCY_CONTRACT } from "@jonloucks/concurrency-ts/api/Concurrency";
 import { ConcurrencyFactory } from "@jonloucks/concurrency-ts/api/ConcurrencyFactory";
 
@@ -36,9 +36,9 @@ const CONCURRENCY : Concurrency = (() : Concurrency => {
  */
 export {
   VERSION,
-  Concurrency,
-  ConcurrencyConfig,
-  ConcurrencyFactory,
+  type Concurrency,
+  type ConcurrencyConfig,
+  type ConcurrencyFactory,
   ConcurrencyException,
   createConcurrencyFactory,
   createConcurrency,

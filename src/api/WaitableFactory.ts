@@ -1,5 +1,5 @@
-import { Contract, createContract,RequiredType } from "@jonloucks/contracts-ts";
-import { guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { Contract, createContract } from "@jonloucks/contracts-ts";
+import { guardFunctions, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Waitable, Config } from "@jonloucks/concurrency-ts/api/Waitable";
 
 /**

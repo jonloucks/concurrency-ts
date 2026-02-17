@@ -1,9 +1,9 @@
-import { AutoClose, RequiredType } from "@jonloucks/contracts-ts";
-import { guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { guardFunctions, RequiredType } from "@jonloucks/concurrency-ts/api/Types";
 import { Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
 import { Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
-export { AutoClose, ConsumerType, PredicateType, RequiredType };
+export { type AutoClose, type ConsumerType, type PredicateType, type RequiredType };
 
 /**
  * Notify lister when condition is satisfied

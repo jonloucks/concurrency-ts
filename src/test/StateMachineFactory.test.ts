@@ -4,9 +4,10 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
 import { CONTRACT, guard, StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
-import { AutoClose, Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
+import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 
-import { assertContract, assertGuard } from "./helper.test";
+import { assertContract, assertGuard } from "./helper.test.js";
+import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 
 const FUNCTION_NAMES: (string | symbol)[] = [
   'createStateMachine'

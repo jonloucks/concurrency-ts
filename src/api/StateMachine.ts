@@ -96,7 +96,7 @@ export interface Config<T> {
   getStateRules?(state: T): ReadonlyArray<Rule<T>>;
 }
 
-export { Config as StateMachineConfig } ;
+export { type Config as StateMachineConfig } ;
 
 /**
  * Determine if the given instance is a StateMachine

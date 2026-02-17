@@ -1,7 +1,7 @@
 import { strictEqual, throws } from "node:assert";
 import { describe, it, test } from "node:test";
 
-import { create as createEvents, Events, Config as EventsConfig } from "./Events.impl";
+import { create as createEvents, Events, Config as EventsConfig } from "./Events.impl.js";
 import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 
 describe("Events", () => {

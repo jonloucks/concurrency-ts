@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 import { CONTRACT, WaitableFactory, guard } from "@jonloucks/concurrency-ts/api/WaitableFactory";
 import { AutoClose } from "@jonloucks/contracts-ts/api/AutoClose";
 import { Concurrency, createConcurrency } from "@jonloucks/concurrency-ts";
-import { assertContract, assertGuard, mockDuck } from "./helper.test";
+import { assertContract, assertGuard, mockDuck } from "./helper.test.js";
 
 import { isPresent } from "@jonloucks/concurrency-ts/api/Types";
 import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";

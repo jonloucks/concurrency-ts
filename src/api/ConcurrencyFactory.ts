@@ -1,6 +1,7 @@
 import { Concurrency, Config as ConcurrencyConfig } from "@jonloucks/concurrency-ts/api/Concurrency";
-import { Contract, createContract, Repository } from "@jonloucks/contracts-ts";
+import { Contract, createContract } from "@jonloucks/contracts-ts";
 import { RequiredType, guardFunctions } from "@jonloucks/concurrency-ts/api/Types";
+import { Repository } from "@jonloucks/contracts-ts/api/Repository";
 
 /**
  * Responsible for creating new instances of Concurrency
