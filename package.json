@@ -1,6 +1,6 @@
 {
   "name": "@jonloucks/concurrency-ts",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "TypeScript asynchronous concurrency library with Waitables, Completables, and State Machines",
   "private": true,
   "type": "module",
