@@ -1,6 +1,6 @@
-export { type Consumer, type Method as ConsumerFunction, guard as consumerGuard, type Type as ConsumerType } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
-export { type Predicate, type Method as PredicateFunction, guard as predicateGuard, type Type as PredicateType } from "@jonloucks/concurrency-ts/auxiliary/Predicate";
-export { type Supplier, type Method as SupplierFunction, guard as supplierGuard, type Type as SupplierType, toValue as supplierToValue } from "@jonloucks/concurrency-ts/auxiliary/Supplier";
+export { type Consumer, type Method as ConsumerFunction, guard as consumerGuard, type Type as ConsumerType } from "@jonloucks/contracts-ts/auxiliary/Consumer";
+export { type Predicate, type Method as PredicateFunction, guard as predicateGuard, type Type as PredicateType } from "@jonloucks/contracts-ts/auxiliary/Predicate";
+export { type Supplier, type Method as SupplierFunction, guard as supplierGuard, type Type as SupplierType, toValue as supplierToValue } from "@jonloucks/contracts-ts/auxiliary/Supplier";
 export { guardFunctions, isNotPresent, isNumber, isPresent, isString, type OptionalType, type RequiredType } from "@jonloucks/contracts-ts/api/Types";
 
 // candidate for inclusion in api-ts

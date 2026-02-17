@@ -1,4 +1,4 @@
-import { Consumer, Type as ConsumerType, fromType as fromTypeToConsumer } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
+import { Consumer, Type as ConsumerType, fromType as fromTypeToConsumer } from "@jonloucks/contracts-ts/auxiliary/Consumer";
 import { OnCompletion } from "@jonloucks/concurrency-ts/api/OnCompletion";
 import { RequiredType, OptionalType, Throwable } from "@jonloucks/concurrency-ts/api/Types";
 import { onCompletionCheck } from "@jonloucks/concurrency-ts/auxiliary/Checks";

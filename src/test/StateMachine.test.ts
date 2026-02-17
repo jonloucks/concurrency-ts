@@ -7,7 +7,7 @@ import { Config, guard, StateMachine } from "@jonloucks/concurrency-ts/api/State
 import { CONTRACT as STATE_MACHINE_FACTORY, StateMachineFactory } from "@jonloucks/concurrency-ts/api/StateMachineFactory";
 import { Transition } from "@jonloucks/concurrency-ts/api/Transition";
 import { used } from "@jonloucks/concurrency-ts/auxiliary/Checks";
-import { Consumer } from "@jonloucks/concurrency-ts/auxiliary/Consumer";
+import { Consumer } from "@jonloucks/contracts-ts/auxiliary/Consumer";
 import { Contracts, CONTRACTS } from "@jonloucks/contracts-ts";
 import { isPresent, OptionalType } from "@jonloucks/contracts-ts/api/Types";
 
