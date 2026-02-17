@@ -30,8 +30,14 @@ import {
   SupplierType,
   Throwable
 } from "@jonloucks/concurrency-ts/api/Types";
-import { Method } from "@jonloucks/contracts-ts/auxiliary/Consumer";
 
+// Local alias to avoid importing Method from a deep contracts-ts path.
+// This keeps the Method name usable in tests while relying only on
+// the concurrency-ts public function types.
+type Method<T = unknown> =
+  | ConsumerFunction<T>
+  | PredicateFunction<T>
+  | SupplierFunction<T>;
 describe("Types", () => {
   describe("isThrowable", () => {
     it("should return true for all values", () => {
