@@ -2,7 +2,7 @@
 
 ## Description
 
-[Provide a clear and concise description of the changes introduced by this PR. Explain *what* was changed and *why* it was changed. Link to any related issues or tasks using keywords like `Closes #123` or `Fixes #456`.]
+[Provide a clear and concise description of the changes introduced by this PR. Explain *what* was changed and *why* it was changed. Link to any related issues or tasks using keywords like `Closes #0` or `Fixes #0`.]
 
 ## Type of change
 
@@ -12,6 +12,7 @@
 - [ ] Refactor (code improvement or restructuring without changing external behavior)
 - [ ] Documentation update
 - [ ] Chore (e.g., dependency updates, build tooling changes)
+- [ ] Project Version Change
 
 ## Checklist:
 
