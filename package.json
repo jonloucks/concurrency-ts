@@ -78,7 +78,7 @@
     "minimatch": "10.2.1"
   },
   "devDependencies": {
-    "@jonloucks/badges-ts": "^1.4.2",
+    "@jonloucks/badges-ts": "^1.4.3",
     "@types/node": "^25.3.2",
     "@typescript-eslint/eslint-plugin": "^8.56.0",
     "@typescript-eslint/parser": "^8.56.0",
