@@ -75,7 +75,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "overrides": {
-    "minimatch": "10.2.1"
+    "minimatch": ">=10.2.4 <11.0.0"
   },
   "devDependencies": {
     "@jonloucks/badges-ts": "^1.4.3",
@@ -88,6 +88,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@jonloucks/contracts-ts": "^2.0.3"
+    "@jonloucks/contracts-ts": "^2.0.4"
   }
 }
